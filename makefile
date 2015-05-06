@@ -1,4 +1,4 @@
-LATEXMK=latexmk
+LATEXMK=./latexmk/latexmk
 
 # Various dependencies
 MAIN=thesis_masters
