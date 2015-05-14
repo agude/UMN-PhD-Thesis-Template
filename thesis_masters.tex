@@ -6,7 +6,6 @@
 \usepackage{epic} % Enhanced picture mode
 \usepackage{eepic} % Extensions for epic
 \usepackage{units} % SI unit typesetting
-\usepackage{hyperref} % Add clickable links to other parts of the document
 \usepackage{url} % URL handling
 \usepackage{longtable} % Tables that continue onto multiple pages
 \usepackage{mathrsfs} % Support for \mathscr script
@@ -17,6 +16,11 @@
 \usepackage{setspace} % Adjust spacing in captions, single by default
 \usepackage{xspace} % Automatically adjusting space after macros
 \usepackage{amsmath} % \text, and other math formatting options
+\usepackage{hyperref} % Add clickable links to other parts of the document
+\usepackage[noabbrev]{cleveref} % Automatically determine \cref type
+
+% Configure the cleveref package
+\newcommand{\creflastconjunction}{, and } % Always use the serial comma
 
 \input{my_definitions}
 
