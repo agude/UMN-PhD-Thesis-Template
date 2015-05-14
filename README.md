@@ -69,4 +69,38 @@ The was in which units are displayed can also be redefined, as has been done
 ```latex
 % Define a better looking eV by moving the V slightly left
 \DeclareSIUnit\electronvolt{e\hspace{-0.08em}V}
+
+## `booktabs`
+
+[`booktabs`](https://www.ctan.org/pkg/booktabs?lang=en) adds options to make
+nicer tables. It defines `\toprule`, `\midrule`, and `\bottomrule` which add
+rules of varying thickness and with additional vertical space.
+
+An example table using these commands is shown below. The `@{}` removes extra
+space on the end of the tables (so that the rules start and end flush with the
+text instead of hanging over) and the `\spacerows{1.2}` command is defined in
+[the macros file](my_definitions.tex) and adds extra space between the rows.
+
+```latex
+\begin{table}[h]
+    \centering
+    \spacerows{1.2}
+    \begin{center}
+        \begin{tabular}{@{}l r@{}}
+            \toprule
+            Mode         & Fraction $\left( \Gamma_{i} / \Gamma \right)$ \\
+            \midrule
+            $\Ztoqq$     & $69.91 \pm 0.06\%$ \\
+            $\Ztoee$     & $3.363 \pm 0.004\%$ \\
+            $\Ztomumu$   & $3.366 \pm 0.007\%$ \\
+            $\Ztotautau$ & $3.370 \pm 0.008\%$ \\
+            $\Ztonunu$   & $20.00 \pm 0.06\%$ \\
+            \bottomrule
+        \end{tabular}
+        \caption{
+            Selected decay modes of the Z boson.
+        }
+        \label{table:z_decays}
+    \end{center}
+\end{table}
 ```
