@@ -16,8 +16,15 @@
 \usepackage{setspace} % Adjust spacing in captions, single by default
 \usepackage{xspace} % Automatically adjusting space after macros
 \usepackage{amsmath} % \text, and other math formatting options
+\usepackage{siunitx} % \num{} formatting and SI unit formatting
 \usepackage{hyperref} % Add clickable links to other parts of the document
 \usepackage[noabbrev]{cleveref} % Automatically determine \cref type
+
+% Configure the siunitx package
+\sisetup{
+    group-separator = {,}, % Use , to separate groups of digits, like 12,345
+    list-final-separator = {, and } % Always use the serial comma in \SIlist
+}
 
 % Configure the cleveref package
 \newcommand{\creflastconjunction}{, and } % Always use the serial comma

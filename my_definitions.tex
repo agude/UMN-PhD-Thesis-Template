@@ -1,33 +1,8 @@
 % Physics constants
 \newcommand{\C}{{\mathrm{c}}}
 
-% Energy
-% We move the V slightly closer to make it look better
-\newcommand{\EnergyIneV}[1]{\ensuremath{\,\text{#1e\hspace{-.08em}V}}\xspace}
-\newcommand{\eV}{\EnergyIneV{}}
-\newcommand{\keV}{\EnergyIneV{k}}
-\newcommand{\MeV}{\EnergyIneV{M}}
-\newcommand{\GeV}{\EnergyIneV{G}}
-\newcommand{\TeV}{\EnergyIneV{T}}
-
-% Momentum
-% We define the momentum (and mass) as \EnergyIneV / c^n where n is taken as an
-% argument. This way any changes to formatting change all three equally.
-\newcommand{\EnergyWithCPower}[2]{\ensuremath{{\EnergyIneV{#1}\text{\hspace{-0.16em}/\hspace{-0.08em}}c^{\text{#2}}}}\xspace}
-\newcommand{\MomentumIneVc}[1]{\EnergyWithCPower{#1}{}}
-\newcommand{\eVc}{\MomentumIneVc{}}
-\newcommand{\keVc}{\MomentumIneVc{k}}
-\newcommand{\MeVc}{\MomentumIneVc{M}}
-\newcommand{\GeVc}{\MomentumIneVc{G}}
-\newcommand{\TeVc}{\MomentumIneVc{T}}
-
-% Mass
-\newcommand{\MassIneVcc}[1]{\EnergyWithCPower{#1}{2}}
-\newcommand{\eVcc}{\MassIneVcc{}}
-\newcommand{\keVcc}{\MassIneVcc{k}}
-\newcommand{\MeVcc}{\MassIneVcc{M}}
-\newcommand{\GeVcc}{\MassIneVcc{G}}
-\newcommand{\TeVcc}{\MassIneVcc{T}}
-
 % Add space between rows of tables
 \newcommand{\spacerows}[1]{\renewcommand{\arraystretch}{#1}}
+
+% Define a better looking eV by moving the V slightly left
+\DeclareSIUnit\electronvolt{e\hspace{-0.08em}V}
