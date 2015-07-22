@@ -63,12 +63,13 @@ are set:
 12,345.0), and `list-final-separator` uses the serial comma in lists ("1K, 2K,
 and 3K", not "1K, 2K and 3K").
 
-The was in which units are displayed can also be redefined, as has been done
+The way in which units are displayed can also be redefined, as has been done
 `\electronvolt` in [the macros file](my_definitions.tex):
 
 ```latex
 % Define a better looking eV by moving the V slightly left
 \DeclareSIUnit\electronvolt{e\hspace{-0.08em}V}
+```
 
 ## `booktabs`
 
