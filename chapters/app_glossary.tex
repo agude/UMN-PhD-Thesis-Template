@@ -32,29 +32,34 @@ atmosphere.
 \label{acronymsec}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%\setlength\LTleft{0pt}
-%\setlength\LTright{0pt}
+% Table formatting
 
-\begin{longtable}{|p{0.25\textwidth}|p{0.75\textwidth}|}
-\caption{Acronyms} \label{Acronyms} \\
+% Heading for the first page
+\begin{longtable}{p{0.25\textwidth} p{0.75\textwidth}}
+\caption{Acronyms} \label{tab:acronyms} \\
 
-\hline
+\toprule
 Acronym & Meaning \\
-\hline \hline
+\midrule
 \endfirsthead
 
-\multicolumn{2}{l}%
-{{\bfseries \tablename\ \thetable{} -- continued from previous page}} \\
-\hline
+% Heading for all subsequent pages
+\multicolumn{2}{l}{\textit{\tablename\ \thetable{} -- Continued from previous page}} \\
+\toprule
 Acronym & Meaning \\
-\hline \hline
+\midrule
 \endhead
 
-\hline \hline \multicolumn{2}{|r|}{{Continued on next page}} \\ \hline
+% Footer for each page that wraps over to the next
+\multicolumn{2}{r}{\textit{Continued on next page}} \\
+\bottomrule
 \endfoot
 
-\hline \hline
+% Footer for the end of the table
+\bottomrule
 \endlastfoot
+
+% End table formatting
 
 CR$\mu$ & Cosmic-Ray Muon \\
 
