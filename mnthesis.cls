@@ -17,6 +17,7 @@
 %            If Dedication page alone is present please uncomment line 406   - Sriram Doraiswamy
 % 11/23/2010 Fixed the problem where additional pages of Acknowledgement were not correctly numbered - Sriram Doraiswamy
 % 11/25/2010 Name of the advisor and Master of Arts or Science appears properly - Sriram Doraiswamy
+% 05/05/2015 - Moved the template into git; see `git log` for changes - Alex Gude
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -31,9 +32,8 @@
 %\title{thesis title}	(this is defined by the report style)
 %\author{author's name}	(this is defined by the report style)
 %\phd			(if invoked then \phdtrue is set.)
-%\degree{degree type}	(Default "Master of Science")
+%\ms			(if invoked then \phdfalse is set.)
 %
-%\words{words in abstract}
 %\abstract{the body of the abstract}
 %\acknowledgements{the body of the acknowledgments}
 %\dedication{the body of the dedication}
@@ -51,7 +51,6 @@
 %\ifpreface		(set if command \preface invoked)
 %\ifextra		(set if command \extra invoked)
 %\ifacknowledgements	(set by \acknowledgements)
-%\ifabstract		(set by \abstract)
 %\iffigures
 %\iftables
 %\ifafterpreface (afterpreface sections pagenumber must be at topright
@@ -203,12 +202,10 @@
 \def\figurespage{\figurestrue}
 \def\tablespage{\tablestrue}
 \def\phd{
-  \phdtrue\def\@degree{Doctor Of Philosophy}
-  \def\@initials{Ph.D.}
+  \phdtrue\def\@degree{DOCTOR OF PHILOSOPHY}
 }
 \def\ms{
-  \phdfalse\def\@degree{Master Of Science}
-  \def\@initials{M.S.}
+  \phdfalse\def\@degree{MASTER OF SCIENCE}
 }
 \long\def\abstract#1{\abstracttrue\gdef\@abstract{#1}}
 \long\def\preface#1{\prefacetrue\gdef\@preface{#1}}
@@ -217,27 +214,16 @@
 \long\def\dedication#1{\dedicationtrue\gdef\@dedication{#1}}
 \def\abbreviations#1{\abbreviationspagetrue\gdef\@abbreviations{#1}}
 
-\def\initials#1{\gdef\@initials{#1}}
 \def\degree#1{\phdfalse\gdef\@degree{#1}}
-\def\program#1{\gdef\@program{#1}}
-\def\words#1{\gdef\@words{#1}}
-\def\campus#1{\gdef\@campus{#1}}
 \def\director#1{\gdef\@director{#1}}
-\def\words#1{\gdef\@words{#1}}
 \def\approvals#1{\gdef\@approvals{#1}}
 \def\submissionmonth#1{\gdef\@month{#1}}
 \def\submissionyear#1{\gdef\@year{#1}}
 
 % defaults
-\def\@initials{Ph.D.}
-\def\@degree{Doctor of Philosophy}
-\def\@campus{University of Minnesota}
 \def\@title{}
 \def\@author{}
-\def\@program{}
-\def\@words{34}
 \def\@director{}
-\def\@words{}
 \def\@month{
   \ifcase\the\month\or
   January\or February\or March\or April\or May\or June\or
@@ -287,8 +273,7 @@
         \vskip 2ex plus 2ex minus 2ex
         IN PARTIAL FULFILLMENT OF THE REQUIREMENTS \\
         FOR THE DEGREE OF\\
-%       \ifphd{Doctor of Philosophy}\else{Master of Science}\fi\ \\
-        \ifphd{Doctor of Philosophy}\else \@degree          \fi\ \\
+        \@degree \\
         \vskip 1ex plus 1ex minus 1ex
         \@director\par
         \vskip 1ex plus 1ex minus 1ex
