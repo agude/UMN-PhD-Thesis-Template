@@ -25,14 +25,14 @@
 % Summary of New Commands (many are not used outside of the style file)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %The following are primarily for the titlepage et al....
-%\draft			(this invokes the macro \draftrue)
-%\copyrightpage		(make a copyright page)
-%\figurespage		(make a page for list of figures)
-%\tablespage		(make a page for list of tables)
-%\title{thesis title}	(this is defined by the report style)
-%\author{author's name}	(this is defined by the report style)
-%\phd			(if invoked then \phdtrue is set.)
-%\ms			(if invoked then \phdfalse is set.)
+%\draft                 (this invokes the macro \draftrue)
+%\copyrightpage         (make a copyright page)
+%\figurespage           (make a page for list of figures)
+%\tablespage            (make a page for list of tables)
+%\title{thesis title}   (this is defined by the report style)
+%\author{author's name} (this is defined by the report style)
+%\phd                   (if invoked then \phdtrue is set.)
+%\ms                    (if invoked then \phdfalse is set.)
 %
 %\abstract{the body of the abstract}
 %\acknowledgements{the body of the acknowledgments}
@@ -44,20 +44,20 @@
 %\begin-end{vita}  (begin single spacing after this point for the vita)
 %
 %       ******* Booleans *******
-%\ifpagestyletopright	(invoke \pagestyle{topright})
-%\ifdraft		(Will do some things differently if draft. Set by \draft)
-%\ifcopyright		(Add a copyright notice? (Set by \copyrightpage)
-%\ifabstract		(set if command \abstract invoked)
-%\ifpreface		(set if command \preface invoked)
-%\ifextra		(set if command \extra invoked)
-%\ifacknowledgements	(set by \acknowledgements)
+%\ifpagestyletopright   (invoke \pagestyle{topright})
+%\ifdraft               (Will do some things differently if draft. Set by \draft)
+%\ifcopyright           (Add a copyright notice? (Set by \copyrightpage)
+%\ifabstract            (set if command \abstract invoked)
+%\ifpreface             (set if command \preface invoked)
+%\ifextra               (set if command \extra invoked)
+%\ifacknowledgements    (set by \acknowledgements)
 %\iffigures
 %\iftables
-%\ifafterpreface (afterpreface sections pagenumber must be at topright
-%               corner. If user has chosen a header then it must be overridden.)
-%               (Produce a List of figures? The default is to do so.)
+%\ifafterpreface        (afterpreface sections pagenumber must be at topright
+%                       corner. If user has chosen a header then it must be overridden.)
+%                       (Produce a List of figures? The default is to do so.)
 %\tablestrue
-%               (Produce a List of tables?)
+%                       (Produce a List of tables?)
 %\begin/end{descriptionlist} (Basically a modified  \description.)
 %\fullpagefigure Creates a figure where the page is a vbox whose
 %                height is \textheight.
@@ -232,19 +232,19 @@
 \def\@year{\number\the\year}
 
 % conditionals and defaults
-\newif\ifdraft			\draftfalse
-\newif\ifafterpreface		\afterprefacefalse
-\newif\ifcopyright		\copyrightfalse
-\newif\iffigures		\figuresfalse
-\newif\iftables			\tablesfalse
-\newif\ifabstract		\abstractfalse
-\newif\ifpreface		\prefacefalse
-\newif\ifextra			\extrafalse
-\newif\ifacknowledgements	\acknowledgementsfalse
-\newif\ifdedication		\dedicationfalse
-\newif\ifabbreviationspage	\abbreviationspagefalse
-\newif\ifphd			\phdfalse
-\newif\ifpagestyletopright	\pagestyletoprighttrue
+\newif\ifdraft              \draftfalse
+\newif\ifafterpreface       \afterprefacefalse
+\newif\ifcopyright          \copyrightfalse
+\newif\iffigures            \figuresfalse
+\newif\iftables             \tablesfalse
+\newif\ifabstract           \abstractfalse
+\newif\ifpreface            \prefacefalse
+\newif\ifextra              \extrafalse
+\newif\ifacknowledgements   \acknowledgementsfalse
+\newif\ifdedication         \dedicationfalse
+\newif\ifabbreviationspage  \abbreviationspagefalse
+\newif\ifphd                \phdfalse
+\newif\ifpagestyletopright  \pagestyletoprighttrue
 
 \newcommand\titlep {
   \vbox to \textheight {
@@ -260,7 +260,7 @@
       \centering\bf
       \ifdraft {
         DRAFT VERSION CREATED ON \uppercase\expandafter{\today}\\
-      }\else 
+      }\else
         A \ifphd{DISSERTATION}\else{THESIS}\fi\ \\
         SUBMITTED TO THE FACULTY OF THE GRADUATE SCHOOL \\
         OF THE UNIVERSITY OF MINNESOTA \\
@@ -313,7 +313,7 @@
 % The signature, title, copywrite, and abstract pages
 \newcommand\beforepreface {
 %  \ifabstract {
-  \ifacknowledgements {  
+  \ifacknowledgements {
     \c@page1 % set page counter so that next is 1
     \pagestyle{empty}
 
@@ -324,12 +324,12 @@
 % Copywrite page
     \ifcopyright\copyrightp\fi
 
-%Acknowledgements 
+%Acknowledgements
 
-  \pagenumbering{roman}    
-  \pagestyle{plain} 
+  \pagenumbering{roman}
+  \pagestyle{plain}
   \ifacknowledgements
-  
+
     \unnumberedsection{Acknowledgements}
 
 %    \addcontentsline{toc}{chapter}{Acknowledgements}
@@ -341,15 +341,15 @@
 %    \end{center}
 %    \vskip 8bp
 
-    \@acknowledgements\fi   
-  \vfil\newpage  
-  }  
+    \@acknowledgements\fi
+  \vfil\newpage
+  }
 
 %Dedication
 
-% \pagenumbering{roman}     
+% \pagenumbering{roman}
   \ifdedication
-  
+
     \unnumberedsection{Dedication}
 
 %    \addcontentsline{toc}{chapter}{Dedication}
@@ -361,9 +361,9 @@
 %    \end{center}
 %    \vskip 8bp
 
-    \@dedication\fi   
-  \vfil\newpage  
-    
+    \@dedication\fi
+  \vfil\newpage
+
 
 
 % An abstract to be bound into the thesis
@@ -401,7 +401,7 @@
 %    \unnumberedsection{Acknowledgements}
 %    \@acknowledgements
 %  \fi
-%  \ifdedication 
+%  \ifdedication
 %    \unnumberedsection{Dedication}
 %    \@dedication
 %   \fi
@@ -430,8 +430,8 @@
     \listoftables
     \let\addvspace=\saveaddvspace
   \fi
-  
- 
+
+
   \iffigures
     \addvspace{10bp}
     \let\saveaddvspace=\addvspace
@@ -439,7 +439,7 @@
     \listoffigures
     \let\addvspace=\saveaddvspace
   \fi
-  
+
   \ifabbreviationspage {
     \def\baselinestretch{1}
     \@normalsize
@@ -548,7 +548,7 @@
   \if@restonecol\twocolumn\fi
 }
 
-\renewcommand{\bibname}{References} 
+\renewcommand{\bibname}{References}
 \renewenvironment{thebibliography}[1]
      {\chapter*{\bibname}%
       \addcontentsline{toc}{chapter}{\bibname}
