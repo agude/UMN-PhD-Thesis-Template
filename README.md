@@ -2,6 +2,30 @@
 
 This repository contains an updated version of the UMN PhD Thesis Template.
 
+## Prerequisites
+
+On Ubuntu 14.04 you will need to enable the `universe` repository. You can do
+this by opening the "Ubuntu Software Center", then following "Edit > Software
+Sources > Ubuntu Software Tab > check the box for 'Community-maintained free
+and open-source software (universe)'", or by running the code below: 
+
+```bash
+# Enable the univerese repo
+sudo add-apt-repository "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc) universe"
+```
+
+You can then install the packages needed to compile the template:
+
+```bash
+# Install the required packages
+sudo apt-get install \
+texlive-latex-base \
+texlive-latex-extra \
+texlive-fonts-recommended \
+texlive-pictures \
+texlive-science \
+```
+
 ## `cleveref`
 
 [`cleveref`](https://www.ctan.org/pkg/cleveref?lang=en) is a package designed
