@@ -6,11 +6,16 @@ and messages from the author.
 ## title.tex
 
 The [title.tex](title.tex) file is where the title is set, as well as the
-author's name, advisor's name, and date. It also includes the `\draft` switch
+author's name, advisor's name, and date. It includes the `\draft` switch
 which will turn draft mode on or off, and the `\phd` and `\ms` switches which
-set up the thesis for a Doctorate or Master thesis.
+set up the thesis for a Doctorate or Master thesis. It also includes three
+switches to set the copyright page of the thesis:
 
-A note about the title. The guidelines state:
+- `\copyrightpage`: Full copyright
+- `\copyrightpageccby`: Full copyright with Creative Commons CC-BY 4.0 license
+- `\copyrightpageccbysa`: Full copyright with Creative Commons CC-BY-SA 4.0 license
+
+A note about the title; the guidelines state:
 
 > "The title of the thesis must not contain chemical or mathematical formulas,
 > symbols, superscripts, subscripts, Greek letters, or other non-standard

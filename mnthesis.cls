@@ -46,7 +46,9 @@
 %       ******* Booleans *******
 %\ifpagestyletopright   (invoke \pagestyle{topright})
 %\ifdraft               (Will do some things differently if draft. Set by \draft)
-%\ifcopyright           (Add a copyright notice? (Set by \copyrightpage)
+%\ifcopyright           (Add a copyright notice, set by \copyrightpage)
+%\ifccby                (Add a copyright notice with Creative Commons CC-BY 4.0 license, set by \copyrightpageccby)
+%\ifccbysa              (Add a copyright notice with Creative Commons CC-BY-SA 4.0 license, set by \copyrightpageccbysa)
 %\ifabstract            (set if command \abstract invoked)
 %\ifpreface             (set if command \preface invoked)
 %\ifextra               (set if command \extra invoked)
@@ -198,7 +200,21 @@
 % User commands
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \def\draft{\drafttrue}
-\def\copyrightpage{\copyrighttrue}
+\def\copyrightpage{
+    \copyrighttrue
+    \ccbysafalse
+    \ccbyfalse
+}
+\def\copyrightpageccby{
+    \copyrightfalse
+    \ccbysafalse
+    \ccbytrue
+}
+\def\copyrightpageccbysa{
+    \copyrightfalse
+    \ccbysatrue
+    \ccbyfalse
+}
 \def\figurespage{\figurestrue}
 \def\tablespage{\tablestrue}
 \def\phd{
@@ -235,6 +251,8 @@
 \newif\ifdraft              \draftfalse
 \newif\ifafterpreface       \afterprefacefalse
 \newif\ifcopyright          \copyrightfalse
+\newif\ifccby               \ccbyfalse
+\newif\ifccbysa             \ccbysafalse
 \newif\iffigures            \figuresfalse
 \newif\iftables             \tablesfalse
 \newif\ifabstract           \abstractfalse
@@ -294,6 +312,39 @@
   \vfil\newpage
 }
 
+\newcommand\ccbytp {
+  \typeout{Copyright}
+  \null\vfil
+  \begin{center}
+  \bf\large\copyright\ \@author\ \ \@year\
+  \\[0.25cm]
+  \includegraphics[width=1cm]{cc_icons/by.pdf}
+  \includegraphics[width=1cm]{cc_icons/cc.pdf}
+  \\
+  The text of this work is licensed under a
+  \href{https://creativecommons.org/licenses/by/4.0/}{Creative Commons
+  Attribution International license}.
+  \end{center}
+  \vfil\newpage
+}
+
+\newcommand\ccbysatp {
+  \typeout{Copyright}
+  \null\vfil
+  \begin{center}
+  \bf\large\copyright\ \@author\ \ \@year\
+  \\[0.25cm]
+  \includegraphics[width=1cm]{cc_icons/by.pdf}
+  \includegraphics[width=1cm]{cc_icons/cc.pdf}
+  \includegraphics[width=1cm]{cc_icons/sa.pdf}
+  \\
+  The text of this work is licensed under a
+  \href{https://creativecommons.org/licenses/by-sa/4.0/}{Creative Commons
+  Attribution-ShareAlike 4.0 International license}.
+  \end{center}
+  \vfil\newpage
+}
+
 \def\desclabel#1{{\bf#1\hfill}}
 \def\descriptionlist#1 {
   \list{} {
@@ -321,8 +372,21 @@
 % Title page
     \titlep
 
-% Copywrite page
-    \ifcopyright\copyrightp\fi
+% Copyright page
+    % Normal copyright
+    \ifcopyright
+        \copyrightp
+    \fi
+
+    % Copyright with Creative Commons Attribution license
+    \ifccby
+        \ccbytp
+    \fi
+
+    % Copyright with Creative Commons Attribution Share-alike license
+    \ifccbysa
+        \ccbysatp
+    \fi
 
 %Acknowledgements
 
