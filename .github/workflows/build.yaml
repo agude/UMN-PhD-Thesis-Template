@@ -13,3 +13,7 @@ jobs:
       run: sudo apt-get install texlive-latex-base texlive-latex-extra texlive-fonts-recommended texlive-pictures texlive-science
     - name: Build the Thesis
       run: make
+    - uses: actions/upload-artifact@master
+      with:
+        name: Upload Thesis
+        path: ./thesis_masters.pdf
