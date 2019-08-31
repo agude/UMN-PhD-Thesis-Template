@@ -10,12 +10,6 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Install the required packages
-      run: |
-        sudo apt-get install \
-        texlive-latex-base \
-        texlive-latex-extra \
-        texlive-fonts-recommended \
-        texlive-pictures \
-        texlive-science \
+      run: sudo apt-get install texlive-latex-base texlive-latex-extra texlive-fonts-recommended texlive-pictures texlive-science
     - name: Build the Thesis
       run: make
