@@ -31,7 +31,7 @@ Once this is done, you can click on the _"Actions"_ tab at the top of the
 repository on Github.
 
 <img
-src="https://raw.githubusercontent.com/agude/UMN-PhD-Thesis-Template/feature-github_actions/.github/images/actions.png?raw=true"
+src="https://raw.githubusercontent.com/agude/UMN-PhD-Thesis-Template/master/.github/images/actions.png?raw=true"
 width="800" alt="Actions page"/> 
 
 There you'll see a list of build jobs. The ones with green check marks have
@@ -40,7 +40,7 @@ where there will be a section titled **Artifacts**. Click on "Compiled Thesis"
 to download a zip file containing the PDF.
 
 <img
-src="https://raw.githubusercontent.com/agude/UMN-PhD-Thesis-Template/feature-github_actions/.github/images/artifact.png?raw=true"
+src="https://raw.githubusercontent.com/agude/UMN-PhD-Thesis-Template/master/.github/images/artifact.png?raw=true"
 width="800" alt="Artifact download"/> 
 
 ## Additional Packages
