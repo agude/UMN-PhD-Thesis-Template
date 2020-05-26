@@ -1,7 +1,7 @@
 LATEXMK=./latexmk/latexmk
 
 # Various dependencies
-MAIN=thesis_masters
+MAIN=thesis
 MAIN_PDF=$(MAIN).pdf
 MAIN_TEX=$(MAIN).tex
 HELPER_FILES= makefile mnthesis.cls
@@ -23,7 +23,7 @@ $(MAIN_PDF): ALWAYS_COMPILE $(MAIN_TEX) $(HELPER_FILES) $(PRELIMS) $(CHAPTERS) $
 	$(LATEXMK) -pdf $(MAIN_TEX)
 
 # Clean up all the regeneratable files except for the final document (the .pdf)
-tidy:
+tidy: $(MAIN_PDF)
 	$(LATEXMK) -c $(MAIN_TEX)
 
 # Clean up all the regeneratable files, including the final document

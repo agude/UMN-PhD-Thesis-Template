@@ -16,4 +16,4 @@ jobs:
     - uses: actions/upload-artifact@master
       with:
         name: Compiled Thesis
-        path: ./thesis_masters.pdf
+        path: ./thesis.pdf

@@ -18,6 +18,21 @@ texlive-pictures \
 texlive-science \
 ```
 
+You can then build the thesis with `make`:
+
+```bash
+make
+```
+
+This will produce a `thesis.pdf` in the root directory of your repository,
+along with all the intermediate build files. You can instead run:
+
+```bash
+make tidy
+```
+
+To just produce the PDF.
+
 ### Build On Github
 
 The easiest way to build the PDF is to use [Github Actions][actions]. This

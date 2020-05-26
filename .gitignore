@@ -1,5 +1,6 @@
 #Generated files
-thesis_masters.pdf
+thesis.pdf
+*.fls
 
 #Binary and Image
 *.exe
