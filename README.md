@@ -4,17 +4,9 @@ This repository contains an updated version of the UMN PhD Thesis Template.
 
 ## Prerequisites
 
-On Ubuntu 14.04 you will need to enable the `universe` repository. You can do
-this by opening the "Ubuntu Software Center", then following "Edit > Software
-Sources > Ubuntu Software Tab > check the box for 'Community-maintained free
-and open-source software (universe)'", or by running the code below: 
+### Build Locally
 
-```bash
-# Enable the univerese repo
-sudo add-apt-repository "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc) universe"
-```
-
-You can then install the packages needed to compile the template:
+To build the thesis locally, on Ubuntu 18.04, you will need to install:
 
 ```bash
 # Install the required packages
@@ -26,7 +18,37 @@ texlive-pictures \
 texlive-science \
 ```
 
-## `cleveref`
+### Build On Github
+
+The easiest way to build the PDF is to use [Github Actions][actions]. This
+will build the thesis and produce a PDF all within Github. The repository
+already contains the correct configuration files, but you will need to enable
+actions in Github.
+
+[actions]: https://help.github.com/en/actions
+
+Once this is done, you can click on the _"Actions"_ tab at the top of the
+repository on Github.
+
+<img
+src="https://raw.githubusercontent.com/agude/UMN-PhD-Thesis-Template/feature-github_actions/.github/images/actions.png?raw=true"
+width="800" alt="Actions page"/> 
+
+There you'll see a list of build jobs. The ones with green check marks have
+completed successfully. Clicking on one will bring you to the build page,
+where there will be a section titled **Artifacts**. Click on "Compiled Thesis"
+to download a zip file containing the PDF.
+
+<img
+src="https://raw.githubusercontent.com/agude/UMN-PhD-Thesis-Template/feature-github_actions/.github/images/artifact.png?raw=true"
+width="800" alt="Artifact download"/> 
+
+## Additional Packages
+
+The thesis template comes with some useful additional packages. They are
+described below.
+
+### `cleveref`
 
 [`cleveref`](https://www.ctan.org/pkg/cleveref?lang=en) is a package designed
 to make cross referencing easier. Unlike `\ref`, `\cref` automatically adds
@@ -51,7 +73,7 @@ instead of "figures 1, 2 and 3".
 Additionally, the package is passed the option `noabbrev` which causes it to
 print the full prefix instead of an abbreviation ("figure" vs "fig.").
 
-## `SIunitx`
+### `SIunitx`
 
 [`SIunitx`](https://www.ctan.org/pkg/siunitx?lang=en) formats SI units. It
 provides the `\SI{}` command, which is used as follows:
@@ -95,7 +117,7 @@ The way in which units are displayed can also be redefined, as has been done
 \DeclareSIUnit\electronvolt{e\hspace{-0.08em}V}
 ```
 
-## `booktabs`
+### `booktabs`
 
 [`booktabs`](https://www.ctan.org/pkg/booktabs?lang=en) adds options to make
 nicer tables. It defines `\toprule`, `\midrule`, and `\bottomrule` which add
