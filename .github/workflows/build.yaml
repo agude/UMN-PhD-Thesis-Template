@@ -15,5 +15,5 @@ jobs:
       run: make
     - uses: actions/upload-artifact@master
       with:
-        name: Upload Thesis
+        name: Compiled Thesis
         path: ./thesis_masters.pdf
