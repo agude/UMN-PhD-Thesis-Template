@@ -121,18 +121,6 @@
 % thefigure, and thetable counters are reset by incrementing
 % thechapter. (The others are correct in the report style.)
 
-% use Table of Contents rather than default of Contents
-%\def\tableofcontents {
-%  \@restonecolfalse
-%  \if@twocolumn
-%    \@restonecoltrue\onecolumn
-%  \fi
-%  \chapter*{Table of Contents\@mkboth{TABLE OF CONTENTS}{TABLE OF CONTENTS}}
-%  \@starttoc{toc}
-%  \if@restonecol
-%    \twocolumn
-%  \fi
-%}
 
 % single space bibliography, quotations and verse.
 \renewenvironment{thebibliography}[1] {
@@ -361,13 +349,12 @@
   \typeout{#1}
 }
 
-% The signature, title, copywrite, and abstract pages
-\newcommand\beforepreface {
-%  \ifabstract {
-  \ifacknowledgements {
-    \c@page1 % set page counter so that next is 1
-    \pagestyle{empty}
 
+
+\newcommand\beforepreface {
+% The signature, title, copywrite, and abstract pages
+
+    \pagestyle{empty}
 
 % Title page
     \titlep
@@ -388,105 +375,48 @@
         \ccbysatp
     \fi
 
-%Acknowledgements
-
+% Acknowledgements
+  \c@page1 % set page counter so that next is 1
   \pagenumbering{roman}
   \pagestyle{plain}
-  \ifacknowledgements
-
+  
+  \ifacknowledgements {
     \unnumberedsection{Acknowledgements}
+    \@acknowledgements
+    \clearpage
+  } \fi
 
-%    \addcontentsline{toc}{chapter}{Acknowledgements}
-%    \null\vskip -20bp
-%    \begin{center} {
-%    }
-%    \large\bf\
-%    Acknowledgements
-%    \end{center}
-%    \vskip 8bp
-
-    \@acknowledgements\fi
-  \vfil\newpage
-  }
-
-%Dedication
-
-% \pagenumbering{roman}
+% Dedication
   \ifdedication
-
     \unnumberedsection{Dedication}
+    \@dedication
+    \clearpage
+  \fi
 
-%    \addcontentsline{toc}{chapter}{Dedication}
-%    \null\vskip -20bp
-%    \begin{center} {
-%    }
-%    \large\bf\
-%    Dedication
-%    \end{center}
-%    \vskip 8bp
+% Abstract
+  \ifabstract {
+    \phantomsection
+    \addcontentsline{toc}{chapter}{Abstract}
+    \null\vskip -20bp
+    \begin{center}
+        \large\bf Abstract
+    \end{center}
+    \vskip 8bp
+    \@abstract
+    \typeout{Abstract}
+    \clearpage
+  } \fi 
+  
+  \phantomsection
+  \addcontentsline{toc}{chapter}{Contents}
+  \tableofcontents
 
-    \@dedication\fi
-  \vfil\newpage
-
-
-
-% An abstract to be bound into the thesis
-%    \pagestyle{plain}
-%    \pagenumbering{roman}
-%    \addcontentsline{toc}{chapter}{Abstract}
-%    \null\vskip -20bp
-%    \begin{center} {
-%      \large\bf\expandafter{\@title} \large
-%      \vskip 8bp
-%      by \@author \\
-%      %Under the supervision of \@director
-%      \vskip 8bp
-%    }
-%    \large\bf\
-%    Abstract
-%    \end{center}
-%    \vskip 8bp
-%    \@abstract
-%  } \fi
-%  \typeout{Abstract}
-%  %\eject
 }
 
 
 \newcommand\afterpreface {
-% Insert all of the text between the title (and copyright) pages and the main
-% body of the thesis.
-%  \pagenumbering{roman}
-%  \ifpreface {
-%    \unnumberedsection{Preface}
-%    \@preface
-%  } \fi
-%  \ifacknowledgements
-%    \unnumberedsection{Acknowledgements}
-%    \@acknowledgements
-%  \fi
-%  \ifdedication
-%    \unnumberedsection{Dedication}
-%    \@dedication
-%   \fi
+% Insert all of the text between the title (and copyright) pages and the main body of the thesis.
 
-    \pagestyle{plain}
-%    \pagenumbering{roman}
-    \ifabstract {
-    \addcontentsline{toc}{chapter}{Abstract}
-    \null\vskip -20bp
-    \begin{center} {
-    }
-    \large\bf\
-    Abstract
-    \end{center}
-    \vskip 8bp
-    \@abstract
-   \fi
-  \typeout{Abstract}
-}
-
-  \tableofcontents
   \iftables
     \addvspace{10bp}
     \let\saveaddvspace=\addvspace
