@@ -121,6 +121,18 @@
 % thefigure, and thetable counters are reset by incrementing
 % thechapter. (The others are correct in the report style.)
 
+% use Table of Contents rather than default of Contents
+%\def\tableofcontents {
+%  \@restonecolfalse
+%  \if@twocolumn
+%    \@restonecoltrue\onecolumn
+%  \fi
+%  \chapter*{Table of Contents\@mkboth{TABLE OF CONTENTS}{TABLE OF CONTENTS}}
+%  \@starttoc{toc}
+%  \if@restonecol
+%    \twocolumn
+%  \fi
+%}
 
 % single space bibliography, quotations and verse.
 \renewenvironment{thebibliography}[1] {
@@ -349,12 +361,13 @@
   \typeout{#1}
 }
 
-
-
-\newcommand\beforepreface {
 % The signature, title, copywrite, and abstract pages
-
+\newcommand\beforepreface {
+%  \ifabstract {
+  \ifacknowledgements {
+    \c@page1 % set page counter so that next is 1
     \pagestyle{empty}
+
 
 % Title page
     \titlep
@@ -375,25 +388,49 @@
         \ccbysatp
     \fi
 
-% Acknowledgements
-  \c@page1 % set page counter so that next is 1
+%Acknowledgements
+
   \pagenumbering{roman}
   \pagestyle{plain}
-  
-  \ifacknowledgements {
+  \ifacknowledgements
+
     \unnumberedsection{Acknowledgements}
-    \@acknowledgements
-    \clearpage
-  } \fi
 
-% Dedication
+%    \addcontentsline{toc}{chapter}{Acknowledgements}
+%    \null\vskip -20bp
+%    \begin{center} {
+%    }
+%    \large\bf\
+%    Acknowledgements
+%    \end{center}
+%    \vskip 8bp
+
+    \@acknowledgements\fi
+  \vfil\newpage
+  }
+
+%Dedication
+
+% \pagenumbering{roman}
   \ifdedication
-    \unnumberedsection{Dedication}
-    \@dedication
-    \clearpage
-  \fi
 
-% Abstract
+    \unnumberedsection{Dedication}
+
+%    \addcontentsline{toc}{chapter}{Dedication}
+%    \null\vskip -20bp
+%    \begin{center} {
+%    }
+%    \large\bf\
+%    Dedication
+%    \end{center}
+%    \vskip 8bp
+
+    \@dedication\fi
+  \vfil\newpage
+
+
+
+% An abstract to be bound into the thesis
   \ifabstract {
     \phantomsection
     \addcontentsline{toc}{chapter}{Abstract}
@@ -415,8 +452,40 @@
 
 
 \newcommand\afterpreface {
-% Insert all of the text between the title (and copyright) pages and the main body of the thesis.
+% Insert all of the text between the title (and copyright) pages and the main
+% body of the thesis.
+%  \pagenumbering{roman}
+%  \ifpreface {
+%    \unnumberedsection{Preface}
+%    \@preface
+%  } \fi
+%  \ifacknowledgements
+%    \unnumberedsection{Acknowledgements}
+%    \@acknowledgements
+%  \fi
+%  \ifdedication
+%    \unnumberedsection{Dedication}
+%    \@dedication
+%   \fi
 
+    % \pagestyle{plain}
+%    \pagenumbering{roman}
+%     \ifabstract {
+%     \addcontentsline{toc}{chapter}{Abstract}
+%     \null\vskip -20bp
+%     \begin{center} {
+%     }
+%     \large\bf\
+%     Abstract
+%     \end{center}
+%     \vskip 8bp
+%     \@abstract
+%    \fi
+%   \typeout{Abstract}
+% }
+
+  % \tableofcontents
+  
   \iftables
     \addvspace{10bp}
     \let\saveaddvspace=\addvspace
