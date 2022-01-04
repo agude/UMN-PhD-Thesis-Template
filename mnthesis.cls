@@ -468,8 +468,6 @@
 %    \@dedication
 %   \fi
 
-  % \tableofcontents
-  
   \iftables
     \addvspace{10bp}
     \let\saveaddvspace=\addvspace
