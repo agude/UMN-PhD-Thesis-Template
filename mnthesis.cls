@@ -18,6 +18,7 @@
 % 11/23/2010 Fixed the problem where additional pages of Acknowledgement were not correctly numbered - Sriram Doraiswamy
 % 11/25/2010 Name of the advisor and Master of Arts or Science appears properly - Sriram Doraiswamy
 % 05/05/2015 - Moved the template into git; see `git log` for changes - Alex Gude
+% 01/05/2022 - Fixed a bug where the table of contents did not link to the right page for the abstract. - KexinFeng
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -363,7 +364,6 @@
 
 % The signature, title, copywrite, and abstract pages
 \newcommand\beforepreface {
-%  \ifabstract {
   \ifacknowledgements {
     \c@page1 % set page counter so that next is 1
     \pagestyle{empty}
@@ -431,30 +431,28 @@
 
 
 % An abstract to be bound into the thesis
-%    \pagestyle{plain}
-%    \pagenumbering{roman}
-%    \addcontentsline{toc}{chapter}{Abstract}
-%    \null\vskip -20bp
-%    \begin{center} {
-%      \large\bf\expandafter{\@title} \large
-%      \vskip 8bp
-%      by \@author \\
-%      %Under the supervision of \@director
-%      \vskip 8bp
-%    }
-%    \large\bf\
-%    Abstract
-%    \end{center}
-%    \vskip 8bp
-%    \@abstract
-%  } \fi
-%  \typeout{Abstract}
-%  %\eject
+  \ifabstract {
+    \phantomsection
+    \addcontentsline{toc}{chapter}{Abstract}
+    \null\vskip -20bp
+    \begin{center}
+        \large\bf Abstract
+    \end{center}
+    \vskip 8bp
+    \@abstract
+    \typeout{Abstract}
+    \clearpage
+  } \fi 
+  
+  \phantomsection
+  \addcontentsline{toc}{chapter}{Contents}
+  \tableofcontents
+
 }
 
 
 \newcommand\afterpreface {
-% Insert all of the text between the title (and copyright) pages and the main
+% Insert table of contents, list of tables, and list of figures
 % body of the thesis.
 %  \pagenumbering{roman}
 %  \ifpreface {
@@ -470,23 +468,6 @@
 %    \@dedication
 %   \fi
 
-    \pagestyle{plain}
-%    \pagenumbering{roman}
-    \ifabstract {
-    \addcontentsline{toc}{chapter}{Abstract}
-    \null\vskip -20bp
-    \begin{center} {
-    }
-    \large\bf\
-    Abstract
-    \end{center}
-    \vskip 8bp
-    \@abstract
-   \fi
-  \typeout{Abstract}
-}
-
-  \tableofcontents
   \iftables
     \addvspace{10bp}
     \let\saveaddvspace=\addvspace
