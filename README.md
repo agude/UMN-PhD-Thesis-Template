@@ -6,7 +6,7 @@ This repository contains an updated version of the UMN PhD Thesis Template.
 
 ### Build Locally
 
-To build the thesis locally, on Ubuntu 18.04, you will need to install:
+To build the thesis locally, on Ubuntu, you will need to install:
 
 ```bash
 # Install the required packages
