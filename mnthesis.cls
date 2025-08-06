@@ -20,6 +20,7 @@
 % 05/05/2015 Moved the template into git; see `git log` for changes - Alex Gude
 % 01/05/2022 Fixed a bug where the table of contents did not link to the right page for the abstract. - Kexin Feng
 % 03/21/2025 Fixed underfull hbox warning. - Trevor Karn
+% 08/05/2025 Fixed a compilation error caused by a duplicated \ifacknowledgements{}, fixed the "Token not allowed in a PDF string" warnings for appendices, properly defined the class name, and deleted the comma separating month and year. - Mykhaylo Malakhov
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -43,7 +44,11 @@
 %\submissionyear{year of submission to the Graduate School}
 %\submissionmonth{month of submission to the Graduate School}
 %(The default dates used will be those at which the document was prepared)
-%\begin-end{vita}  (begin single spacing after this point for the vita)
+%
+%\begin-end{vita} (begin single spacing after this point for the vita)
+%\begin-end{descriptionlist} (Basically a modified \description.)
+%\fullpagefigure Creates a figure where the page is a vbox whose
+%                height is \textheight.
 %
 %       ******* Booleans *******
 %\ifpagestyletopright   (invoke \pagestyle{topright})
@@ -55,22 +60,17 @@
 %\ifpreface             (set if command \preface invoked)
 %\ifextra               (set if command \extra invoked)
 %\ifacknowledgements    (set by \acknowledgements)
-%\iffigures
-%\iftables
+%\iffigures             (Produce a List of figures? The default is to do so.)
+%\iftables              (Produce a List of tables?)
 %\ifafterpreface        (afterpreface sections pagenumber must be at topright
 %                       corner. If user has chosen a header then it must be overridden.)
-%                       (Produce a List of figures? The default is to do so.)
-%\tablestrue
-%                       (Produce a List of tables?)
-%\begin/end{descriptionlist} (Basically a modified  \description.)
-%\fullpagefigure Creates a figure where the page is a vbox whose
-%                height is \textheight.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Redefine the way that LaTeX starts up so that its simpler to use.
+% The mnthesis document class is based on the report document class.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\input{report.cls}\relax
+\ProvidesClass{mnthesis}
+\LoadClass{report}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -86,10 +86,8 @@
 \setlength{\paperwidth}{8.5in}
 
 %\setlength{\oddsidemargin}{1.937cm}  % default -> 2.0 cm odd side
-%\setlength{\oddsidemargin}{0.55in} % final version to grad school
-\setlength{\oddsidemargin}{0.55in}
+\setlength{\oddsidemargin}{0.55in} % final version to grad school
 \setlength{\evensidemargin}{0.1in} % default -> 3.4 cm even side
-%\setlength{\evensidemargin}{0.1in} % default -> 3.4 cm even side
 
 %\setlength{\topmargin}{0.75in}
 \setlength{\topmargin}{0.25in}
@@ -297,7 +295,7 @@
         \vskip 1ex plus 1ex minus 1ex
         \@director\par
         \vskip 1ex plus 1ex minus 1ex
-        \@month, \@year\\
+        \@month~\@year\\
       \fi %close ifdraft
     }
   \vfill
@@ -364,9 +362,8 @@
   \typeout{#1}
 }
 
-% The signature, title, copywrite, and abstract pages
+% The title, copyright, acknowledgements, dedication, and abstract pages
 \newcommand\beforepreface {
-  \ifacknowledgements {
     \c@page1 % set page counter so that next is 1
     \pagestyle{empty}
 
@@ -409,7 +406,6 @@
 
     \@acknowledgements\fi
   \vfil\newpage
-  }
 
 %Dedication
 
@@ -452,10 +448,9 @@
 
 }
 
-
+% Insert list of tables, list of figures, and abbreviations page
 \newcommand\afterpreface {
-% Insert table of contents, list of tables, and list of figures
-% body of the thesis.
+
 %  \pagenumbering{roman}
 %  \ifpreface {
 %    \unnumberedsection{Preface}
@@ -531,8 +526,8 @@
 
 % Redefine appendix to print Appendix []. ... page # in table of contents.
 \def\appnumberline#1{
-  \advance\hangindent\@tempdima
-  \hbox{Appendix #1. }
+  \texorpdfstring{\advance\hangindent\@tempdima
+  \hbox{Appendix #1. }}{Appendix #1. }
 }
 
 \renewcommand\appendix {
