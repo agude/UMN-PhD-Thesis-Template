@@ -248,8 +248,7 @@ $d$ and $d^\prime$, are shown in Figure~\ref{fig:data-view}, where the upper pan
 is injected at a fixed reference time, while the lower panel shows a time-shifted signal i.e. all signal
 parameters being the same except the time of arrival, which is chosen randomly up to 1 second in this case.
 We should emphasize that the views shown in Figure~\ref{fig:data-view} do not affect the
-relative times of arrival between the detectors which is crucial for sky-localization, but instead
-are a shift in the geo-center time of arrival by up to 1 second.
+relative times of arrival between the detectors which is crucial for sky-localization, but instead are a shift in the geo-center time of arrival by up to 1 second.
 Two batches of views are then forward-modeled through the embedding network and projected down to the resulting space. 
 This projection, $\boldgamma$, is performed in two different steps. First, the ResNet $f$, mentioned above,
 projects the inputs in to $\smallgamma\in\mathbb{R}^{D_{\gamma}}$. Following this, another fully-connected expander network, $h$, takes $\gamma$ to a ($N\times D_{\gamma}$)-dimensional space
