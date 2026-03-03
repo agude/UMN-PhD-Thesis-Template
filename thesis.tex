@@ -19,10 +19,18 @@
 \usepackage{amsmath} % \text, and other math formatting options
 \usepackage{siunitx} % \num{} formatting and SI unit formatting
 \usepackage{booktabs} % Enhanced tables with \toprule, etc.
-\usepackage{hyperref} % Add clickable links to other parts of the document
+\usepackage[colorlinks,urlcolor=blue,citecolor=blue,linkcolor=blue]{hyperref} % Add clickable links to other parts of the document
 \usepackage[noabbrev]{cleveref} % Automatically determine \cref type
 \usepackage[font=small]{caption}
 \usepackage{iopams}
+\usepackage{rotating,color,wasysym,epstopdf,subcaption}
+\usepackage[normalem]{ulem}
+\usepackage{comment}
+\usepackage[multiple]{footmisc}
+\usepackage[backend=bibtex,giveninits=true,style=numeric]{biblatex}
+\addbibresource{thesis.bib}
+
+\graphicspath{{./}{figures/}}
 
 % Configure the siunitx package
 \sisetup{
@@ -65,13 +73,7 @@
     chapters/aframe_methods,
     chapters/o3_catalog,
     chapters/amplfi_methods,
-    % chapters/science,
-    % chapters/experiment,
-    % chapters/simulation,
-    % chapters/reconstruction,
-    % chapters/data_set,
-    % chapters/event_selection,
-    % chapters/analysis,
+    chapters/amplfi_results,
     chapters/conclusion,
     chapters/app_glossary,
 }
@@ -90,21 +92,11 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \include{chapters/intro}
 
-%Base Chapters
-% \include{chapters/science}
-% \include{chapters/experiment}
-
-%Software Chapters
-% \include{chapters/simulation}
-% \include{chapters/reconstruction}
 \include{chapters/aframe_methods}
 \include{chapters/o3_catalog}
 \include{chapters/amplfi_methods}
+\include{chapters/amplfi_results}
 
-%Analysis Chapters
-% \include{chapters/data_set}
-% \include{chapters/event_selection}
-% \include{chapters/analysis}
 
 %Conclusion
 \include{chapters/conclusion}
@@ -113,8 +105,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Bibliography
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\bibliography{thesis}
-\bibliographystyle{unsrt}
+\singlespacing
+\printbibliography
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

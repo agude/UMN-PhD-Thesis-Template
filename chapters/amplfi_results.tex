@@ -1,100 +1,7 @@
-\RequirePackage{lineno} 
-\documentclass[prd, reprint, preprintnumbers, twocolumn, eqsecnum,floatfix,letterpaper,superscriptaddress,nofootinbib]{revtex4-1}
-\usepackage{graphicx,url,amssymb,amsmath,rotating,color,units,wasysym,epsfig,multirow,epstopdf,subcaption,xcolor}
-\usepackage[normalem]{ulem}
-\usepackage{comment}
-\usepackage[multiple]{footmisc}
-\usepackage[colorlinks,urlcolor=blue,citecolor=blue,linkcolor=blue]{hyperref}
-\usepackage{cleveref}
-\usepackage{multirow}
-\usepackage{graphicx}
-% For P&P review
-\usepackage{lineno}
-\usepackage{arydshln}
-
-\graphicspath{{./}{figures/}}
-
-\newcommand{\red}[1]{{\color{red} #1}}
-
-\newcommand{\Ethan}[1]{{\color{blue} (Ethan: #1)}}
-\newcommand{\Malina}[1]{{\color{violet} (Malina: #1)}}
-\newcommand{\Deep}[1]{{\color{red} (Deep: #1)}}
-\newcommand{\Erik}[1]{{\color{green} (Erik: #1)}}
-
-\newcommand{\amplfi}{{\tt AMPLFI}}
-\newcommand{\lalsim}{{\tt lalsimulation}}
-\newcommand{\aframe}{{\tt Aframe}}
-\newcommand{\mlgw}{{\tt ml4gw}}
-\newcommand{\phenomd}{{\tt IMRPhenomD}}
-\newcommand{\phenomp}{\tt IMRPhenomPv2}
-\newcommand{\phenomxphm}{\tt IMRPhenomXPHM}
-\newcommand{\raytune}{{\tt ray.tune}}
-\newcommand{\pyro}{{\tt pyro}}
-\newcommand{\nside}{{\mathrm{NSIDE}}}
-\newcommand{\mc}{\ensuremath{\mathcal{M}}}
-\newcommand{\msun}{\ensuremath{M_{\odot}}}
-\newcommand{\mpc}{\ensuremath{\mathrm{Mpc}}}
-\newcommand{\dl}{\ensuremath{D_L}}
-\newcommand{\thetajn}{\ensuremath{\theta_{\mathrm{JN}}}}
-\newcommand{\boldtheta}{\ensuremath{\mathbf{\Theta}}}
-\newcommand{\data}{\ensuremath{\mathbf{d}}}
-\newcommand{\boldgamma}{\ensuremath{\mathbf{\Gamma}}}
-\newcommand{\smallgamma}{\ensuremath{\mathbf{\gamma}}}
-\newcommand{\vicreg}{\ensuremath{\mathcal{L}_{\mathrm{VICReg}}}}
-
-\begin{document}
-
-\title{Likelihood-free inference for gravitational-wave data analysis and public alerts}
-\author{Ethan Marx}
-\affiliation{Department of Physics, MIT, Cambridge, MA 02139, USA}
-\affiliation{LIGO Laboratory, 185 Albany St, MIT, Cambridge, MA 02139, USA}
-\author{Deep Chatterjee}
-\affiliation{Department of Physics, MIT, Cambridge, MA 02139, USA}
-\affiliation{LIGO Laboratory, 185 Albany St, MIT, Cambridge, MA 02139, USA}
-\author{Malina Desai}
-\affiliation{Department of Physics, MIT, Cambridge, MA 02139, USA}
-\affiliation{LIGO Laboratory, 185 Albany St, MIT, Cambridge, MA 02139, USA}
-
-\author{Ravi Kumar}
-\affiliation{Department of Aerospace Engineering, IIT Bombay, Powai, Mumbai, 400076, India}
-\affiliation{School of Physics and Astronomy, University of Minnesota, Minneapolis, MN 55455, USA}
-
-\author{William Benoit}
-\affiliation{School of Physics and Astronomy, University of Minnesota, Minneapolis, MN 55455, USA}
-
-\author{Argyro Sasli}
-\affiliation{School of Physics and Astronomy, University of Minnesota, Minneapolis, MN 55455, USA}
-
-\author{Leo Singer}
-\affiliation{Astroparticle Physics Laboratory, NASA Goddard Space Flight Center, Code 661, Greenbelt, MD 20771, USA}
-
-\author{Michael W. Coughlin}
-\affiliation{School of Physics and Astronomy, University of Minnesota, Minneapolis, MN 55455, USA}
-\author{Philip Harris}
-\affiliation{Department of Physics, MIT, Cambridge, MA 02139, USA}
-\author{Erik Katsavounidis}
-\affiliation{Department of Physics, MIT, Cambridge, MA 02139, USA}
-\affiliation{LIGO Laboratory, 185 Albany St, MIT, Cambridge, MA 02139, USA}
-
-
-
-\date{\today}
-
-
-%\author[0000-0002-0786-7307]{KKKK J. HHHH}
-%\affiliation{Department of Physics, \\
-%Massachusetts Institute of Technology, \\
-%Cambridge, Massachusetts 02139, USA \\
-%2LIGO Laboratory, \\
-%185 Albany St, MIT, \\
-%Cambridge, MA 02139, USA} 
-
-
 \begin{abstract}
 Rapid and reliable detection and dissemination of source parameter estimation data products from gravitational-wave events, especially sky localization, is critical for maximizing the potential of multi-messenger astronomy. Machine learning based detection and parameter estimation algorithms are emerging as production ready alternatives to traditional approaches. Here, we report validation studies of AMPLFI, a likelihood-free inference solution to low-latency parameter estimation of binary black holes. We use simulated signals added into data from the LIGO-Virgo-KAGRA's (LVK's) third observing run (O3) to compare sky localization performance with BAYESTAR, the algorithm currently in production for rapid sky localization of candidates from matched-filter pipelines. We demonstrate sky localization performance, measured by searched area and volume, to be equivalent with BAYESTAR. We show accurate reconstruction of source parameters with uncertainties for use in distributing low-latency coarse-grained chirp mass information. In addition, we analyze several candidate events reported by the LVK in the third gravitational-wave transient catalog (GWTC-3) and show consistency with the LVK's analysis. Altogether, we demonstrate AMPLFI's ability to produce data products for low-latency public alerts.
 
 \end{abstract}
-\pacs{} \maketitle
 %\keywords{}
 
 \section{Introduction}  \label{sec:intro}
@@ -260,7 +167,7 @@ We calculate the conditional distance ansatz parameters for pixels with $\geq 5$
 The KDE is constructed by modeling p($\alpha, \delta, d_L$) as the product of the 2D marginal distribution p($\alpha, \delta$) and the conditional distance distribution p($d \vert \alpha, \delta$). For both, posterior samples are clustered using a k-means algorithm into $k$ clusters. A brute-force search over $k$ is performed in order to maximize the Bayesian information criterion. For each cluster, a separate KDE is constructed, and the total distribution is modeled by summing the cluster KDEs with appropriate weights. The conditional distance distribution p($d \vert \alpha, \delta$) is evaluated as $p(\alpha, \delta, d_L) / p(\alpha, \delta)$ by analytically marginalizing the 3D KDEs. See Sec.~5 in \cite{Singer_2016} for more details. Due to the brute-force search over $k$, the runtime is $\sim 11$ seconds parallelized on 64 CPUs, which is not suitable for extremely rapid alerts.
 
 
-Using the dataset of injections described in Sec.~\ref{sec:testing-data}, we compare the accuracy of the AMPLFI sky map produced using the histogram and KDE estimators. For each injection, we calculate searched area and searched volume metrics for both estimators. Searched area (volume) is measured by sorting sky area (volume) pixels by descending probability, and accumulating area (volume) until the pixel containing the true location of the simulated signal is reached. For the adaptive histogram estimator, we draw 20,000 samples from the model. The top row of Figure~\ref{fig:kde-vs-hist} shows that searched areas from the two methods are in statistical agreement. However, the histogram estimator has a minimum searched area of $\sim 1$ $\mathrm{deg^2}$ due to the pixel resolution of NSIDE=64, and is therefore unable to achieve searched areas smaller than this. The bottom row compares the searched volumes between the estimators. The methods agree for searched volumes $\lesssim 10^9$ $\mathrm{Mpc}^3$. For larger searched volumes, the KDE method performs better. This behavior is due to the large number of samples required for the histogram estimator to properly converge for low SNR events, where the sky localization probability is spread across a larger number of pixels. In practice, these low SNR events are not as likely to be pursued for EM followup. For example, the Rubin target of opportunity observing strategy plans to pursue EM followup for events with sky localizations less than $\sim 100\;\text{deg}^2$ \citep{andreoni2024rubin2024envisioningvera}. In this regime, the histogram methods searched volume is comparable with the KDE. 
+Using the dataset of injections described in Sec.~\ref{sec:testing-data}, we compare the accuracy of the AMPLFI sky map produced using the histogram and KDE estimators. For each injection, we calculate searched area and searched volume metrics for both estimators. Searched area (volume) is measured by sorting sky area (volume) pixels by descending probability, and accumulating area (volume) until the pixel containing the true location of the simulated signal is reached. For the adaptive histogram estimator, we draw 20,000 samples from the model. The top row of Figure~\ref{fig:kde-vs-hist} shows that searched areas from the two methods are in statistical agreement. However, the histogram estimator has a minimum searched area of $\sim 1$ $\mathrm{deg^2}$ due to the pixel resolution of NSIDE=64, and is therefore unable to achieve searched areas smaller than this. The bottom row compares the searched volumes between the estimators. The methods agree for searched volumes $\lesssim 10^9$ $\mathrm{Mpc}^3$. For larger searched volumes, the KDE method performs better. This behavior is due to the large number of samples required for the histogram estimator to properly converge for low SNR events, where the sky localization probability is spread across a larger number of pixels. In practice, these low SNR events are not as likely to be pursued for EM followup. For example, the Rubin target of opportunity observing strategy plans to pursue EM followup for events with sky localizations less than $\sim 100\;\text{deg}^2$ \cite{andreoni2024rubin2024envisioningvera}. In this regime, the histogram methods searched volume is comparable with the KDE. 
 
 
 \begin{figure} 
@@ -359,13 +266,13 @@ This procedure is repeated $N$ times, where $N$ is the size of the training batc
 
 The idea behind this sampling procedure is that noise between different detector sites is highly uncorrelated. So, strain data sampled independently in time for each detector is a plausible, unique noise realization. This idea, well-known in the GW literature as time-slides, is commonly used to create realistic noise realizations for estimating the background distributions of search algorithms. During training, the detector strain data is stored on disk and the above sampling procedure is done on-the-fly.
 
-To validate AMPLFI's robustness over time, we created 4 datasets of 1000 injections sampled from AMPLFI's training prior and added them into real detector noise. \red{We then filter the injections to those with SNR $\geq 12$, leaving $\sim$ 500 injections in each dataset.}
+To validate AMPLFI's robustness over time, we created 4 datasets of 1000 injections sampled from AMPLFI's training prior and added them into real detector noise. We then filter the injections to those with SNR $\geq 12$, leaving $\sim$ 500 injections in each dataset.
 For each dataset, we utilized strain data at different epochs after the initial model training period. These periods spanned from immediately after, to 11 weeks after the training period. Each period consisted of $\sim 1$ day of live time. We analyze each of these datasets using the HLV AMPLFI network. In Fig~\ref{fig:robustness}, we show sky localization consistency and searched area performance. We see that AMPLFI's sky localizations remain well calibrated and accurate 11 weeks beyond AMPLFI's initial training period. This demonstrates that a single AMPLFI model maintains utility well beyond its initial training period. 
 
 \begin{figure*}
     \centering
     \includegraphics[scale=0.5]{figures/performance_over_time_consistency.pdf}
-    \caption{Left: 2D (area) localization P-P tests for 4 datasets of injections drawn from AMPLFI's training prior created at various epochs across O3b. \red{Analyzed injections are restricted to have SNR $\geq 12$}. P-values shown in the legend indicate that sky maps produced by AMPLFI remain well calibrated across an 11 week period. Right: Cumulative histogram of searched area for the same datasets. Bootstrapped 95\% confidence intervals are plotted as shaded bands. The accuracy of AMPLFI sky maps does not degrade over time.}
+    \caption{Left: 2D (area) localization P-P tests for 4 datasets of injections drawn from AMPLFI's training prior created at various epochs across O3b. Analyzed injections are restricted to have SNR $\geq 12$. P-values shown in the legend indicate that sky maps produced by AMPLFI remain well calibrated across an 11 week period. Right: Cumulative histogram of searched area for the same datasets. Bootstrapped 95\% confidence intervals are plotted as shaded bands. The accuracy of AMPLFI sky maps does not degrade over time.}
     \label{fig:robustness}
 \end{figure*}
 
@@ -413,12 +320,6 @@ Collaboration, and KAGRA.
 \end{itemize}
 \end{comment}
 
-\bibliographystyle{apsrev}
-\bibliography{references.bib}
-
-
-
-\appendix
 
 \begin{comment}
 \section{Method of moments}\label{appendix:moments}
@@ -444,7 +345,6 @@ In Fig.~\ref{fig:kde-vs-hist}, we show that for sufficiently high SNR events, th
 
 
 \section{Interferometer Masking}
-\red{TODO: decide whether or not to keep}
 When a candidate event is detected, it is possible that some interferometers are not taking science quality data. So, finding ways to process data from any subset of 
 active detectors. A simple approach is to train a unique neural network for each subset. However, this very rapidly increases the computational burden, since the number of subsets scales exponentially with the number of detectors. Here, we introduce interferometer masking, a solution that allows a single neural network to process on an arbitrary configuration of interferometers. The idea is to randomly mask the data from different detectors during the training process, allowing the neural network to learn from different detector subsets. More formally, a mask $M \subseteq \{1, 2, ..., N\}$, indicating which interferometers will be masked, is sampled from some prior $p(M)$, where $N$ is the number of interferometers. The mask is applied to the data $\mathbf{d} \in \mathbb{R}^{N \times T}$, producing $\mathbf{d}^M$. Then, the training loss function becomes $L = - \log q(\theta | \mathbf{d}^M)$. In practice, the masking is performed by zeroing out the interferometer data. 
 
@@ -537,6 +437,3 @@ One can imagine how this approach can be extended to include more detector subse
     \label{fig:GW191222_033537-dist-railing}
     
 \end{figure*}
-
-
-\end{document}
