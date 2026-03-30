@@ -1,123 +1,227 @@
 
 \chapter{O3 Catalog}
+\label{chap:o3_catalog}
 
-We conduct a search for stellar-mass binary black hole mergers in gravitational-wave data collected by the LIGO detectors during the LIGO-Virgo-KAGRA (LVK) third observing run (O3).
-Our search uses a machine learning (ML) based method, Aframe, an alternative to traditional matched filtering search techniques. The O3 observing run has been analyzed by the LVK collaboration, producing GWTC-3, the most recent catalog installment which has been made publicly available in 2021. Various groups outside the LVK have re-analyzed O3 data using both traditional and ML-based approaches. Here, we identify 38 candidates with probability of astrophysical origin ($p_\mathrm{astro}$) greater than 0.5, which were previously reported in GWTC-3. This is comparable to the number of candidates reported by  individual matched-filter searches. In addition, we compare Aframe candidates with catalogs from research groups outside of the LVK, identifying three candidates with $p_\mathrm{astro} > 0.5$. No previously un-reported candidates are identified by Aframe. This work demonstrates that Aframe, and ML based searches more generally, are useful companions to matched filtering pipelines. 
+\begin{refsection}
+
+\section{Abstract}
+
+Using the Aframe model introduced in Chapter \ref{chap:aframe_methods}, we conduct a search for stellar-mass binary black hole mergers in gravitational-wave data collected by the LIGO detectors during the LIGO-Virgo-KAGRA (LVK) third observing run (O3).
+The O3 observing run has been analyzed by the LVK collaboration, producing GWTC-3, the most recent catalog installment which has been made publicly available in 2021. 
+Various groups outside the LVK have re-analyzed O3 data using both traditional and ML-based approaches. 
+Here, we identify 38 candidates with probability of astrophysical origin ($p_\mathrm{astro}$) greater than 0.5, which were previously reported in GWTC-3. 
+This is comparable to the number of candidates reported by individual matched-filter searches. 
+In addition, we compare Aframe candidates with catalogs from research groups outside of the LVK, identifying three candidates with $p_\mathrm{astro} > 0.5$. 
+No previously unreported candidates are identified by Aframe. 
+This work demonstrates that Aframe, and ML based searches more generally, are useful companions to matched filtering pipelines.
+
 
 \section{Introduction}
 
-The first direct detection of gravitational waves from the merger of a binary stellar-mass black hole system~\cite{AbEA2016a} in 2015 was a breakthrough event in how we observe our universe.
-The continuing observations and improved sensitivities of the international network of gravitational-wave detectors (Advanced LIGO~\cite{Aasi_2015}, Advanced Virgo~\cite{Acernese_2015} and KAGRA~\cite{kagra}) over three observing runs (O1, O2 and O3) from 2015-2020, has brought the total number of cataloged systems close to 100~\cite{Abbott_2023}.
+% The first direct detection of gravitational waves from the merger of a binary stellar-mass black hole system~\cite{AbEA2016a} in 2015 was a breakthrough event in how we observe our universe.
+The continuing observations and improved sensitivities of the international network of gravitational-wave detectors (Advanced LIGO~\cite{Aasi_2015}, Advanced Virgo~\cite{Acernese_2015} and KAGRA~\cite{kagra}) over three observing runs (O1, O2 and O3) from 2015-2020, brought the total number of cataloged systems to nearly 100~\cite{Abbott_2023}.
 Additional candidate events have been reported from non-LVK analyses in the IAS \cite{ias_o3a, ias_o3b}, OGC \cite{3-ogc, 4-ogc}, and AresGW \cite{ares_gw_o3} catalogs, the last of which is another fully machine learning (ML) based approach.
 These detections have enabled a broad range of studies, from measuring properties of the binary black hole populations and probing their formation channels to testing general relativity ~\cite{testing-gr, gwtc-3-astro}.
 A fourth observing run (O4) of the LVK commenced in May 2023 and is expected to complete in the fall of 2025~\cite{o4_plans}.
 LVK data from the first three observing runs are in the public domain through the gravitational-wave open science center~\cite{Abbott_2023_open_data}.
 
 
-In this work, we perform an end-to-end analysis of the LVK's O3 observing run with Aframe~\cite{aframe_methods}, a machine learning algorithm for detecting binary black hole mergers. We accumulate 100 years of background data by analyzing timeslides across the entire observing run to assign false alarm rates (FARs) to candidates, and perform the same sensitive volume analysis used to assess search pipeline sensitivity in the LVK's GWTC-3. We conduct an injection campaign across O3 to both estimate search sensitivity, and construct a foreground model to estimate candidates probability of astrophysical origin ($p_\mathrm{astro}$). Using $p_\mathrm{astro} > 0.5$ as a threshold for significant candidates, we compare candidates identified by Aframe with the GWTC-3, IAS, OGC, and AresGW catalogs. 
+In this work, we perform an end-to-end analysis of the LVK's O3 observing run with Aframe~\cite{aframe_methods}, a machine learning algorithm for detecting binary black hole mergers. 
+We accumulate 100 years of background data by analyzing timeslides across the entire observing run to assign false alarm rates (FARs) to candidates, and perform the same sensitive volume analysis used to assess search pipeline sensitivity in the LVK's GWTC-3. 
+We conduct an injection campaign across O3 to both estimate search sensitivity, and construct a foreground model to estimate candidates probability of astrophysical origin ($p_\mathrm{astro}$). 
+Using $p_\mathrm{astro} > 0.5$ as a threshold for significant candidates, we compare candidates identified by Aframe with the GWTC-3, IAS, OGC, and AresGW catalogs. 
 
-% the paragaph below is not needed for the introduction
-%Our search yields two new candidate events above the $p_\mathrm{astro}$ threshold of $0.5$.
-%This is the probability of a given candidate event to be of astrophysical origin that we measure directly from our data and based on the population of astrophysical sources as established by the LVK observations so far.
-%This has become the standard criterion for inclusion in catalogs. We perform several data quality checks for these candidates, and perform full parameter estimation of their source properties. 
-
-This paper is organized as follows.
-In Sec.~\ref{methdat}, we provide a brief review of the Aframe algorithm, the data that was used to train the algorithm, and the data that was analyzed. Sensitivity estimates attained using Monte Carlo techniques are described in section~\ref{sens}.
-Our search results are presented in Sec.~\ref{results}, including comparisons with previously published event catalogs.
-We conclude with a discussion and outlook for ML searches in Sec.~\ref{sec:conclusion}.
-The method used for estimating $p_{\mathrm{astro}}$ is presented in Appendix~\ref{sec:pastro}, and the details of parameter estimation are discussed in Appendix~\ref{sec:pe}.
+This chapter is organized as follows.
+In Sec.~\ref{o3cat_sec:methdat}, we provide a brief review of the Aframe algorithm, the data that was used to train the algorithm, and the data that was analyzed. Sensitivity estimates attained using Monte Carlo techniques are described in Sec.~\ref{o3cat_sec:sens}.
+Our search results are presented in Sec.~\ref{o3cat_sec:results}, including comparisons with previously published event catalogs.
+We conclude with a discussion and outlook for ML searches in Sec.~\ref{o3cat_sec:conclusion}.
+The method used for estimating $p_{\mathrm{astro}}$ is presented in Appendix~\ref{o3cat_sec:pastro}, and the details of parameter estimation are discussed in Appendix~\ref{o3cat_sec:pe}.
 
 \section{Methods and Data}
-\label{methdat}
+\label{o3cat_sec:methdat}
 
-Aframe~\cite{Marx_aframe} is a supervised ML framework for training neural networks to detect gravitational-wave signals directly from interferometer strain data. In this work, we use the Aframe configuration described extensively in Ref.~\cite{aframe_methods} to search for gravitational-wave signals from binary black hole (BBH) mergers in O3. 
+Aframe~\cite{Marx_aframe} is a supervised ML framework for training neural networks to detect gravitational-wave signals directly from interferometer strain data. 
+In this work, we use the Aframe configuration described extensively in Ref.~\cite{aframe_methods} to search for gravitational-wave signals from binary black hole (BBH) mergers in O3. 
 
 In brief, the neural network used by Aframe is a ResNet34\cite{resnet}-based architecture that processes overlapping, 1.5 second windows of coincident LIGO Hanford and Livingston strain data to produce a scalar-valued detection statistic. 
-Higher values of this statistic signify the neural network is more confident there is a signal consistent with the training distribution present in the data. Aframe analyzes overlapping windows spaced 0.25~s apart, corresponding to an inference sampling rate of 4~Hz. This timeseries of neural-network candidates is integrated using a top hat filter, and candidates are identified by finding peaks in the integrated neural-network output. See Fig.~\ref{fig:output_example} for an illustration of how Aframe's neural network output is used to make detections. 
+Higher values of this statistic signify the neural network is more confident there is a signal consistent with the training distribution present in the data. 
+Aframe analyzes overlapping windows spaced 0.25~s apart, corresponding to an inference sampling rate of 4~Hz. 
+This timeseries of neural-network output is integrated using a top hat filter, and candidates are identified by finding peaks in the integrated neural-network output. 
+See Fig.~\ref{o3cat_fig:output_example} for an illustration of how Aframe's neural network output is used to make detections. 
 
-The neural-network model used in this work has been trained and optimized to search for BBH mergers in the component mass range $[5, 100]~ M_\odot$. The astrophysical priors used to generate the signals used to train the neural-network are reported in Table \ref{table:priors} and were based on the distributions used to estimate search pipeline sensitivity in the LVK's third observing run (O3) \cite{ligo_scientific_collaboration_and_virgo_2023_7890437}. For this analysis, we train and validate Aframe using coincident strain data between times 2019-04-01T:15:00:00 and 2019-04-17T:19:53:20 corresponding to a 17-day calendar period from the start of O3. The training procedure is the same as described in~\cite{aframe_methods}. To summarize this procedure, the problem is framed as a supervised learning task where neural-network parameters are optimized by minimizing a binary cross entropy loss between labeled signals and noise. Training batches are constructed by randomly sampling 1.5 second windows of real strain data with a sample rate of 2048\,Hz, and simulated signals are added into a fraction of the batch. We utilize the ml4gw\footnote{https://github.com/ML4GW/ml4gw/} library for GPU accelerated power spectral density (PSD) estimation, data whitening, and projection of waveform polarizations onto the interferometers, enabling real time data augmentations. In this work, training is distributed across 8 NVIDIA A100 GPUs on the Nautilus HyperCluster\footnote{https://nrp.ai/}. The learning rate used in~\cite{aframe_methods} is scaled linearly by the number of GPUs to account for the effective increase in batch size from using multiple GPUs~\cite{lr_scaling}.
+The neural-network model used in this work has been trained and optimized to search for BBH mergers in the component mass range $[5, 100]~ M_\odot$. 
+The astrophysical priors used to generate the signals used to train the neural-network are reported in Table \ref{o3cat_tab:priors} and were based on the distributions used to estimate search pipeline sensitivity in the LVK's third observing run (O3) \cite{ligo_scientific_collaboration_and_virgo_2023_7890437}. 
+For this analysis, we train and validate Aframe using coincident strain data between times 2019-04-01T:15:00:00 and 2019-04-17T:19:53:20 corresponding to a 17-day calendar period from the start of O3. 
+The training procedure is the same as described in~\cite{aframe_methods}. 
+To summarize this procedure, the problem is framed as a supervised learning task where neural-network parameters are optimized by minimizing a binary cross entropy loss between labeled signals and noise. 
+Training batches are constructed by randomly sampling 1.5 second windows of real strain data with a sample rate of 2048\,Hz, and simulated signals are added into a fraction of the batch. 
+We utilize the ml4gw\footnote{https://github.com/ML4GW/ml4gw/} library for GPU accelerated power spectral density (PSD) estimation, data whitening, and projection of waveform polarizations onto the interferometers, enabling real time data augmentations. 
+In this work, training is distributed across 8 NVIDIA A100 GPUs on the Nautilus HyperCluster\footnote{https://nrp.ai/}. 
+The learning rate used in~\cite{aframe_methods} is scaled linearly by the number of GPUs to account for the effective increase in batch size from using multiple GPUs~\cite{lr_scaling}.
 
-The search is performed using public data across the entirety of O3 \cite{Buikema_2020, Acernese_2023} provided by the Gravitational Wave Open Science Center (GWOSC) \cite{gwosc}. Currently, Aframe requires coincident Hanford and Livingston data for analysis. For each interferometer, the openly available science mode flag is queried to remove segments with poor data quality. Segments for which the science mode flag is active for both the Hanford and Livingston LIGO interferometers are selected. A minimum coincident segment duration of 128\,s is enforced to allow enough data to accurately estimate the PSD. In addition, the LVK provides transient-like veto flags referred to as category 1 and 2 (CAT1, CAT2)~\cite{Abbott_2020, Davis_2021, Virgo:2022fxr, Christensen_2004} vetoes. These binary vetoes are applied to background and foreground events to mitigate the effects of non-Gaussian noise transients. The total live time that meets our analysis criteria is 202.4\,days. The sampling rate of the strain data is downsampled to 2048\,Hz from their original 16384\,Hz, and the strain data is high-passed at 32\,Hz, near the seismic noise wall. 
+The search is performed using public data across the entirety of O3 \cite{Buikema_2020, Acernese_2023} provided by the Gravitational Wave Open Science Center (GWOSC) \cite{gwosc}.
+Currently, Aframe requires coincident Hanford and Livingston data for analysis. 
+For each interferometer, the openly available science mode flag is queried to remove segments with poor data quality. 
+Segments for which the science-mode flag is active for both the Hanford and Livingston LIGO interferometers are selected. 
+A minimum coincident segment duration of 128\,s is enforced to allow enough data to accurately estimate the PSD. 
+In addition, the LVK provides transient-like veto flags referred to as category 1 and 2 (CAT1, CAT2)~\cite{Abbott_2020, Davis_2021, Virgo:2022fxr, Christensen_2004} vetoes. 
+These binary vetoes are applied to background and foreground events to mitigate the effects of non-Gaussian noise transients. 
+The total live time that meets our analysis criteria is 202.4\,days. 
+The sampling rate of the strain data is downsampled to 2048\,Hz from their original 16384\,Hz, and the strain data is high-passed at 32\,Hz, near the seismic noise wall. 
 
 \begin{figure}[ht]
 \centering
 \includegraphics[width=\columnwidth]{figures/gw190828_063405_response.png}
-\caption{
-Example of Aframe's neural network output in response to GWTC-3's GW190828\_063405, a merger with $m_1 = 23.7^{+6.8}_{-6.7} M_{\odot}$ and $ m_2 = 10.4^{+3.8}_{-2.2} M_{\odot}$. The event time corresponds to the coalescence time of the binary. As the merger time enters the window of the network, the output increases and remains at a high level while the merger time is within the network window. The integrated response rises as the merger passes through the window, and traditional peak-finding methods can be used to identify events and estimate merger times; see \cite{aframe_methods} for details.
-}\label{fig:output_example}
+\caption[Aframe detection example]{
+Example of Aframe's neural network output in response to GWTC-3's GW190828\_063405, a merger with $m_1 = 23.7^{+6.8}_{-6.7} M_{\odot}$ and $ m_2 = 10.4^{+3.8}_{-2.2} M_{\odot}$. 
+The event time corresponds to the coalescence time of the binary. 
+As the merger time enters the window of the network, the output increases and remains at a high level while the merger time is within the network window. 
+The integrated response rises as the merger passes through the window, and traditional peak-finding methods can be used to identify events and estimate merger times; see \cite{aframe_methods} for details.
+}\label{o3cat_fig:output_example}
 \end{figure}
 
 \section{Sensitivity}
-\label{sens}
+\label{o3cat_sec:sens}
 
 In Ref.~\cite{aframe_methods}, Aframe's sensitive volume was measured using injections drawn from an astrophysically motivated population, and added into over $\sim$ 1 month of data at the beginning of O3. 
 One year of background was accumulated through timeslides and analyzed to assign FARs to injections. 
-We refer the reader to Ref.~\cite{aframe_methods} for additional details of that analysis. In this work, sensitive volume is estimated by performing signal injections across O3, excluding the 17-day training period. Using the same data, one-hundred years of timeslides are analyzed to produce a background distribution from which we can assign FARs. Figure~\ref{fig:sensitivity} shows Aframe's sensitive volume for four different mass regions as a function of FAR. Importance sampling is used to estimate sensitive volume for four different mass distributions ~\cite{Tiwari_2018}.
-After scaling up the quantity of background analyzed, we see similar trends as reported in ~\cite{aframe_methods}. Aframe achieves similar sensitivity with matched filtering approaches in the 35-35 $M_{\odot}$ bin, and a relative decrease in sensitivity as the chirp mass decreases. Still, this analysis illustrates empirically that Aframe maintains sensitivity at high significances (low FARs). 
+We refer the reader to Ref.~\cite{aframe_methods} for additional details of that analysis. 
+In this work, sensitive volume is estimated by performing signal injections across O3, excluding the 17-day training period. 
+Using the same data, one-hundred years of timeslides are analyzed to produce a background distribution from which we can assign FARs. 
+Figure~\ref{o3cat_fig:sensitivity} shows Aframe's sensitive volume for four different mass regions as a function of FAR. 
+Importance sampling is used to estimate sensitive volume for four different mass distributions ~\cite{Tiwari_2018}.
+After scaling up the quantity of background analyzed, we see similar trends as reported in ~\cite{aframe_methods}. 
+Aframe achieves similar sensitivity with matched filtering approaches in the 35-35 $M_{\odot}$ bin, and a relative decrease in sensitivity as the chirp mass decreases. 
+Still, this analysis illustrates empirically that Aframe maintains sensitivity at high significances (low FARs). 
 
 
 \begin{figure*}[ht]
 \centering
 \includegraphics[width=\textwidth]{figures/o3-search-sv.png}
-\caption{Sensitive volume vs FAR for four different mass distributions. Masses are specified in the source frame. Each mass is drawn from a log-normal distribution with a mean of the value given above each plot and a width of 0.1. Aframe demonstrates competitive sensitivity at higher masses, but loses performance relative to traditional search pipelines at lower masses. The sensitive volume of the other pipelines was calculated using data from a GWTC-3 data release\cite{ligo_scientific_collaboration_and_virgo_2023_7890437}.}\label{fig:sensitivity}
+\caption[O3 catalog sensitivity]{
+Sensitive volume vs FAR for four different mass distributions. 
+Masses are specified in the source frame. 
+Each mass is drawn from a log-normal distribution with a mean of the value given above each plot and a width of 0.1. 
+Aframe demonstrates competitive sensitivity at higher masses, but loses performance relative to traditional search pipelines at lower masses. 
+The sensitive volume of the other pipelines was calculated using data from a GWTC-3 data release\cite{ligo_scientific_collaboration_and_virgo_2023_7890437}.}
+\label{o3cat_fig:sensitivity}
 \end{figure*}
 
 
 \input{tables/priors}
 
 \section{Search Results}
-The LVK's GWTC-2.1 and GWTC-3 (henceforth, GWTC-3), provided the first catalog of gravitational-wave transients identified during O3. Since then, other analyses have reported additional significant gravitational wave candidates not identified in GWTC-3 \cite{ares_gw_o3, 3-ogc, 4-ogc, ias_o3a, ias_o3b}. As is standard in the gravitational-wave literature when constructing catalogs, we apply an inclusion criteria of $p_{\mathrm{astro}} > 0.5$. $p_{\mathrm{astro}}$ represents the probability that a candidate event has an astrophysical origin (i.e., is not a result of background noise), and is calculated using prior information on the astrophysical population, as well as a search's event distributions for background events and simulated event detections. The details of this calculation for Aframe are given in Appendix~\ref{sec:pastro}. Candidates that pass the threshold of 0.5 are called ``significant". Table~\ref{table:significant} lists the 41 significant candidate events that Aframe detects, along with the catalog where the event was first reported. In addition, Table~\ref{table:non_significant} lists 30 candidates identified by Aframe as low-significance, associated with candidates reported in previous catalogs. These low-significant candidates did not pass the $p_{\mathrm{astro}} > 0.5$ threshold, but have a FAR more significant than 2 per year, the threshold for issuing public alerts in O3. Three significant candidates from non-GWTC-3 catalogs are found by Aframe. For these candidates, we perform parameter estimation using Bilby (details in Appendix \ref{sec:pe}). We also refer the reader to recent work \cite{Williams:2024tna} where a configuration similar to that used by the LVK for GWTC-3 was employed to perform parameter estimation on candidates reported from analyses outside the LVK. One event not reported elsewhere was identified with $p_{\mathrm{astro}} = 0.6$, but is discarded due to the identification of a whistle glitch by GravitySpy at the inferred coalescence time. Besides this, Aframe does not identify any previously un-reported candidates. In the rest of this section, we make comparisons of Aframe's search results with previously pubished GWTC-3, IAS, OGC, and AresGW catalogs. We note that, when making these comparisons, we include candidates that may lie outside the training prior (Table \ref{table:priors}) used for this search.
+The LVK's GWTC-2.1 and GWTC-3 (henceforth, GWTC-3), provided the first catalog of gravitational-wave transients identified during O3.
+Since then, other analyses have reported additional significant gravitational wave candidates not identified in GWTC-3 \cite{ares_gw_o3, 3-ogc, 4-ogc, ias_o3a, ias_o3b}. 
+As is standard in the gravitational-wave literature when constructing catalogs, we apply an inclusion criteria of $p_{\mathrm{astro}} > 0.5$. 
+$p_{\mathrm{astro}}$ represents the probability that a candidate event has an astrophysical origin (i.e., is not a result of background noise), and is calculated using prior information on the astrophysical population, as well as a search's event distributions for background events and simulated event detections. 
+The details of this calculation for Aframe are given in Appendix~\ref{o3cat_sec:pastro}. 
+Candidates that pass the threshold of 0.5 are called ``significant". 
+Table~\ref{o3cat_tab:significant} lists the 41 significant candidate events that Aframe detects, along with the catalog where the event was first reported. 
+In addition, Table~\ref{o3cat_tab:non_significant} lists 30 candidates identified by Aframe as low-significance, associated with candidates reported in previous catalogs.
+These low-significant candidates did not pass the $p_{\mathrm{astro}} > 0.5$ threshold, but have a FAR more significant than 2 per year, the threshold for issuing public alerts in O3.
+Three significant candidates from non-GWTC-3 catalogs are found by Aframe. 
+For these candidates, we perform parameter estimation using Bilby (details in Appendix \ref{o3cat_sec:pe}). 
+We also refer the reader to recent work \cite{Williams:2024tna} where a configuration similar to that used by the LVK for GWTC-3 was employed to perform parameter estimation on candidates reported from analyses outside the LVK. 
+One event not reported elsewhere was identified with $p_{\mathrm{astro}} = 0.6$, but is discarded due to the identification of a whistle glitch by GravitySpy at the inferred coalescence time. 
+Besides this, Aframe does not identify any previously unreported candidates. 
+In the rest of this section, we make comparisons of Aframe's search results with previously pubished GWTC-3, IAS, OGC, and AresGW catalogs. 
+We note that, when making these comparisons, we include candidates that may lie outside the training prior (Table \ref{o3cat_tab:priors}) used for this search.
 
-\label{results}
+\label{o3cat_sec:results}
 
-\textbf{\emph{GWTC-3}} 70 candidates were reported in GWTC-3 from O3 with Hanford and Livingston data available. Four matched-filtering pipelines, GstLAL \cite{ewing2023performance, Tsukada_2023}, MBTA \cite{Aubin_2021}, PyCBC-broad, PyCBC-BBH \cite{Dal_Canton_2021}, and one minimally modeled pipeline, cWB \cite{DRAGO2021100678}, reported candidates. 
-The criterion for inclusion in GWTC-3 was that \textit{any} of the five search pipelines reported a $p_{\mathrm{astro}} > 0.5$. Therefore, it is expected that Aframe identifies fewer events with $p_{\mathrm{astro}} > 0.5$ than the union of all search pipelines, which is what we find. Table \ref{table:significant} contains 39 of the 70 Hanford/Livingston events reported in GWTC-3 that were also identified by Aframe as significant. One of these candidates, $\mathrm{GW}200129\_065458$ was detected with $p_\mathrm{astro} > 0.99$, but was coincident with a CAT2 veto.
-For comparison, GstLAL, MBTA, PyCBC-Broad, PyCBC-BBH, and cWB  detect 47, 48, 41, 61, and 25 events at this threshold respectively \cite{gwtc-2.1, Abbott_2023}. So, Aframe identifies a comparable quantity of candidates. Of the 39 significant Aframe candidates, 28 were detected with FAR more significant than all events in the 100 years of analyzed background, corresponding to $p_{\mathrm{astro}} > 0.99$. In addition, in Table \ref{table:non_significant} we report 16 GWTC-3 candidates which were found by Aframe with low significance\footnote{GW190916\_200658 and GW190926\_050336 are present in GWTC-3, but were first reported in OGC }. Therefore, there are 15 Hanford/Livingston candidates reported in GWTC-3 that were not identified by Aframe at any significance. Of these, 5 had secondary masses below 5 $M_\odot$, putting them outside of our training prior. The remaining 10 had network matched filter SNRs reported in GWTC-3 below 12.6.
-Fig.~\ref{fig:missed_found} summarizes Aframe's detections of GWTC-3 events across slices of the parameter space. 
+\textbf{\emph{GWTC-3}} 70 candidates were reported in GWTC-3 from O3 with Hanford and Livingston data available. 
+Four matched-filtering pipelines, GstLAL \cite{ewing2023performance, Tsukada_2023}, MBTA \cite{Aubin_2021}, PyCBC-broad, PyCBC-BBH \cite{Dal_Canton_2021}, and one minimally modeled pipeline, cWB \cite{DRAGO2021100678}, reported candidates. 
+The criterion for inclusion in GWTC-3 was that \textit{any} of the five search pipelines reported a $p_{\mathrm{astro}} > 0.5$. 
+Therefore, it is expected that Aframe identifies fewer events with $p_{\mathrm{astro}} > 0.5$ than the union of all search pipelines, which is what we find. 
+Table \ref{o3cat_tab:significant} contains 39 of the 70 Hanford/Livingston events reported in GWTC-3 that were also identified by Aframe as significant. 
+However, one of these candidates, $\mathrm{GW}200129\_065458$ was detected with $p_\mathrm{astro} > 0.99$, but was coincident with a CAT2 veto, and so would been reported by Aframe without analysis by other searches.
+For comparison, GstLAL, MBTA, PyCBC-Broad, PyCBC-BBH, and cWB  detect 47, 48, 41, 61, and 25 events at this threshold respectively \cite{gwtc-2.1, Abbott_2023}. 
+So, Aframe identifies a comparable quantity of candidates. 
+Of the 38 significant Aframe candidates, 27 were detected with FAR more significant than all events in the 100 years of analyzed background, corresponding to $p_{\mathrm{astro}} > 0.99$. 
+In addition, in Table \ref{o3cat_tab:non_significant} we report 16 GWTC-3 candidates which were found by Aframe with low significance\footnote{GW190916\_200658 and GW190926\_050336 are present in GWTC-3, but were first reported in OGC }. 
+Therefore, there are 15 Hanford/Livingston candidates reported in GWTC-3 that were not identified by Aframe at any significance. 
+Of these, 5 had secondary masses below 5 $M_\odot$, putting them outside of our training prior. 
+The remaining 10 had network matched filter SNRs reported in GWTC-3 below 12.6.
+Fig.~\ref{o3cat_fig:missed_found} summarizes Aframe's detections of GWTC-3 events across slices of the parameter space. 
 
 \begin{figure}[ht]
 \centering
-\includegraphics[width=\columnwidth]{figures/missed_found_pastro.png}
-\caption{\emph{Top}: The SNR vs. the source frame chirp mass of all 70 Hanford/Livingston events reported in GWTC-2.1 and GWTC-3. Mass and SNR information are as reported by the LVK. Points are colored by the $p_{\mathrm{astro}}$ that Aframe reports for each event. Consistent with sensitivity estimates (Fig.~\ref{fig:sensitivity}), Aframe more confidently identifies higher mass candidates. We note that the highest SNR event in this figure, GW200129\_065458, is not detected due to the application of a category 2 veto. \emph{Bottom}: Same events plotted based on source frame component masses.}
-\label{fig:missed_found}
+\includegraphics[width=0.5\textwidth]{figures/missed_found_pastro.png}
+\caption[O3 catalog missed-found]{
+\emph{Top}: The SNR vs. the source frame chirp mass of all 70 Hanford/Livingston events reported in GWTC-2.1 and GWTC-3. 
+Mass and SNR information are as reported by the LVK. Points are colored by the $p_{\mathrm{astro}}$ that Aframe reports for each event. 
+Consistent with sensitivity estimates (Fig.~\ref{o3cat_fig:sensitivity}), Aframe more confidently identifies higher mass candidates. 
+We note that the highest SNR event in this figure, GW200129\_065458, is not detected due to the application of a category 2 veto. 
+\emph{Bottom}: Same events plotted based on source frame component masses.}
+\label{o3cat_fig:missed_found}
 \end{figure}
 
 
-\textbf{\emph{IAS}} The IAS algorithm is another matched-filtering-based detection pipeline. IAS identified a total of 65 significant Hanford/Livingston candidates, 16 of which were reported for the first time by IAS \cite{ias_o3a, ias_o3b}. Of the 65 significant IAS candidates, Aframe identifies 35 as significant, leaving 30 IAS candidates unidentified by Aframe. Six Aframe significant candidates are not identified by IAS. Table \ref{table:significant} lists two candidates, $\mathrm{GW}190707\_083226$ and $\mathrm{GW}190818\_232544$ first identified in the IAS catalog which were also identified as significant by Aframe. In addition, Table \ref{table:non_significant} lists 3 candidates first reported by the IAS analysis which were found by Aframe with low-significance. One such candidate, $\mathrm{GW}200109\_195634$, is found just below threshold with a $p_\mathrm{astro}$ of $0.44$. For this candidate, although the IAS catalog reports a much more significant $p_\mathrm{astro}$, Aframe and the IAS report comparable FARs. We perform parameter estimation for the two significant candidates. Both $\mathrm{GW}190707\_083226$, and $\mathrm{GW}190818\_232544$ have primary mass posterior support in the upper mass gap ($~\sim45-135 M_\odot$) predicted by pulsational pair instability and pair instability supernovae \cite{Woosley_2021}. $\mathrm{GW}190707\_083226$, has effective spin consistent with zero, consistent with the bulk of the GWTC-3 population \cite{gwtc-3-astro}. But, $\mathrm{GW}190818\_232544$ confidently has $\chi_{\mathrm{eff}} \gtrsim 0.5$. 
+\textbf{\emph{IAS}} The IAS algorithm is another matched-filtering-based detection pipeline. 
+IAS identified a total of 65 significant Hanford/Livingston candidates, 16 of which were reported for the first time by IAS \cite{ias_o3a, ias_o3b}. 
+Of the 65 significant IAS candidates, Aframe identifies 35 as significant, leaving 30 IAS candidates unidentified by Aframe. 
+Six Aframe significant candidates are not identified by IAS. 
+Table \ref{o3cat_tab:significant} lists two candidates, $\mathrm{GW}190707\_083226$ and $\mathrm{GW}190818\_232544$ first identified in the IAS catalog which were also identified as significant by Aframe. 
+In addition, Table \ref{o3cat_tab:non_significant} lists 3 candidates first reported by the IAS analysis which were found by Aframe with low-significance. 
+One such candidate, $\mathrm{GW}200109\_195634$, is found just below threshold with a $p_\mathrm{astro}$ of $0.44$. 
+For this candidate, although the IAS catalog reports a much more significant $p_\mathrm{astro}$, Aframe and the IAS report comparable FARs. 
+We perform parameter estimation for the two significant candidates. 
+Both $\mathrm{GW}190707\_083226$, and $\mathrm{GW}190818\_232544$ have primary mass posterior support in the upper mass gap ($~\sim45-135 M_\odot$) predicted by pulsational pair instability and pair instability supernovae \cite{Woosley_2021}.
+$\mathrm{GW}190707\_083226$ has effective spin consistent with zero, consistent with the bulk of the GWTC-3 population \cite{gwtc-3-astro}, while $\mathrm{GW}190818\_232544$ confidently has $\chi_{\mathrm{eff}} \gtrsim 0.5$. 
 \newline
 
-\textbf{\emph{OGC}} The 3-OGC and 4-OGC (henceforth OGC) catalogs identify 67 significant Hanford/Livingston candidates, 10 of which were reported for the first time by the OGC \cite{3-ogc, 4-ogc}. Of the 67 significant OGC candidates, Aframe identifies 39 as significant. Two Aframe candidates are not identified by OGC. Table \ref{table:significant} reports 1 candidate, GW200106\_134123, that was first reported by the OGC which Aframe finds identifies as significant. GW200106\_134123 is found by Aframe just above threshold with $p_\mathrm{astro} = 0.55$ and by the OGC analysis with $p_\mathrm{astro} = 0.69$. However, Aframe detects the event at a more significant FAR of $1.16$ per year compared with the FAR of $16.67$ per year reported by the OGC. We perform parameter estimation for this candidate, finding a primary mass of $44^{+8.63}_{-7.27} M_{\odot}$, secondary mass of $27.6^{+6.88}_{-6.39} M_{\odot}$ and $\chi_{\mathrm{eff}}$ consistent with zero.
+\textbf{\emph{OGC}} The 3-OGC and 4-OGC (henceforth OGC) catalogs identify 67 significant Hanford/Livingston candidates, 10 of which were reported for the first time by the OGC \cite{3-ogc, 4-ogc}. 
+Of the 67 significant OGC candidates, Aframe identifies 39 as significant. 
+Two Aframe candidates are not identified by OGC. 
+Table \ref{o3cat_tab:significant} reports one candidate, GW200106\_134123, that was first reported by the OGC which Aframe finds identifies as significant. 
+GW200106\_134123 is found by Aframe just above threshold with $p_\mathrm{astro} = 0.55$ and by the OGC analysis with $p_\mathrm{astro} = 0.69$. 
+However, Aframe detects the event at a more significant FAR of $1.16$ per year compared with the FAR of $16.67$ per year reported by the OGC. 
+We perform parameter estimation for this candidate, finding a primary mass of $44^{+8.63}_{-7.27} M_{\odot}$, secondary mass of $27.6^{+6.88}_{-6.39} M_{\odot}$ and $\chi_{\mathrm{eff}}$ consistent with zero.
 
-\textbf{\emph{AresGW}} AresGW is another machine learning-based detection pipeline \cite{aresgw}, that performed a search over O3 \cite{ares_gw_o3}. For calculating $p_\mathrm{astro}$, AresGW employs three variants of their analysis, and assigns the largest $p_\mathrm{astro}$ to each candidate. Therefore, like GWTC-3, their inclusion criteria is less restrictive than ours. AresGW identified a total of 52 significant candidates, 8 of which were reported for the first time by AresGW. Of these, Aframe identifies 33 as significant, leaving 19 AresGW candidates unidentified by Aframe. Of these 19, 8 are also not reported in any of the GWTC-3, IAS, or OGC catalogs. Four of these AresGW-only candidates, however, are found by Aframe as low significance candidates (see Table \ref{table:non_significant}). The most significant of which, GW190607\_083827 is detected by Aframe with $p_\mathrm{astro} = 0.17$, and AresGW with $p_\mathrm{astro} = 0.99$. However, while the $p_\mathrm{astro}$ estimates differ greatly, the FAR's are in closer agreement. This discrepancy in $p_\mathrm{astro}$ despite similar FAR estimates is likely due to Aframe's lack of inclusion of individual source property information in its $p_{\mathrm{astro}}$ foreground model (see Appendix \ref{sec:pastro}).
+\textbf{\emph{AresGW}} AresGW is another machine learning-based detection pipeline \cite{aresgw}, that performed a search over O3 \cite{ares_gw_o3}. 
+For calculating $p_\mathrm{astro}$, AresGW employs three variants of their analysis, and assigns the largest $p_\mathrm{astro}$ to each candidate. 
+Therefore, like GWTC-3, their inclusion criteria is less restrictive than ours. 
+AresGW identified a total of 52 significant candidates, 8 of which were reported for the first time by AresGW. 
+Of these, Aframe identifies 33 as significant, leaving 19 AresGW candidates unidentified by Aframe. 
+Of these 19, 8 are also not reported in any of the GWTC-3, IAS, or OGC catalogs. 
+Four of these AresGW-only candidates, however, are found by Aframe as low significance candidates (see Table \ref{o3cat_tab:non_significant}). 
+The most significant of which, GW190607\_083827 is detected by Aframe with $p_\mathrm{astro} = 0.17$, and AresGW with $p_\mathrm{astro} = 0.99$. 
+However, while the $p_\mathrm{astro}$ estimates differ greatly, the FAR's are in closer agreement. 
+This discrepancy in $p_\mathrm{astro}$ despite similar FAR estimates is likely due to Aframe's lack of inclusion of individual source property information in its $p_{\mathrm{astro}}$ foreground model (see Appendix \ref{o3cat_sec:pastro}).
 
 
-\section{Conclusion}\label{sec:conclusion}
-In this work, an end to end search is performed over the O3 observing run with Aframe, a machine learning based search pipeline. We show that Aframe is capable of detecting previously reported gravitational waves from BBH sources during O3, identifying 38 events reported in GWTC-3 using an inclusion criteria of $p_{\mathrm{astro}} > 0.5$. Additionally, 2 events reported by the IAS analysis and 1 event by the OGC analysis are also found with $p_{\mathrm{astro}} > 0.5$. Many other events reported by GWTC-3, OGC, AresGW and IAS are identified by Aframe as low significance candidates. 
+\section{Conclusion}\label{o3cat_sec:conclusion}
+In this work, an end-to-end search is performed over the O3 observing run with Aframe, a machine learning based search pipeline. 
+We show that Aframe is capable of detecting previously reported gravitational waves from BBH sources during O3, identifying 38 events reported in GWTC-3 using an inclusion criteria of $p_{\mathrm{astro}} > 0.5$. 
+Additionally, 2 events reported by the IAS analysis and 1 event by the OGC analysis are also found with $p_{\mathrm{astro}} > 0.5$. 
+Many other events reported by GWTC-3, OGC, AresGW and IAS are identified by Aframe as low significance candidates. 
 
-Still, there are a number of areas for improvement. Aframe's failure to identify candidates like GW190814 with SNR $\sim$ 25, but secondary mass $\lesssim 3 M_\odot$ can be mitigated by expanding the training distribution to include lower masses. Missing events like GW191105\_143521 can be explained by Aframe's lower sensitivity to specific regions of the parameter space (see Fig~\ref{fig:sensitivity}). Researching techniques to improve sensitivity in these regions is critical for broadening the searchable parameter space. For example, choosing a training prior more inspired by matched filtering template banks, which aim to minimize the maximum possible waveform mismatch, have been shown to help mitigate this bias neural network approaches have against lower chirp mass signals \cite{Nagarajan:2025hws}. In addition, a fraction of candidates reported in GWTC-3 are currently inaccessible to Aframe due to their reliance on Virgo data. Being able to incorporate arbitrary detector configurations will improve the quantity of data Aframe is able to analyze and increase the number of potential detections. Finally, the current $p_{\mathrm{astro}}$ model only accounts for detection statistic, and does not incorporate candidate source properties with prior astrophysical information to inform the foreground model. For matched filtering pipelines, source properties are extracted from the template that identified the event, and thus are readily available to inform a $p_{\mathrm{astro}}$ model. In its current state, Aframe does not provide source property information on candidates. However, extremely low-latency machine learning based parameter estimation algorithms being developed \cite{Chatterjee:2024pbj, Dax_2021} can be used in conjunction with Aframe to fold source property information into a $p_{\mathrm{astro}}$ model.
+Still, there are a number of areas for improvement. 
+Aframe's failure to identify candidates like GW190814 with SNR $\sim$ 25, but secondary mass $\lesssim 3 M_\odot$ can be mitigated by expanding the training distribution to include lower masses. 
+Missing events like GW191105\_143521 can be explained by Aframe's lower sensitivity to specific regions of the parameter space (see Fig~\ref{o3cat_fig:sensitivity}). 
+Researching techniques to improve sensitivity in these regions is critical for broadening the searchable parameter space. 
+For example, choosing a training prior more inspired by matched filtering template banks, which aim to minimize the maximum possible waveform mismatch, have been shown to help mitigate this bias neural network approaches have against lower chirp mass signals \cite{Nagarajan:2025hws}. 
+In addition, a fraction of candidates reported in GWTC-3 are currently inaccessible to Aframe due to their reliance on Virgo data. 
+Being able to incorporate arbitrary detector configurations will improve the quantity of data Aframe is able to analyze and increase the number of potential detections. 
+Finally, the current $p_{\mathrm{astro}}$ model only accounts for detection statistic, and does not incorporate candidate source properties with prior astrophysical information to inform the foreground model. 
+For matched filtering pipelines, source properties are extracted from the template that identified the event, and thus are readily available to inform a $p_{\mathrm{astro}}$ model. 
+In its current state, Aframe does not provide source property information on candidates. 
+However, extremely low-latency machine learning based parameter estimation algorithms being developed \cite{Chatterjee:2024pbj, Dax_2021} can be used in conjunction with Aframe to fold source property information into a $p_{\mathrm{astro}}$ model.
 \newline
-
-\section{Acknowledgments}
-The authors thank Malina Desai and Christina Reissel for fruitful discussions on the manuscript. All authors acknowledge support from the National Science Foundation (NSF) for award PHY-2117997 for the A3D3 Institute. 
-W.B and M.W.C acknowledge support from the National Science Foundation (NSF) with grant numbers PHY-2308862 and PHY-2409481. E.M and E.K acknowledge support from the NSF under award PHY-1764464 and PHY-2309200 to the LIGO Laboratory. E.M and E.K also acknowledge NSF awards PHY-1931469 and PHY-1934700. T.B. acknowledges support from the Research Experiences for Undergraduates grant NSF-2348668. E.B., S.H., and K.K. all acknowledge support from the University of Minnesota's Undergraduate Research Opportunities Program.
-
-This research was undertaken with the support of the LIGO computational clusters.
-This material is based upon work supported by the NSF's LIGO Laboratory which is a major facility fully funded by the National Science Foundation. 
-This research has made use of data obtained from the Gravitational Wave Open Science Center (www.gw-openscience.org), a service of LIGO Laboratory, the LIGO Scientific Collaboration and the Virgo Collaboration.
-
-% nautilus acknowledgements
- The authors are grateful for the computing resources provided by the Nautilus Hypercluster, which is supported in part by National Science Foundation (NSF) awards CNS-1730158, ACI-1540112, ACI-1541349, OAC-1826967, OAC-2112167, CNS-2100237, CNS-2120019, the University of California Office of the President, and the University of California San Diego's California Institute for Telecommunications and Information Technology/Qualcomm Institute.
 
 \input{tables/significant}
 \input{tables/non_significant}
 
 
 \section{Probability of Astrophysical Origin}
-\label{sec:pastro}
+\label{o3cat_sec:pastro}
 
-The probability of astrophysical origin $p_\mathrm{astro}$ is often used instead of FAR for ranking candidates because it incorporates the candidates source property estimates in conjunction with prior information on the astrophysical population. As previously noted, in the GWTC-3, IAS, OGC and AresGW catalogs, candidates are identified as significant if they have $p_\mathrm{astro} > 0.5$.
+The probability of astrophysical origin $p_\mathrm{astro}$ is often used instead of FAR for ranking candidates because it incorporates the candidates source property estimates in conjunction with prior information on the astrophysical population. 
+As previously noted, in the GWTC-3, IAS, OGC and AresGW catalogs, candidates are identified as significant if they have $p_\mathrm{astro} > 0.5$.
 
-Most searches utilize a coarse-grained approach to $p_\mathrm{astro}$, summing the probability that the candidate belongs to a specific region of the parameter space. Typically, the regions are defined based on the compact objects involved in the merger, i.e. binary black hole (BBH), binary neutron star (BNS), and neutron star black hole (NSBH) regions, corresponding to the $p_\mathrm{astro}$ decomposition 
+Most searches utilize a coarse-grained approach to $p_\mathrm{astro}$, summing the probability that the candidate belongs to a specific region of the parameter space.
+Typically, the regions are defined based on the compact objects involved in the merger, i.e. binary black hole (BBH), binary neutron star (BNS), and neutron star black hole (NSBH) regions, corresponding to the $p_\mathrm{astro}$ decomposition 
 
 \begin{equation}
     p_\mathrm{astro} = p_\mathrm{BBH} + p_\mathrm{BNS} + p_\mathrm{NSBH} = 1 - p_\mathrm{terr}
@@ -143,7 +247,8 @@ f_n(x)=
     \end{cases}
 \end{equation}
 
-where $\alpha$ is fit to the data. This domain split ensures that $p_\mathrm{astro}$ is a smooth, function of $x$ even at values that lack sufficient statistics to be well-modeled by the KDE. Then,
+where $\alpha$ is fit to the data. This domain split ensures that $p_\mathrm{astro}$ is a smooth, function of $x$ even at values that lack sufficient statistics to be well-modeled by the KDE. 
+Then,
 
 \begin{equation}
     R_n(x) = \frac{f_n(x) N_b}{T}
@@ -155,7 +260,8 @@ $R_s$ is estimated as
 \begin{equation}
     R_s(x) = V(x)r
 \end{equation}
-Where $r$, the astrophysical rate of mergers, comes from prior knowledge typically determined by a population analysis from a previous observing run. $V(x)$ is the sensitive volume of the search at detection statistic $x$, defined as
+Where $r$, the astrophysical rate of mergers, comes from prior knowledge typically determined by a population analysis from a previous observing run. 
+$V(x)$ is the sensitive volume of the search at detection statistic $x$, defined as
 \begin{equation}
     V(x) = V_0 \frac{N_s(x)}{N_{\text{tot}}}.
 \end{equation}
@@ -169,9 +275,12 @@ Now, since this mass range consists only of BBH mergers, we implicitly set $p_\m
 \end{equation}
 
 Sensitive volume is measured through an injection campaign, in which $N_{\text{tot}}$ simulated signals are injected into time-shifted background data.
-The quantity $V_0$ is the astrophysical volume corresponding to the furthest distance at which signals may be simulated, and $N_s(x)$ is the number of signals detected at a detection statistic $x$. The latter quantity is estimated by constructing a foreground model using another KDE.
+The quantity $V_0$ is the astrophysical volume corresponding to the furthest distance at which signals may be simulated, and $N_s(x)$ is the number of signals detected at a detection statistic $x$. 
+The latter quantity is estimated by constructing a foreground model using another KDE.
 
-Figure \ref{fig:pastro_vs_ifar} shows our $p_\mathrm{astro}$ estimate as a function of detection statistic and inverse FAR (iFAR). Currently, source property information, like component masses, are not incorporated into the foreground model. So, $p_\mathrm{astro}$ is solely a function of our detection statistic, and thus is a smooth, increasing function of detection statistic, or, equivalently, iFAR.
+Figure \ref{o3cat_fig:pastro_vs_ifar} shows our $p_\mathrm{astro}$ estimate as a function of detection statistic and inverse FAR (iFAR). 
+Currently, source property information, like component masses, are not incorporated into the foreground model. 
+So, $p_\mathrm{astro}$ is solely a function of our detection statistic, and thus is a smooth, increasing function of detection statistic, or, equivalently, iFAR.
 
 
 % Then in your document:
@@ -180,14 +289,15 @@ Figure \ref{fig:pastro_vs_ifar} shows our $p_\mathrm{astro}$ estimate as a funct
 \centering
 \includegraphics[width=\textwidth]{figures/cum_background_density.pdf}
 
-\caption{\emph{Left}: Cumulative density of detection statistic for background events from 100 years of live time accumulated via the timeslide method. \emph{Right}: $p_\mathrm{astro}$ as a function of Aframe's detection statistic. The top axis of both plots labels the iFAR corresponding to the detection statistic on the bottom axis.}\label{fig:pastro_vs_ifar}
+\caption{\emph{Left}: Cumulative density of detection statistic for background events from 100 years of live time accumulated via the timeslide method. 
+\emph{Right}: $p_\mathrm{astro}$ as a function of Aframe's detection statistic. The top axis of both plots labels the iFAR corresponding to the detection statistic on the bottom axis.}\label{o3cat_fig:pastro_vs_ifar}
 \end{figure*}
 
 \input{tables/aframe_pe}
 
 
 \section{Parameter Estimation} \label{sec:pe}
-We perform parameter estimating for the significant candidates Aframe detects that were not analyzed in GWTC-3. These events are GW190707\_083266 and GW190818\_232544 initially reported in the IAS catalog, and GW200106\_134123 initially reported in the OGC catalog. We use Bilby with the IMRPhenomXPHM waveform approximant, and 2000 live points \cite{Ashton_2019}. The Bilby prior distribution used for all events is reported in Fig~\ref{fig:pe-prior}. Estimates for select parameters are listed in Table ~\ref{table:aframe-pe}. Posterior corner plots comparing our anaysis result with those reported by the respective catalog or presented in Figures ~\ref{fig:gw200106},~\ref{fig:gw190707} and ~\ref{fig:gw190818}. The IAS catalog performed two parameter estimation runs with two different spin priors. For a direct comparison, we use their posterior samples from the analysis that used an isotropic spin prior.
+We perform parameter estimating for the significant candidates Aframe detects that were not analyzed in GWTC-3. These events are GW190707\_083266 and GW190818\_232544 initially reported in the IAS catalog, and GW200106\_134123 initially reported in the OGC catalog. We use Bilby with the IMRPhenomXPHM waveform approximant, and 2000 live points \cite{Ashton_2019}. The Bilby prior distribution used for all events is reported in Fig~\ref{o3cat_fig:pe-prior}. Estimates for select parameters are listed in Table ~\ref{o3cat_tab:aframe-pe}. Posterior corner plots comparing our anaysis result with those reported by the respective catalog or presented in Figures ~\ref{o3cat_fig:gw200106},~\ref{o3cat_fig:gw190707} and ~\ref{o3cat_fig:gw190818}. The IAS catalog performed two parameter estimation runs with two different spin priors. For a direct comparison, we use their posterior samples from the analysis that used an isotropic spin prior.
 
 For the OGC candidate GW200106\_134123, our parameter estimates agree closely. However, for both IAS candidates GW190818\_232544 and GW190707\_083266, our parameter estimates are broadly consistent, but there are still discrepancies. Most notably, our analyses report smaller luminosity distances compared with the IAS for both events. Despite these differences, for the high $\chi_{\mathrm{eff}}$ candidate GW190818\_232544, our marginalized $\chi_{\mathrm{eff}}$ posteriors are in close agreement.
 
@@ -214,7 +324,7 @@ tilt_2 = Sine(name=`tilt_2')
 phi_12 = Uniform(name=`phi_12', minimum=0, maximum=2 * np.pi, boundary=`periodic')
 phi_jl = Uniform(name=`phi_jl', minimum=0, maximum=2 * np.pi, boundary=`periodic')
 \end{verbatim}
-\caption{Bilby prior distribution used for parameter estimation analyses.} \label{fig:pe-prior}
+\caption{Bilby prior distribution used for parameter estimation analyses.} \label{o3cat_fig:pe-prior}
 \end{figure*}
 
 
@@ -222,21 +332,23 @@ phi_jl = Uniform(name=`phi_jl', minimum=0, maximum=2 * np.pi, boundary=`periodic
     \centering
     \includegraphics[width=\linewidth]{figures/OGC-comparison.pdf}
     \caption{Parameter estimation comparison for OGC event GW200106\_134123}
-    \label{fig:gw200106}
+    \label{o3cat_fig:gw200106}
 \end{figure*}
 
 \begin{figure*}
     \centering
     \includegraphics[width=\linewidth]{figures/IAS-190707-comparison.pdf}
     \caption{Parameter estimation comparison for IAS event GW190707\_083226}
-    \label{fig:gw190707}
+    \label{o3cat_fig:gw190707}
 \end{figure*}
 
 \begin{figure*}
     \centering
     \includegraphics[width=\linewidth]{figures/IAS-190818-comparison.pdf}
     \caption{Parameter estimation comparison for IAS event GW190818\_232544}
-    \label{fig:gw190818}
+    \label{o3cat_fig:gw190818}
 \end{figure*}
 
-
+\singlespacing
+\printbibliography[title=References,heading=subbibintoc]
+\end{refsection}
