@@ -1,153 +1,102 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%    INSTITUTE OF PHYSICS PUBLISHING                                   %
-%                                                                      %
-%   `Preparing an article for publication in an Institute of Physics   %
-%    Publishing journal using LaTeX'                                   %
-%                                                                      %
-%    LaTeX source code `ioplau2e.tex' used to generate `author         %
-%    guidelines', the documentation explaining and demonstrating use   %
-%    of the Institute of Physics Publishing LaTeX preprint files       %
-%    `iopart.cls, iopart12.clo and iopart10.clo'.                      %
-%                                                                      %
-%    `ioplau2e.tex' itself uses LaTeX with `iopart.cls'                %
-%                                                                      %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-%
-% First we have a character check
-%
-% ! exclamation mark    " double quote  
-% # hash                ` opening quote (grave)
-% & ampersand           ' closing quote (acute)
-% $ dollar              % percent       
-% ( open parenthesis    ) close paren.  
-% - hyphen              = equals sign
-% | vertical bar        ~ tilde         
-% @ at sign             _ underscore
-% { open curly brace    } close curly   
-% [ open square         ] close square bracket
-% + plus sign           ; semi-colon    
-% * asterisk            : colon
-% < open angle bracket  > close angle   
-% , comma               . full stop
-% ? question mark       / forward slash 
-% \ backslash           ^ circumflex
-%
-% ABCDEFGHIJKLMNOPQRSTUVWXYZ 
-% abcdefghijklmnopqrstuvwxyz 
-% 1234567890
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-\documentclass[12pt]{iopart}
+\chapter{Online deployment of Aframe and AMPLFI}
+\label{chap:online}
+\begin{refsection}
 
-\newcommand{\amplfi}{{\tt AMPLFI}}
-\newcommand{\aframe}{{\tt Aframe}}
-
-\usepackage{listings}
-\usepackage{xcolor}
-\usepackage{mathtools}
-\usepackage{minted}
-\usepackage{booktabs}
-\usepackage{makecell}
-\usepackage{cleveref}
-\usepackage{graphicx,url,amssymb,amsmath,rotating,color,units,wasysym,epsfig,multirow,epstopdf,subcaption, booktabs, caption}
-\usepackage{dcolumn} % Align table columns on decimal point
-\usepackage{colortbl}
-\usepackage{xcolor}
-\definecolor{codegreen}{rgb}{0,0.6,0}
-\definecolor{codegray}{rgb}{0.5,0.5,0.5}
-\definecolor{codepurple}{rgb}{0.58,0,0.82}
-\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
- 
-\lstdefinestyle{mystyle}{
-    backgroundcolor=\color{backcolour},   
-    commentstyle=\color{codegreen},
-    keywordstyle=\color{magenta},
-    numberstyle=\tiny\color{codegray},
-    stringstyle=\color{codepurple},
-    basicstyle=\footnotesize,
-    breakatwhitespace=false,         
-    breaklines=true,                 
-    captionpos=b,                    
-    keepspaces=true,                 
-    numbers=left,                    
-    numbersep=5pt,                  
-    showspaces=false,                
-    showstringspaces=false,
-    showtabs=false,                  
-    tabsize=2
-}
-\lstset{style=mystyle}
-\usepackage{iopams}
-\usepackage{graphicx}
-\usepackage{url}
-\usepackage[font=small]{caption}
-\begin{document}
-
-\title[]{Real-time deployment of a deep-learning based detection and parameter estimation pipeline during the LIGO-Virgo-KAGRA fourth observing run}
-
-\author{W.~Benoit,$^3$, E.~Marx,$^{1,2}\;^{\dagger}$, D. Chatterjee,$^{1,2}$, M.~Desai,$^{1,2}$, M.~W.~Coughlin,$^3$ , P.~Harris,$^1$ E.~Katsavounidis$^{1,2}$}
-
-\address{
-$^1$Department of Physics, MIT, Cambridge, MA 02139, USA \\
-$^2$LIGO Laboratory, 185 Albany St, MIT, Cambridge, MA 02139, USA \\
-$^3$School of Physics and Astronomy, U. Minnesota, Minneapolis, MN 55455, USA \\
-}
-\ead{$^{\dagger}$emarx@mit.edu}
-\vspace{10pt}
-
-\begin{abstract}
 We describe the software architecture used to deploy the Aframe and AMPLFI algorithms, an end to end machine-learning based system for real time detection and parameter estimation of gravitational wave data. We detail the production deployment of Aframe and AMPLFI during the the third part of the LIGO-Virgo-KAGRA collaboration's  fourth observing run, and discuss the system's contributions to public alerts. 
 
-\end{abstract}
-
-\vspace{2pc}
-\noindent{\it Keywords}: Machine learning, Gravitational waves, Multi-messenger astronomy
-
-\submitto{\MLST}
-
 \section{Introduction}
-The first discovery of gravitational waves (GWs) from a binary black hole (BBH) merger in 2015 jump-started the era of observational GW science \cite{Abbott_2016}. The LIGO-Virgo-KAGRA (LVK) collaboration's third observing run (O3) was the first which distributed real-time public alerts to the astronomical community. Since then, hundreds of real-time candidate events have been made public\footnote{//gracedb.ligo.org/superevents/public}. In May 2023, the LVK began its fourth observing run (O4) ending in November 2025. Already, the LVK has published GWTC-4.0 consisting of \red{128} GW candidate events from just the first part of the fourth observing run (O4a). As the Advanced LIGO \cite{buikema2020sensitivity, Aasi_2015}, Advanced Virgo \cite{Acernese_2015}, and KAGRA \cite{KAGRA:2020tym} interferometers sensitivity increase, so does the quantity of detected events. 
+The first discovery of gravitational waves (GWs) from a binary black hole (BBH) merger in 2015 jump-started the era of observational GW science \cite{Abbott_2016}. The LIGO-Virgo-KAGRA (LVK) collaboration's third observing run (O3) was the first which distributed real-time public alerts to the astronomical community. Since then, hundreds of real-time candidate events have been made public\footnote{//gracedb.ligo.org/superevents/public}. In May 2023, the LVK began its fourth observing run (O4) ending in November 2025. Already, the LVK has published GWTC-4.0 consisting of 128 GW candidate events from just the first part of the fourth observing run (O4a). As the Advanced LIGO \cite{buikema2020sensitivity, Aasi_2015}, Advanced Virgo \cite{Acernese_2015}, and KAGRA \cite{KAGRA:2020tym} interferometers sensitivity increase, so does the quantity of detected events. 
 
 Several pipelines operated real-time searches during O4. The GstLAL, MBTA, PyCBC, and SPIIR pipelines are all matched-filtering based searches targeting compact binary coalescences (CBCs) \cite{PhysRevD.108.043004, Allene_2025, Dal_Canton_2021, PhysRevD.105.024023}. Also operating were minimally modeled pipelines cWB \cite{PhysRevD.93.042004, PhysRevD.105.083018}, MLy \cite{PhysRevD.110.104034}, and oLIB \cite{Lynch:2015yin} which are designed to be sensitive to a broader range of astrophysical sources. 
 
 
 Over the past decade, machine-learning (ML) research in gravitational-wave (GW) astronomy has emerged as a flourishing  field \cite{Cuoco_2020}. Non-linear noise sources, availability of robust numerical relativity simulations, and strict requirements of real-time analysis make ML solutions highly compelling candidates for next generation data analysis methods. The ability to operate in real-time on accelerated hardware like GPUs provides reduced alert latencies, and smaller inference compute footprints compared with CPU-based filtering methods. In addition, ML methods provide a pathway to handle the growing computational burdens associated with the growing detection rate \cite{gwtc-4}. Despite rapid growth in GW ML literature, these methods have seen limited adoption by the LVK for collaboration analyses. The process of moving ML based research beyond publications and into production-ready systems is critical for proving their utility, and, more importantly, identifying where they can improve. 
 
-In previous works, Aframe, a ML based detection algorithm, was introduced and used to search for GW signals from binary black hole (BBH) mergers in O3 \cite{aframe-methods, marx2025machine}. In parallel, AMPLFI, a parameter estimation (PE) method based on likelihood-free inference was developed and validated as a method for producing real-time alert data products \cite{amplfi, Marx:2025ioo}. These algorithms were designed to operate in unison as an end-to-end real-time search pipeline. In this work, we describe the software system used to deploy Aframe and AMPLFI for real-time analysis during O4c. In Sec.~\ref{sec:models}, we review the Aframe and AMPLFI algorithms. In Sec.~\ref{sec:event-identification} we discuss how Aframe loads, validates, and processes strain data to identify events. In Sec.~\ref{sec:data-products} we detail the methodology for producing the suite of low-latency alert data products from the outputs of Aframe and AMPLFI. In Sec.~\ref{sec:software-arch} we show how our software architecture design minimizes latency. Finally, in Sec.~\ref{sec:o4c} we analyze results from the real time analysis of O4c.
+In previous works, Aframe, a ML based detection algorithm, was introduced and used to search for GW signals from binary black hole (BBH) mergers in O3 \cite{aframe-methods, marx2025machine}. In parallel, AMPLFI, a parameter estimation (PE) method based on likelihood-free inference was developed and validated as a method for producing real-time alert data products \cite{amplfi, Marx:2025ioo}. These algorithms were designed to operate in unison as an end-to-end real-time search pipeline. In this work, we describe the software system used to deploy Aframe and AMPLFI for real-time analysis during O4c. In Sec.~\ref{online_sec:models}, we review the Aframe and AMPLFI algorithms. In Sec.~\ref{online_sec:event-identification} we discuss how Aframe loads, validates, and processes strain data to identify events. In Sec.~\ref{online_sec:data-products} we detail the methodology for producing the suite of low-latency alert data products from the outputs of Aframe and AMPLFI. In Sec.~\ref{online_sec:software-arch} we show how our software architecture design minimizes latency. Finally, in Sec.~\ref{online_sec:o4c} we analyze results from the real time analysis of O4c.
 
 
-\section{Aframe and AMPLFI}  \label{sec:models}
+\section{Aframe and AMPLFI}  \label{online_sec:models}
 Here we briefly describe the Aframe detection and AMPLFI parameter estimation models for CBC sources. For full details, we refer readers to Refs.~\cite{aframe-methods, Marx:2025ioo}. We also describe the datasets used to train the models deployed during O4c. 
 
 \subsection{Aframe}
-Aframe is a deep-learning-based detection algorithm designed to identify GW signals from well-modeled astrophysical sources. In particular, Aframe has been trained and used to search for GW signals from binary black hole (BBH) coalescences. The core architecture utilizes a 1D convolutional neural network (CNN) that processes strain data from multiple detectors. Aframe analyzes 1-second windows of whitened strain data sampled at $2048$ Hz from the Hanford and Livingston LIGO interferometers. The neural network is trained to map this input to a single scalar detection statistic that indicates how likely the algorithm finds a signal present in the input data segment. Aframe's analysis window strides across the data at a fixed rate called the \emph{inference sampling rate}, producing a time-series of neural network outputs. The inference sampling rate determines the precision with which the coalescence time of the merger can be estimated. For O4c online analysis, the inference sampling rate is 512 Hz. The prior used to train Aframe for O4c deployment is listed in Table \ref{table:aframe-priors}, which is the same as that used in previous works. 
+Aframe is a deep-learning-based detection algorithm designed to identify GW signals from well-modeled astrophysical sources. In particular, Aframe has been trained and used to search for GW signals from binary black hole (BBH) coalescences. The core architecture utilizes a 1D convolutional neural network (CNN) that processes strain data from multiple detectors. Aframe analyzes 1-second windows of whitened strain data sampled at $2048$ Hz from the Hanford and Livingston LIGO interferometers. The neural network is trained to map this input to a single scalar detection statistic that indicates how likely the algorithm finds a signal present in the input data segment. Aframe's analysis window strides across the data at a fixed rate called the \emph{inference sampling rate}, producing a time-series of neural network outputs. The inference sampling rate determines the precision with which the coalescence time of the merger can be estimated. For O4c online analysis, the inference sampling rate is 512 Hz. The prior used to train Aframe for O4c deployment is listed in Table \ref{online_tab:aframe-priors}, which is the same as that used in previous works. 
 
 \subsection{AMPLFI}
 After candidate events are identified, parameter estimation (PE) is performed by AMPLFI, a ML framework based on likelihood-free inference (LFI) \cite{amplfi, Marx:2025ioo}. In particular, AMPLFI uses a normalizing flow neural-network architecture which is trained to model the Bayesian posterior distribution, $p(\theta\lvert d)$ of source properties $\theta$ given data $d$. The model uses time and frequency representations of the strain data along with an estimate of the power spectral density (PSD) surrounding the trigger identified by Aframe as contextual input to condition the normalizing flow. 
 
-AMPLFI models are trained for fixed detector configurations. To maximize sky localization precision, two distinct AMPLFI models for Hanford-Livingston (HL) and Hanford-Livingston-Virgo (HLV) detector configurations are trained. The online deployment dynamically selects the appropriate model, prioritizing the HLV model when science-quality data from the Virgo interferometer at the time of the event is available. The signal priors used to train the AMPLFI models used during O4c is listed in Table \ref{tab:amplfi-priors}. Compared with Refs.\cite{amplfi, Marx:2025ioo}, the chirp mass prior is lowered to 5 $\mathrm{M}_{\odot}$ motivated by analyzing mock data challenges with Aframe which demonstrated sensitivity to these signals. In addition, we extend the distance prior from 3 to 6 Gpc to account for increased detector sensitivity between O3 and O4, and to reduce instances where AMPLFIs luminosity distance posteriors would rail against the prior boundary. 
+AMPLFI models are trained for fixed detector configurations. To maximize sky localization precision, two distinct AMPLFI models for Hanford-Livingston (HL) and Hanford-Livingston-Virgo (HLV) detector configurations are trained. The online deployment dynamically selects the appropriate model, prioritizing the HLV model when science-quality data from the Virgo interferometer at the time of the event is available. The signal priors used to train the AMPLFI models used during O4c is listed in Table \ref{online_tab:amplfi-priors}. Compared with Refs.\cite{amplfi, Marx:2025ioo}, the chirp mass prior is lowered to 5 $\mathrm{M}_{\odot}$ motivated by analyzing mock data challenges with Aframe which demonstrated sensitivity to these signals. In addition, we extend the distance prior from 3 to 6 Gpc to account for increased detector sensitivity between O3 and O4, and to reduce instances where AMPLFIs luminosity distance posteriors would rail against the prior boundary. 
 
 \subsection{Training}
 Both Aframe and AMPLFI were trained using data from the second part of the fourth observing run (O4b). 
 
-\include{priors}
+\begin{table}
+\centering
+\begin{tabular}{ p{4cm} p{1.5cm} p{1.75cm} p{1.5cm} }
+\hline
+\hline
+Parameter & Prior & Limits & Units\\
+\hline
+Mass of primary & $m_1^{-2.35}$ & $(5, 100)$ & $M_{\odot}$\\
+Mass of secondary & $m_2$ & $(5, m_1)$ & $M_{\odot}$\\
+Redshift & Comoving & $(0, 2)$ & -\\
+Polarization angle & Uniform & $(0, \pi)$ & rad.\\
+Dimensionless spin magnitude & Uniform & $(0, 0.998)$ & -\\
+Spin tilt & Sine & $(0, \pi)$ & rad.\\
+Relative spin azimuthal angle & Uniform & $(0, 2\pi)$ & rad.\\
+Spin phase angle & Uniform & $(0, 2\pi)$ & rad.\\
+Orbital phase & Uniform & $(0, 2\pi)$ & rad.\\
+Right ascension & $(0, 2\pi)$ & rad.\\
+Declination &Cosine & $(-\pi/2, \pi/2)$ & rad.\\
+Inclination angle & Sine & $(0, \pi)$ & rad.\\
+\hline
+\hline
+\end{tabular}
+\caption{Priors on parameters used to generate waveforms for training Aframe. The prior is derived from that used in GWTC-3 to assess search pipelines. The component mass distributions are defined in the source frame. ``Comoving" refers to uniform in comoving volume.}
+\label{online_tab:aframe-priors}
+\end{table}
 
-\section{Event Identification} \label{sec:event-identification}
+\begin{table}
+\centering
+\begin{tabular}{ p{4cm} p{1.5cm} p{1.75cm} p{1.5cm} }
+\hline
+\hline
+Parameter & Prior & Limits & Units\\
+\hline
+Coalescence time & Uniform & $(-0.2, 0.2)$ & s \\
+Spin magnitude & Uniform & $(0, 0.999)$ & - \\
+Spin azimuthal angle & Uniform & $(0, 2\pi)$ & rad. \\
+Spin phase angle & Uniform & $(0, 2\pi)$ & rad. \\
+Spin tilt angle & Uniform & $(0, \pi)$ & rad. \\
+Chirp mass & Uniform & $(5, 100)$ & $M_{\odot}$ \\
+Mass ratio & Uniform & $(0.01, 1)$ & - \\
+Luminosity distance & Uniform & $(100, 6000)$ & Mpc \\
+Inclination & Sine & $(0, \pi)$ & rad. \\
+Right ascension & Uniform & $(0, 2\pi)$ & rad. \\
+Declination & Cosine & $(-\pi/2, \pi/2)$ & rad. \\
+Coalescence phase & Uniform & $(0, 2\pi)$ & rad. \\
+Polarization angle & Uniform & $(0, \pi)$ & rad. \\
+\hline
+\hline
+\end{tabular}
+\caption{Priors on parameters used to generate waveforms for training AMPLFI.}
+\label{online_tab:amplfi-priors}
+\end{table}
+
+
+\section{Event Identification} \label{online_sec:event-identification}
 In this section, we detail how Aframe streams, loads, processes, and analyzes GW data to identify events, and how AMPLFI performs PE followup.
 
 
 \subsection{Frame Delivery and Loading}
 GW data in the LVK are currently distributed in real time via 1 second chunks known as ``frames''. Online search pipelines must aggregate and process these frames into the appropriate format for their analysis. The Aframe data loader continuously queries designated directories on disk for incoming real-time frame files. If a required frame does not appear within a specified timeout period (typically $\sim10$ s), the data loader will yield a timeout signal and dynamically reset its internal clock to query the latest available data. This ensures that transient frame delivery issues will not cause the data loader to halt indefinitely. In addition, the data loader employs automated retry logic to catch and recover from common I/O errors, such as corrupted file headers or incomplete frame writes.
 
-This current system for delivering GW frames introduces a fundamental latency due to the discrete frame size. Delivery of frames as discrete 1 second chunks means pipelines must wait for the whole frame to be complete before analysis. In the worst case, a GW event occurs at the beginning of a frame, and downstream tasks must wait for the remaining full second of data before proceeding. For 1 second frames, this \emph{discrete frame latency} adds an additional 0.5 seconds on average. See Figure \ref{fig:discrete-frame-latency} for an illustration. Next generation data delivery (NGDD) systems are being developed for use in future observing runs that will deliver data in 1/16 s increments, significantly reducing these incurred latencies. In addition, the Aframe/AMPLFI pipeline deployed at the LIGO Caltech computing cluster must wait for the data to be transferred from the interferometer sites to Caltech before analysis. This transfer latency typically takes $\sim 1$ s.
+This current system for delivering GW frames introduces a fundamental latency due to the discrete frame size. Delivery of frames as discrete 1 second chunks means pipelines must wait for the whole frame to be complete before analysis. In the worst case, a GW event occurs at the beginning of a frame, and downstream tasks must wait for the remaining full second of data before proceeding. For 1 second frames, this \emph{discrete frame latency} adds an additional 0.5 seconds on average. See Figure \ref{online_fig:discrete-frame-latency} for an illustration. Next generation data delivery (NGDD) systems are being developed for use in future observing runs that will deliver data in 1/16 s increments, significantly reducing these incurred latencies. In addition, the Aframe/AMPLFI pipeline deployed at the LIGO Caltech computing cluster must wait for the data to be transferred from the interferometer sites to Caltech before analysis. This transfer latency typically takes $\sim 1$ s.
 
 \begin{figure}
     \centering
     \includegraphics[page=9,width=0.95\columnwidth]{figures/aframe_diagrams.pdf}
     \caption{Discreteness of frame delivery increases analysis latency. If an event occurs at the beginning of a frame, one must wait for the remainder of the frame to be packaged and delivered before analysis.}
-    \label{fig:discrete-frame-latency}
+    \label{online_fig:discrete-frame-latency}
 \end{figure}
 
 \subsection{Data Quality}
@@ -162,38 +111,38 @@ Data quality information for each interferometer is distributed in the same fram
 State vectors are typically sampled at 16 Hz. When processing a new frame, Aframe checks that both the \texttt{HOFT\_OK} and \texttt{OBSERVATION\_INTENT} flags are active for both Hanford and Livingston. If either flag is not active at any point in the frame for either interferometer, the frame is not considered ``analysis ready". To perform inference Aframe requires at least 64 continuous seconds of analysis ready data. This ensures there is enough data to estimate the PSD for whitening. When a frame is not analysis ready, the input strain data and neural network output buffers are reset. Inference will restart once 64 seconds of continuous analysis ready data is accumulated. This PSD ``burn-in" period makes $\sim 1$ minute of data at the beginning of each coincident HL science-quality segment not analyzeable. In the future, using a PSD estimate from a previous segment, or using a smaller amount of data to estimate the PSD will increase the quantity of analyzable data. 
 
 \subsection{Resampling}
-Delivered frames are sampled at 16 kHz. As a reminder, Aframe and AMPLFI are trained using data sampled at 2048 Hz, well above the Nyquist frequency for even the lowest mass BBH mergers in the prior ranges (see Tables \ref{tab:amplfi-priors} and \ref{table:aframe-priors}). So, the frames must be resampled at 2048 Hz in real time. Resampling methods that utilize finite impulse response filters corrupt portions of the beginning and end of the time-series due to filter settle in. To mitigate these edge effects, the Aframe data loader maintains a 2 second buffer of the most recent frames in memory. When a new frame arrives, it is appended to the buffer. The now 3 second frame buffer is resampled to the desired sample rate. The uncorrupted middle second of data is appended to a separate buffer which maintains 64 seconds of resampled data for analysis by Aframe. An illustration of this process is shown in Figure \ref{fig:resampling}. Because resampling the frame at time T requires the frame at time T + 1, this procedure incurs a 1 second latency. When NGDD systems begin to deliver frames in smaller chunks, this inherent latency from waiting for the next frame will be reduced. 
+Delivered frames are sampled at 16 kHz. As a reminder, Aframe and AMPLFI are trained using data sampled at 2048 Hz, well above the Nyquist frequency for even the lowest mass BBH mergers in the prior ranges (see Tables \ref{online_tab:amplfi-priors} and \ref{online_tab:aframe-priors}). So, the frames must be resampled at 2048 Hz in real time. Resampling methods that utilize finite impulse response filters corrupt portions of the beginning and end of the time-series due to filter settle in. To mitigate these edge effects, the Aframe data loader maintains a 2 second buffer of the most recent frames in memory. When a new frame arrives, it is appended to the buffer. The now 3 second frame buffer is resampled to the desired sample rate. The uncorrupted middle second of data is appended to a separate buffer which maintains 64 seconds of resampled data for analysis by Aframe. An illustration of this process is shown in Figure \ref{online_fig:resampling}. Because resampling the frame at time T requires the frame at time T + 1, this procedure incurs a 1 second latency. When NGDD systems begin to deliver frames in smaller chunks, this inherent latency from waiting for the next frame will be reduced. 
 
 \begin{figure}
     \centering
     \includegraphics[page=2,width=0.95\columnwidth]{figures/aframe_diagrams.pdf}
     \caption{Illustration of resampling procedure. A buffer of frames is kept in memory. At time T, the frame at time T - 1 is resampled. Corrupted data at times T - 2 and T are discarded. The resampled data at time T - 1 is kept for downstream analysis. }
-    \label{fig:resampling}
+    \label{online_fig:resampling}
 \end{figure}
 
 
 \subsection{Whitening}
-Before Aframe performs inference, the strain data is filtered and then whitened, which requires an estimate of the PSD. During training, the PSD is estimated using the previous 8 seconds of data for each sample. This PSD duration is limited by GPU memory constraints when training with large batch sizes. During real time processing, GPU memory is no longer a bottleneck, so a longer segment of 64 seconds  can be used to estimate the PSD more accurately. To facilitate this, a 64 second buffer of resampled data is kept in GPU memory. When the latest resampled frame is complete, it is moved to the GPU and appended to the front of the buffer. Overlapping windows of data, with time deltas corresponding to the inference sampling rate, are "unfolded" into a batch. The PSD estimated from the preceding 64 seconds of data is used to whiten each batch element. The whitened batch is passed to Aframe for inference. This procedure is illustrated in Figure~\ref{fig:whitening}.
+Before Aframe performs inference, the strain data is filtered and then whitened, which requires an estimate of the PSD. During training, the PSD is estimated using the previous 8 seconds of data for each sample. This PSD duration is limited by GPU memory constraints when training with large batch sizes. During real time processing, GPU memory is no longer a bottleneck, so a longer segment of 64 seconds  can be used to estimate the PSD more accurately. To facilitate this, a 64 second buffer of resampled data is kept in GPU memory. When the latest resampled frame is complete, it is moved to the GPU and appended to the front of the buffer. Overlapping windows of data, with time deltas corresponding to the inference sampling rate, are "unfolded" into a batch. The PSD estimated from the preceding 64 seconds of data is used to whiten each batch element. The whitened batch is passed to Aframe for inference. This procedure is illustrated in Figure~\ref{online_fig:whitening}.
 
 \begin{figure}
     \centering
     \includegraphics[page=3,width=0.95\columnwidth]{figures/aframe_diagrams.pdf}
     \caption{Illustration of whitening procedure. As new frames arrive, they are appended to an in-memory strain buffer. The latest frame is "un-folded" into a batch of overlapping windows of data. The preceding 64 seconds of data is used to estimate a PSD, and whiten the batch.}
-    \label{fig:whitening}
+    \label{online_fig:whitening}
 \end{figure}
 
 
 \subsection{Inference}
-After a batch of windows is whitened, they are analyzed by Aframe producing a time-series of detection statistics. The time-series of detection statistics is then appended to an output buffer which contains the most recent 8 seconds of detection statistics. This time-series is then integrated using a top-hat filter to produce a time-series of integrated detection statistics. Events are identified by finding peaks in the integrated time-series. An overview of this procedure is shown in Figure \ref{fig:inference}. 
+After a batch of windows is whitened, they are analyzed by Aframe producing a time-series of detection statistics. The time-series of detection statistics is then appended to an output buffer which contains the most recent 8 seconds of detection statistics. This time-series is then integrated using a top-hat filter to produce a time-series of integrated detection statistics. Events are identified by finding peaks in the integrated time-series. An overview of this procedure is shown in Figure \ref{online_fig:inference}. 
 
-Accurately estimating the significance of an event requires identifying the peak in the integrated network output. If the coalescence time of the event lies at the end of the frame, the integrated network output will not reach its peak until the next frame. In these cases, we wait for inference outputs from the next frame, which contains the integrated network output peak. See Fig.~\ref{fig:ramp-up} for an illustration. 
+Accurately estimating the significance of an event requires identifying the peak in the integrated network output. If the coalescence time of the event lies at the end of the frame, the integrated network output will not reach its peak until the next frame. In these cases, we wait for inference outputs from the next frame, which contains the integrated network output peak. See Fig.~\ref{online_fig:ramp-up} for an illustration. 
 
 
 \begin{figure}
     \centering
     \includegraphics[page=4,width=0.95\columnwidth]{figures/aframe_diagrams.pdf}
     \caption{Illustration of Inference}
-    \label{fig:inference}
+    \label{online_fig:inference}
 \end{figure}
 
 
@@ -201,16 +150,16 @@ Accurately estimating the significance of an event requires identifying the peak
     \centering
     \includegraphics[page=5,width=0.95\columnwidth]{figures/aframe_diagrams.pdf}
     \caption{If an events integrated NN output has yet to reach a peak, wait for the next frame. }
-    \label{fig:ramp-up}
+    \label{online_fig:ramp-up}
 \end{figure}
 
-\subsection{Parameter Estimation} \label{sec:amplfi}
+\subsection{Parameter Estimation} \label{online_sec:amplfi}
 Once a significant event is identified, AMPLFI is immediately triggered to produce posterior samples for the source parameters we need to estimate. While Aframe only analyzes Hanford and Livingston data for detection, the inclusion of Virgo data for parameter estimation leads to significantly smaller localization areas \cite{PhysRevLett.119.141101}. So, two AMPLFI models, one trained using a Hanford-Livingston (HL) configuration, and the other using a Hanford-Livingston-Virgo (HLV) are utilized. If science quality Virgo data is available at the time of an event, the HLV AMPLFI model will be used. Otherwise, the HL AMPLFI model will be used. 
 
 Using the event time estimated by Aframe, AMPLFI slices a 4 second window of strain data from the input buffer, placing the estimated coalescence time 0.5\,s from the right edge of the window. The AMPLFI models are trained with the coalesence time randomly jittered by 0.1\,s around this point. The previous 64 seconds of data are used to estimate the PSD for whitening, and also to pass to AMPLFI as context for conditioning the normalizing flow. For each event, AMPLFI
 
-\section{Data Products} \label{sec:data-products}
-Several data products are required to be uploaded to the Gravitational-Wave Candidate Event Database (GraceDB) for a pipeline to contribute to public alerts. These data products provide critical information for effective EM followup \cite{Chaudhary:2023vec}. In this section, we provide an overview of the pipelines methodology for producing these data products from the outputs of Aframe and AMPLFI. Later, in Sec.~\ref{sec:software-arch} we discuss how data product computation is distributed among several sub-processes to minimize time-to-alert. 
+\section{Data Products} \label{online_sec:data-products}
+Several data products are required to be uploaded to the Gravitational-Wave Candidate Event Database (GraceDB) for a pipeline to contribute to public alerts. These data products provide critical information for effective EM followup \cite{Chaudhary:2023vec}. In this section, we provide an overview of the pipelines methodology for producing these data products from the outputs of Aframe and AMPLFI. Later, in Sec.~\ref{online_sec:software-arch} we discuss how data product computation is distributed among several sub-processes to minimize time-to-alert. 
 
 \subsection{False Alarm Rate}
 The statistical significance of an event is one of the most important factors for informing EM followup strategy. One measure used in GW data analysis is the false alarm rate (FAR) of an event, which indicates how often a random coincidence will produce an event of equal or greater significance. Events with FARs less than one per seven months ($< 5.51 \times 10^{-8}$ ) qualify as significant, are made publicly available, and are followed up with PE and additional human vetting\footnote{See \url{https://emfollow.docs.ligo.org/userguide/analysis} for more information on alert thresholds}. Aframe, like many other detection methods, estimates FAR using the time-slide technique \cite{Aubin_2021, Dal_Canton_2021}. For an event with detection statistic $x$, the FAR of an event can be estimated by counting the number of background events with a equal or greater detection statistic, $N_b(x)$ and dividing by the analyzed background live time $T_b$
@@ -270,10 +219,10 @@ In practice, the pipeline uploads the posterior samples to GraceDB, and gwcelery
 \subsection{Sky Localization}
 GW sky localizations are represented as probability density distributions on the sky constructed in the HEALPix format \cite{Fernique}. Matched-filtering pipelines produce signal-to-noise ratio (SNR) time-series, which are processed by the BAYESTAR algorithm to produce fast sky localizations \cite{bayestar}. ML detection methods do not naturally produce SNR time-series, and so require an alternative. Two different estimators are used in real time to estimate sky localizations. First, an adaptive histogram estimator produces a rapid ($\lesssim 1$s) localization. Meanwhile, a slower ($\sim 20$s) but more robust kernel density estimator using the \texttt{ligo.skymap}\footnote{\url{https://git.ligo.org/lscsoft/ligo.skymap}} package is run in parallel. In Ref.~\cite{Marx:2025ioo}, we perform a detailed comparison of the two density estimation methods and find equal sky localization performance measured by searched area. However, the adaptive histogram estimator performs significantly worse as measured by searched volume (a three dimensional statistic) for low SNR events.  
 
-\section{Software Design} \label{sec:software-arch}
-The Aframe and AMPLFI deployment software is designed to minimize the latency to produce and upload each of the required data products described in Sec.~\ref{sec:data-products}. To enable this goal, software deployment consists of a main python process, and several python sub-processes that enable parallel execution of tasks. This allows tasks that are dependents of the same upstream data products to begin immediately. The main process is responsible for initial setup, data loading and processing, and model inference. After events are identified, a chain of sub-processes are triggered to produce derived data products. Processes are designed to begin work immediately once their data dependencies are available. In practice, this is implemented via a message passing system using python \texttt{multiprocessing.Queue} objects. Processes communicate data dependencies to others via a shared \texttt{multiprocessing.Queue}, and are then free to continue their own execution threads\footnote{We note the existence of several python based frameworks for distributed task orchestration, like Ray or Celery. We leave investigation of their utility to our problems to future work}. In Sec~\ref{sec:main-process} we outline the responsibilities of the main process, and in Sec~\ref{sec:sub-process} we describe each of the sub-processes. 
+\section{Software Design} \label{online_sec:software-arch}
+The Aframe and AMPLFI deployment software is designed to minimize the latency to produce and upload each of the required data products described in Sec.~\ref{online_sec:data-products}. To enable this goal, software deployment consists of a main python process, and several python sub-processes that enable parallel execution of tasks. This allows tasks that are dependents of the same upstream data products to begin immediately. The main process is responsible for initial setup, data loading and processing, and model inference. After events are identified, a chain of sub-processes are triggered to produce derived data products. Processes are designed to begin work immediately once their data dependencies are available. In practice, this is implemented via a message passing system using python \texttt{multiprocessing.Queue} objects. Processes communicate data dependencies to others via a shared \texttt{multiprocessing.Queue}, and are then free to continue their own execution threads\footnote{We note the existence of several python based frameworks for distributed task orchestration, like Ray or Celery. We leave investigation of their utility to our problems to future work}. In Sec~\ref{online_sec:main-process} we outline the responsibilities of the main process, and in Sec~\ref{online_sec:sub-process} we describe each of the sub-processes. 
 
-\subsection{Main Process} \label{sec:main-process}
+\subsection{Main Process} \label{online_sec:main-process}
 When the pipeline is first launched, the main process will perform initial setup. This includes 
 
 \begin{itemize}
@@ -281,14 +230,14 @@ When the pipeline is first launched, the main process will perform initial setup
     \item initializing python sub-processes and \texttt{multiprocessing.Queue}'s for sharing data between processes,
     \item creating a GraceDB client instance for uploading data products to GraceDB,
     \item loading in a background model of noise events for estimating event significance,
-    \item initializing buffers in GPU-memory for storing recent strain data and neural network outputs (see Sec.~\ref{sec:event-identification} and Sec.~\ref{sec:amplfi} for details)
+    \item initializing buffers in GPU-memory for storing recent strain data and neural network outputs (see Sec.~\ref{online_sec:event-identification} and Sec.~\ref{online_sec:amplfi} for details)
 \end{itemize}
 
 The main process is the only process which communicates with GPU devices. 
-After initial setup, the main process is responsible for the main strain data loading, processing, and validation loop. In addition, the main process performs inference with Aframe, and generates posterior samples with AMPLFI (see Sec.~\ref{sec:event-identification}). 
+After initial setup, the main process is responsible for the main strain data loading, processing, and validation loop. In addition, the main process performs inference with Aframe, and generates posterior samples with AMPLFI (see Sec.~\ref{online_sec:event-identification}). 
 
-\subsection{Sub-processes} \label{sec:sub-process}
-After event identification, python sub-processes are utilized to parallelize data product production. Python \texttt{multiprocessing.Queue} objects are used for message passing data dependencies between processes. Each sub-process operates by continually checking for available data in the queue, and immediately starts processing once available. A Python code snippet depicting this behavior is shown in Listing~\ref{lst:subprocess}. Below, we describe sub-process responsibilities, data products, and dependencies. Fig.~\ref{fig:subprocesses} provides an illustration of how sub-processes interact and depend upon each other. 
+\subsection{Sub-processes} \label{online_sec:sub-process}
+After event identification, python sub-processes are utilized to parallelize data product production. Python \texttt{multiprocessing.Queue} objects are used for message passing data dependencies between processes. Each sub-process operates by continually checking for available data in the queue, and immediately starts processing once available. A Python code snippet depicting this behavior is shown in Listing~\ref{lst:subprocess}. Below, we describe sub-process responsibilities, data products, and dependencies. Fig.~\ref{online_fig:subprocesses} provides an illustration of how sub-processes interact and depend upon each other. 
 
 %\newpage
 
@@ -309,7 +258,7 @@ Posterior samples produced by AMPLFI are standard scaled to be zero mean unit va
 GraceDB utilizes the SciToken protocol for authentication \cite{DBLP:journals/corr/abs-1905-09816}. Successful communication with the GraceDB server requires keeping a fresh SciToken available. To do so, an additional sub-process continually refreshes the pipelines SciToken. The authentication sub-process does not directly communicate with the other processes.
 
 \subsection{Deployment}
-The pipeline is deployed and managed by a cronjob which launches the main process. The main process is executed inside an apptainer container environment. A shell-based monitoring script initializes the main process and restarts it upon exit for any reason. In some cases, sub-processes can fail  while the main process continues operating. When this occurs, the failed sub-process propagates its error to the main process via a python \texttt{\texttt{multiprocessing.Queue}} object. Upon receiving the error, the main process will  exit, killing each sub-process, and triggering a restart of the entire pipeline. Unfortunately, restarts cause incoming data to be skipped as the pipeline takes time to re-initialize and re-accumulate data buffers (see Sec.~\ref{sec:event-identification}). However, restarts are rare, typically occurring due to transient errors communicating with GraceDB, or issues with frame file delivery.
+The pipeline is deployed and managed by a cronjob which launches the main process. The main process is executed inside an apptainer container environment. A shell-based monitoring script initializes the main process and restarts it upon exit for any reason. In some cases, sub-processes can fail  while the main process continues operating. When this occurs, the failed sub-process propagates its error to the main process via a python \texttt{\texttt{multiprocessing.Queue}} object. Upon receiving the error, the main process will  exit, killing each sub-process, and triggering a restart of the entire pipeline. Unfortunately, restarts cause incoming data to be skipped as the pipeline takes time to re-initialize and re-accumulate data buffers (see Sec.~\ref{online_sec:event-identification}). However, restarts are rare, typically occurring due to transient errors communicating with GraceDB, or issues with frame file delivery.
 
 The computational resources used for deployment are an NVIDIA A30 GPU, and 8 CPU-cores. Both Aframe and AMPLFI models are able to fit in memory and perform inference on this GPU. The CPU cores are used primarily for data loading, post processing Aframe and AMPLFI outputs, and interacting with GraceDB. 
 
@@ -317,7 +266,7 @@ The computational resources used for deployment are an NVIDIA A30 GPU, and 8 CPU
     \centering
     \includegraphics[page=7, width=0.95\columnwidth]{figures/aframe_diagrams.pdf}
     \caption{Communication of data between processes. Sub-procceses are depicted as blue parallelograms. Aframe identifies a signficant candidate, triggering AMPLFI, the event creation process, and $p_\mathrm{astro}$ calculation process. The GraceDB server returns a Gevent ID to the event creation process, and distributes it to the other sub-processes so each can upload data to the Gevent. Posterior samples from AMPLFI are passed to the parameter estimation process to calculate and upload a skymap.}
-    \label{fig:subprocesses}
+    \label{online_fig:subprocesses}
 \end{figure}
 
 
@@ -328,51 +277,90 @@ The computational resources used for deployment are an NVIDIA A30 GPU, and 8 CPU
     \centering
     \includegraphics[width=0.95\columnwidth]{figures/software_architecture.png}
     \caption{A high level overview of the software architecture that deploys Aframe and AMPLFI in real time. A main python process loads data, identifies events with Aframe, and produces parameter estimation products with AMPLFI. After an event is identified, several sub processes are kicked off in parallel to upload the necessary data products to GraceDB.}
-    \label{fig:software_architecture}
+    \label{online_fig:software_architecture}
 \end{figure}
 
 
-\section{O4c Results} \label{sec:o4c}
-Aframe and AMPLFI joined the O4c observing run on August 27th, 2025, operating until its completion on November 25th, 2025. During this period, 31 high significance public alerts were distributed via GCN. Of these, S251112cm was from a sub-solar mass (SSM) search, S251031dw was from a burst search, S250910b was from an early warning (EW) search, and S250908y, S250912f, S250917aq did not include either Hanford or Livingston as a trigger. This leaves 25 superevents to which Aframe and AMPLFI could have contributed. These events are listed in Table~\ref{table:o4c_events}. Of these 25 events, Aframe detected 23 of them. One non-detection, S250920bq, was detected only by SPIIR, with a FAR of $6.32 \times 10^{-8}$ Hz, just below the high significance threshold. The other, S250906ca, occurred during a power outage at the CIT cluster where Aframe is deployed, which caused issues with data delivery. 
+\section{O4c Results} \label{online_sec:o4c}
+Aframe and AMPLFI joined the O4c observing run on August 27th, 2025, operating until its completion on November 25th, 2025. During this period, 31 high significance public alerts were distributed via GCN. Of these, S251112cm was from a sub-solar mass (SSM) search, S251031dw was from a burst search, S250910b was from an early warning (EW) search, and S250908y, S250912f, S250917aq did not include either Hanford or Livingston as a trigger. This leaves 25 superevents to which Aframe and AMPLFI could have contributed. These events are listed in Table~\ref{online_tab:o4c_events}. Of these 25 events, Aframe detected 23 of them. One non-detection, S250920bq, was detected only by SPIIR, with a FAR of $6.32 \times 10^{-8}$ Hz, just below the high significance threshold. The other, S250906ca, occurred during a power outage at the CIT cluster where Aframe is deployed, which caused issues with data delivery. 
 
-Each Superevent is an aggregate of multiple G-events from potentially different pipelines which have estimated coalescence times that occur within some specified time interval. Each superevent has an associated preferred G-event, which is determined by the G-event which reports the largest SNR. Because Aframe does not estimate a SNR, G-events from other pipelines will be prioritized as the preferred event. However, if Aframe is the only G-event apart of a superevent, it will remain the preferred event until a G-event from another pipeline is submitted. When a G-event contains all of the data products necessary to distribute the preliminary alert, the preferred event is temporarily locked. The sky map corresponding to the preferred event is distributed with the alert. During O4c, there were 9 alerts where Aframe was the preferred at the time of the preliminary alert meaning the AMPLFI sky map was distributed. For all of these alerts, a matched filtering pipeline was made the preferred event after the preliminary alert was sent. Localization comparisons between AMPLFI and BAYESTAR for these 9 events where AMPLFI are shown in~\Cref{fig:S251103f,fig:S250830bp,fig:S251018bi,fig:S250830m,fig:S250901cb,fig:S250904br,fig:S251021u,fig:S251116en,fig:S251117dq}.
+Each Superevent is an aggregate of multiple G-events from potentially different pipelines which have estimated coalescence times that occur within some specified time interval. Each superevent has an associated preferred G-event, which is determined by the G-event which reports the largest SNR. Because Aframe does not estimate a SNR, G-events from other pipelines will be prioritized as the preferred event. However, if Aframe is the only G-event apart of a superevent, it will remain the preferred event until a G-event from another pipeline is submitted. When a G-event contains all of the data products necessary to distribute the preliminary alert, the preferred event is temporarily locked. The sky map corresponding to the preferred event is distributed with the alert. During O4c, there were 9 alerts where Aframe was the preferred at the time of the preliminary alert meaning the AMPLFI sky map was distributed. For all of these alerts, a matched filtering pipeline was made the preferred event after the preliminary alert was sent. Localization comparisons between AMPLFI and BAYESTAR for these 9 events where AMPLFI are shown in~\Cref{online_fig:S251103f,online_fig:S250830bp,online_fig:S251018bi,online_fig:S250830m,online_fig:S250901cb,online_fig:S250904br,online_fig:S251021u,online_fig:S251116en,online_fig:S251117dq}.
 
-\include{alerts.tex}
+\begin{table*}[ht]
+\centering
+\caption{High significance O4c superevents from the CBC group where both Hanford and Livingston were involved in the alert. Sub-solar mass, burst, and early warning events are not listed. A dash (--) indicates the pipeline did not contribute to the alert.}
+\label{online_tab:o4c_events}
+\rowcolors{2}{white}{gray!15}
+\resizebox{1.1\textwidth}{!}{
+\begin{tabular}{!{\vrule width 1pt}lccccccccccc!{\vrule width 1pt}}
+\toprule[1pt]
+ & Superevent ID & \makecell{Preferred \\ Pipeline} & \makecell{Preferred \\ Event \\ $t_0$} & \makecell{Preferred Event \\ FAR  \\ $\mathrm{yr}^{-1}$} & \makecell{Aframe \\ $t_0$} & \makecell{Aframe \\ FAR \\ $\mathrm{yr}^{-1}$} & \makecell{CWB-BBH \\ FAR \\ $\mathrm{yr}^{-1}$} & \makecell{GstLAL \\ FAR \\ $\mathrm{yr}^{-1}$} & \makecell{Spiir \\ FAR \\ $\mathrm{yr}^{-1}$} & \makecell{MBTA \\ FAR \\ $\mathrm{yr}^{-1}$} & \makecell{PyCBC \\ FAR \\ $\mathrm{yr}^{-1}$} \\
+\midrule[1pt]
+1 & S251117dq & GstLAL & 1447450731.12 & $5.87 \times 10^{-15}$ & 1447450731.10 & $3.15 \times 10^{-10}$ & $6.48 \times 10^{-11}$ & $5.87 \times 10^{-15}$ & $1.05 \times 10^{-6}$ & $1.64 \times 10^{-10}$ & $3.17 \times 10^{-10}$ \\
+2 & S251116en & Spiir & 1447370559.76 & $1.31 \times 10^{-12}$ & 1447370559.74 & $3.15 \times 10^{-10}$ & $6.71 \times 10^{-11}$ & $8.19 \times 10^{-44}$ & $1.31 \times 10^{-12}$ & $4.00 \times 10^{-20}$ & $3.17 \times 10^{-10}$ \\
+3 & S251108fi & GstLAL & 1446664426.51 & $1.31 \times 10^{-12}$ & 1446664426.50 & $2.21 \times 10^{-9}$ & $6.74 \times 10^{-11}$ & $1.31 \times 10^{-12}$ & -- & $2.29 \times 10^{-9}$ & $8.55 \times 10^{-9}$ \\
+4 & S251108dn & GstLAL & 1446633181.58 & $9.45 \times 10^{-18}$ & 1446633181.51 & $3.78 \times 10^{-9}$ & $4.28 \times 10^{-5}$ & $9.45 \times 10^{-18}$ & $1.06 \times 10^{-6}$ & $6.26 \times 10^{-7}$ & $3.17 \times 10^{-10}$ \\
+5 & S251105aj & MBTA & 1446382777.96 & $8.04 \times 10^{-13}$ & 1446382777.96 & $3.15 \times 10^{-10}$ & $6.84 \times 10^{-11}$ & $2.28 \times 10^{-23}$ & $7.12 \times 10^{-5}$ & $8.04 \times 10^{-13}$ & $3.17 \times 10^{-10}$ \\
+6 & S251103f & GstLAL & 1446242744.54 & $4.15 \times 10^{-14}$ & 1446242744.54 & $6.31 \times 10^{-10}$ & $7.04 \times 10^{-11}$ & $4.15 \times 10^{-14}$ & $9.85 \times 10^{-5}$ & $5.68 \times 10^{-10}$ & $6.34 \times 10^{-10}$ \\
+7 & S251031cq & GstLAL & 1445972373.91 & $7.01 \times 10^{-10}$ & 1445972373.91 & $2.85 \times 10^{-7}$ & $6.82 \times 10^{-11}$ & $7.01 \times 10^{-10}$ & -- & $2.79 \times 10^{-9}$ & $3.17 \times 10^{-10}$ \\
+8 & S251026bn & GstLAL & 1445548583.30 & $4.83 \times 10^{-12}$ & 1445548583.23 & $8.52 \times 10^{-9}$ & $6.30 \times 10^{-11}$ & $4.83 \times 10^{-12}$ & $4.87 \times 10^{-9}$ & $3.57 \times 10^{-16}$ & $3.17 \times 10^{-10}$ \\
+9 & S251021u & PyCBC & 1445052153.18 & $2.22 \times 10^{-9}$ & 1445052153.18 & $3.15 \times 10^{-10}$ & $6.67 \times 10^{-11}$ & $1.07 \times 10^{-10}$ & $1.07 \times 10^{-5}$ & $1.92 \times 10^{-8}$ & $2.22 \times 10^{-9}$ \\
+10 & S251018bi & PyCBC & 1444836365.02 & $3.17 \times 10^{-10}$ & 1444836364.98 & $3.15 \times 10^{-10}$ & $1.35 \times 10^{-10}$ & $5.14 \times 10^{-11}$ & $2.87 \times 10^{-6}$ & $7.69 \times 10^{-13}$ & $3.17 \times 10^{-10}$ \\
+11 & S251014cn & PyCBC & 1444476821.37 & $3.17 \times 10^{-10}$ & 1444476821.30 & $3.15 \times 10^{-10}$ & $6.69 \times 10^{-11}$ & $8.79 \times 10^{-38}$ & $1.21 \times 10^{-13}$ & $7.26 \times 10^{-19}$ & $3.17 \times 10^{-10}$ \\
+12 & S251013x & GstLAL & 1444358672.28 & $1.48 \times 10^{-8}$ & 1444358672.28 & $3.15 \times 10^{-10}$ & -- & $1.48 \times 10^{-8}$ & -- & $2.27 \times 10^{-8}$ & $3.48 \times 10^{-9}$ \\
+13 & S251006dd & MBTA & 1443829055.98 & $5.42 \times 10^{-16}$ & 1443829055.87 & $3.15 \times 10^{-10}$ & -- & -- & $3.04 \times 10^{-6}$ & $5.42 \times 10^{-16}$ & $3.17 \times 10^{-10}$ \\
+14 & S250929c & GstLAL & 1443140870.38 & $2.53 \times 10^{-8}$ & 1443140870.35 & $1.89 \times 10^{-9}$ & $3.03 \times 10^{-9}$ & $2.53 \times 10^{-8}$ & -- & $5.54 \times 10^{-6}$ & -- \\
+15 & S250927cy & GstLAL & 1443029459.68 & $5.31 \times 10^{-8}$ & 1443029459.68 & $4.48 \times 10^{-6}$ & -- & $5.31 \times 10^{-8}$ & -- & $2.78 \times 10^{-7}$ & -- \\
+16 & S250927ck & GstLAL & 1443021906.94 & $3.14 \times 10^{-8}$ & 1443021906.80 & $5.47 \times 10^{-6}$ & $2.40 \times 10^{-6}$ & $3.14 \times 10^{-8}$ & -- & -- & -- \\
+17 & S250920bq & Spiir & 1442399277.06 & $6.32 \times 10^{-8}$ & -- & -- & -- & -- & $6.32 \times 10^{-8}$ & -- & -- \\
+18 & S250911ac & PyCBC & 1441612017.27 & $6.02 \times 10^{-9}$ & 1441612017.15 & $1.90 \times 10^{-6}$ & $3.66 \times 10^{-6}$ & $1.77 \times 10^{-14}$ & $2.11 \times 10^{-9}$ & $1.47 \times 10^{-15}$ & $6.02 \times 10^{-9}$ \\
+19 & S250906ca & GstLAL & 1441196657.10 & $1.10 \times 10^{-13}$ & -- & -- & -- & $1.10 \times 10^{-13}$ & -- & $3.18 \times 10^{-16}$ & -- \\
+20 & S250904cv & PyCBC & 1441029010.53 & $3.17 \times 10^{-10}$ & 1441029010.50 & $9.46 \times 10^{-10}$ & $5.97 \times 10^{-11}$ & $3.84 \times 10^{-18}$ & $4.12 \times 10^{-5}$ & $9.55 \times 10^{-17}$ & $3.17 \times 10^{-10}$ \\
+21 & S250904br & PyCBC & 1441016546.02 & $3.17 \times 10^{-10}$ & 1441016546.00 & $3.15 \times 10^{-10}$ & $6.08 \times 10^{-11}$ & $1.60 \times 10^{-25}$ & -- & $1.16 \times 10^{-14}$ & $3.17 \times 10^{-10}$ \\
+22 & S250904ae & PyCBC & 1440992005.67 & $3.17 \times 10^{-10}$ & 1440992005.66 & $3.15 \times 10^{-10}$ & $6.34 \times 10^{-11}$ & $4.13 \times 10^{-14}$ & -- & $7.12 \times 10^{-13}$ & $3.17 \times 10^{-10}$ \\
+23 & S250901cb & GstLAL & 1440788399.97 & $3.19 \times 10^{-14}$ & 1440788399.96 & $3.15 \times 10^{-10}$ & $6.10 \times 10^{-6}$ & $3.19 \times 10^{-14}$ & $2.18 \times 10^{-5}$ & $1.68 \times 10^{-8}$ & $6.02 \times 10^{-9}$ \\
+24 & S250830bp & PyCBC & 1440584676.85 & $3.17 \times 10^{-10}$ & 1440584676.73 & $3.15 \times 10^{-10}$ & $6.25 \times 10^{-11}$ & $5.60 \times 10^{-43}$ & $6.02 \times 10^{-27}$ & $4.00 \times 10^{-20}$ & $3.17 \times 10^{-10}$ \\
+25 & S250830m & MBTA & 1440559647.03 & $1.19 \times 10^{-8}$ & 1440559647.03 & $3.15 \times 10^{-10}$ & $6.50 \times 10^{-11}$ & $5.78 \times 10^{-13}$ & $1.21 \times 10^{-4}$ & $1.19 \times 10^{-8}$ & $1.27 \times 10^{-9}$ \\
+\bottomrule[1pt]
+\end{tabular}
+
+}
+\end{table*}
 
 \begin{figure} 
     \includegraphics[width=0.95\columnwidth]{figures/skymaps/S251103f.pdf}
     \caption{}
-    \label{fig:S251103f}
+    \label{online_fig:S251103f}
 \end{figure}
 
 \begin{figure} 
     \includegraphics[width=0.95\columnwidth]{figures/skymaps/S250830bp.pdf}
     \caption{}
-    \label{fig:S250830bp}
+    \label{online_fig:S250830bp}
 \end{figure}
 
 \begin{figure}
     \includegraphics[width=0.95\columnwidth]{figures/skymaps/S251018bi.pdf}
     \caption{}
-    \label{fig:S251018bi}
+    \label{online_fig:S251018bi}
 \end{figure}
 
 \begin{figure}
     \includegraphics[width=0.95\columnwidth]{figures/skymaps/S250830m.pdf}
     \caption{}
-     \label{fig:S250830m}
+     \label{online_fig:S250830m}
 \end{figure}
 
 \begin{figure}
     \includegraphics[width=0.95\columnwidth]{figures/skymaps/S250901cb.pdf}
     \caption{}
-    \label{fig:S250901cb}
+    \label{online_fig:S250901cb}
 \end{figure}
 
 \begin{figure}
     \includegraphics[width=0.95\columnwidth]{figures/skymaps/S250904br.pdf}
     \caption{}
-    \label{fig:S250904br}
+    \label{online_fig:S250904br}
 \end{figure}
 
 
@@ -380,19 +368,19 @@ Each Superevent is an aggregate of multiple G-events from potentially different 
 \begin{figure} 
     \includegraphics[width=0.95\columnwidth]{figures/skymaps/S251021u.pdf}
     \caption{}
-    \label{fig:S251021u}
+    \label{online_fig:S251021u}
 \end{figure}
 
 \begin{figure} 
     \includegraphics[width=0.95\columnwidth]{figures/skymaps/S251116en.pdf}
     \caption{}
-    \label{fig:S251116en}
+    \label{online_fig:S251116en}
 \end{figure}
 
 \begin{figure} 
     \includegraphics[width=0.95\columnwidth]{figures/skymaps/S251117dq.pdf}
     \caption{}
-    \label{fig:S251117dq}
+    \label{online_fig:S251117dq}
 \end{figure}
 
 
@@ -400,8 +388,8 @@ Each Superevent is an aggregate of multiple G-events from potentially different 
 
 
 
-Several avenues exist for improving the quality of this low latency deployment. Currently, if one sub-tasks fails, (e.g. due to an issue communicating with GraceDB), the whole system needs to restart, causing some data to not be analyzed. Integrating a distributed task orchestration framework like Ray or Celery will enable a scalable, fault-tolerant system. Failed sub-tasks can easily be retried without affecting other components of the system. Several contributors to latency can also be removed. Currently, to resample a frame at time T, we wait for the frame at time T + 1 so edge effects can be removed. (see Fig.\ref{fig:resampling}). In practice, the frame at time T can be 
-\section*{References}
-\bibliographystyle{unsrt}
-\bibliography{references}
-\end{document}
+Several avenues exist for improving the quality of this low latency deployment. Currently, if one sub-tasks fails, (e.g. due to an issue communicating with GraceDB), the whole system needs to restart, causing some data to not be analyzed. Integrating a distributed task orchestration framework like Ray or Celery will enable a scalable, fault-tolerant system. Failed sub-tasks can easily be retried without affecting other components of the system. Several contributors to latency can also be removed. Currently, to resample a frame at time T, we wait for the frame at time T + 1 so edge effects can be removed. (see Fig.\ref{online_fig:resampling}). In practice, the frame at time T can be 
+
+\singlespacing
+\printbibliography[title=References,heading=subbibintoc]
+\end{refsection}

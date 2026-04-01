@@ -30,6 +30,40 @@
 \usepackage[backend=bibtex,giveninits=true,style=numeric]{biblatex}
 \addbibresource{thesis.bib}
 
+
+\usepackage{listings}
+\usepackage{mathtools}
+\usepackage{minted}
+\usepackage{makecell}
+\usepackage{dcolumn} % Align table columns on decimal point
+\usepackage{colortbl}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+ 
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+\lstset{style=mystyle}
+
+
+
 \graphicspath{{./}{figures/}}
 
 % Configure the siunitx package
@@ -55,6 +89,7 @@
     chapters/amplfi_methods,
     chapters/amplfi_results,
     chapters/ml4gw,
+    chapters/online_deployment,
     chapters/conclusion,
     chapters/app_glossary,
 }
@@ -78,7 +113,7 @@
 \include{chapters/amplfi_methods}
 \include{chapters/amplfi_results}
 \include{chapters/ml4gw}
-
+\include{chapters/online_deployment}
 
 %Conclusion
 \include{chapters/conclusion}
