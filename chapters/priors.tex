@@ -1,0 +1,52 @@
+\begin{table}
+\centering
+\begin{tabular}{ p{4cm} p{1.5cm} p{1.75cm} p{1.5cm} }
+\hline
+\hline
+Parameter & Prior & Limits & Units\\
+\hline
+Mass of primary & $m_1^{-2.35}$ & $(5, 100)$ & $M_{\odot}$\\
+Mass of secondary & $m_2$ & $(5, m_1)$ & $M_{\odot}$\\
+Redshift & Comoving & $(0, 2)$ & -\\
+Polarization angle & Uniform & $(0, \pi)$ & rad.\\
+Dimensionless spin magnitude & Uniform & $(0, 0.998)$ & -\\
+Spin tilt & Sine & $(0, \pi)$ & rad.\\
+Relative spin azimuthal angle & Uniform & $(0, 2\pi)$ & rad.\\
+Spin phase angle & Uniform & $(0, 2\pi)$ & rad.\\
+Orbital phase & Uniform & $(0, 2\pi)$ & rad.\\
+Right ascension & $(0, 2\pi)$ & rad.\\
+Declination &Cosine & $(-\pi/2, \pi/2)$ & rad.\\
+Inclination angle & Sine & $(0, \pi)$ & rad.\\
+\hline
+\hline
+\end{tabular}
+\caption{Priors on parameters used to generate waveforms for training Aframe. The prior is derived from that used in GWTC-3 to assess search pipelines. The component mass distributions are defined in the source frame. ``Comoving" refers to uniform in comoving volume.}
+\label{table:aframe-priors}
+\end{table}
+
+\begin{table}
+\centering
+\begin{tabular}{ p{4cm} p{1.5cm} p{1.75cm} p{1.5cm} }
+\hline
+\hline
+Parameter & Prior & Limits & Units\\
+\hline
+Coalescence time & Uniform & $(-0.2, 0.2)$ & s \\
+Spin magnitude & Uniform & $(0, 0.999)$ & - \\
+Spin azimuthal angle & Uniform & $(0, 2\pi)$ & rad. \\
+Spin phase angle & Uniform & $(0, 2\pi)$ & rad. \\
+Spin tilt angle & Uniform & $(0, \pi)$ & rad. \\
+Chirp mass & Uniform & $(5, 100)$ & $M_{\odot}$ \\
+Mass ratio & Uniform & $(0.01, 1)$ & - \\
+Luminosity distance & Uniform & $(100, 6000)$ & Mpc \\
+Inclination & Sine & $(0, \pi)$ & rad. \\
+Right ascension & Uniform & $(0, 2\pi)$ & rad. \\
+Declination & Cosine & $(-\pi/2, \pi/2)$ & rad. \\
+Coalescence phase & Uniform & $(0, 2\pi)$ & rad. \\
+Polarization angle & Uniform & $(0, \pi)$ & rad. \\
+\hline
+\hline
+\end{tabular}
+\caption{Priors on parameters used to generate waveforms for training AMPLFI.}
+\label{tab:amplfi-priors}
+\end{table}
