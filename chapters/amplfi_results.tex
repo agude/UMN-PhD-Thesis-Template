@@ -3,51 +3,97 @@
 
 \begin{refsection}
 
-% \begin{abstract}
-Rapid and reliable detection and dissemination of source parameter estimation data products from gravitational-wave events, especially sky localization, is critical for maximizing the potential of multi-messenger astronomy. Machine learning based detection and parameter estimation algorithms are emerging as production ready alternatives to traditional approaches. Here, we report validation studies of AMPLFI, a likelihood-free inference solution to low-latency parameter estimation of binary black holes. We use simulated signals added into data from the LIGO-Virgo-KAGRA's (LVK's) third observing run (O3) to compare sky localization performance with BAYESTAR, the algorithm currently in production for rapid sky localization of candidates from matched-filter pipelines. We demonstrate sky localization performance, measured by searched area and volume, to be equivalent with BAYESTAR. We show accurate reconstruction of source parameters with uncertainties for use in distributing low-latency coarse-grained chirp mass information. In addition, we analyze several candidate events reported by the LVK in the third gravitational-wave transient catalog (GWTC-3) and show consistency with the LVK's analysis. Altogether, we demonstrate AMPLFI's ability to produce data products for low-latency public alerts.
+Rapid and reliable detection and dissemination of source parameter estimation data products from gravitational-wave events, especially sky localization, is critical for maximizing the potential of multi-messenger astronomy. 
+Machine learning based detection and parameter estimation algorithms are emerging as production ready alternatives to traditional approaches. 
+Here, we report validation studies of AMPLFI, a likelihood-free inference solution to low-latency parameter estimation of binary black holes. 
+We use simulated signals added into data from the LIGO-Virgo-KAGRA's (LVK's) third observing run (O3) to compare sky localization performance with BAYESTAR, the algorithm currently in production for rapid sky localization of candidates from matched-filter pipelines. 
+We demonstrate sky localization performance, measured by searched area and volume, to be equivalent with BAYESTAR. 
+We show accurate reconstruction of source parameters with uncertainties for use in distributing low-latency coarse-grained chirp mass information. I
+n addition, we analyze several candidate events reported by the LVK in the third gravitational-wave transient catalog (GWTC-3) and show consistency with the LVK's analysis. 
+Altogether, we demonstrate AMPLFI's ability to produce data products for low-latency public alerts.
 
-% \end{abstract}
-%\keywords{}
 
 \section{Introduction}  \label{amp_res_sec:intro}
-A decade has passed since the first direct detection of gravitational waves (GWs) \cite{PhysRevLett.116.061102}. Now, observing GWs from compact binary coalescences (CBCs) is commonplace. The number of GW candidates has increased by two orders of magnitude in this decade, rising from three candidates in the first observing run, to over three-hundred cumulative after the fourth observing run (O4) \cite{AbEA2018b, theligoscientificcollaboration2022gwtc21, Abbott_2023,LIGOScientific:2025slb}. The discovery rate is expected to continue to rise as the Advanced LIGO~\cite{Aasi_2015}, Advanced Virgo~\cite{VIRGO:2014yos} and KAGRA~\cite{kagra} interferometers approach the design sensitivity era of the fifth observing run \cite{ observing_scenarios}. 
+A decade has passed since the first direct detection of gravitational waves (GWs) \cite{PhysRevLett.116.061102}. 
+Now, observing GWs from compact binary coalescences (CBCs) is commonplace. 
+The number of GW candidates has increased by two orders of magnitude in this decade, rising from three candidates in the first observing run, to over three-hundred cumulative after the fourth observing run (O4) \cite{AbEA2018b, theligoscientificcollaboration2022gwtc21, Abbott_2023,LIGOScientific:2025slb}. 
+The discovery rate is expected to continue to rise as the Advanced LIGO~\cite{Aasi_2015}, Advanced Virgo~\cite{VIRGO:2014yos} and KAGRA~\cite{kagra} interferometers approach the design sensitivity era of the fifth observing run \cite{ observing_scenarios}. 
 Accompanying this rapid growth has been excitement to transmit real-time public alerts to the broader astrophysical community, with the goal of finding coincident electromagnetic (EM) signals. 
 
-Machine learning (ML) methods for detecting and characterizing CBCs are emerging as production ready solutions to real-time GW data analysis. For detection, many methods are being developed, showing promise in achieving the sensitivity of traditional matched-filter pipelines at a reduced latency and computational cost \cite{aframe-methods, sage, Nousi_2023}. However, these methods do not provide a solution for producing the suite of low-latency data products necessary for informing effective EM followup after an initial detection. Currently, the LVK's low-latency alert infrastructure relies on data products expected from matched-filter pipelines. For example, the production sky localization algorithm for events from matched-filter pipelines, BAYESTAR, requires signal to noise ratio (SNR) time series \cite{bayestar}. In addition, coarse-grained chirp mass information (a recent addition to LVK alerts\footnote{\url{https://emfollow.docs.ligo.org/userguide/}}) and other source property classifiers utilize point estimates from the best fit matched-filtering template \cite{Chatterjee:2019avs}. ML-based search algorithms do not naturally provide SNR time series or template parameters required by these downstream tasks. 
+Machine learning (ML) methods for detecting and characterizing CBCs are emerging as production ready solutions to real-time GW data analysis. 
+For detection, many methods are being developed, showing promise in achieving the sensitivity of traditional matched-filter pipelines at a reduced latency and computational cost \cite{aframe-methods, sage, Nousi_2023}. 
+However, these methods do not provide a solution for producing the suite of low-latency data products necessary for informing effective EM followup after an initial detection. 
+Currently, the LVK's low-latency alert infrastructure relies on data products expected from matched-filter pipelines. 
+For example, the production sky localization algorithm for events from matched-filter pipelines, BAYESTAR, requires signal to noise ratio (SNR) time series \cite{bayestar}. 
+In addition, coarse-grained chirp mass information (a recent addition to LVK alerts\footnote{\url{https://emfollow.docs.ligo.org/userguide/}}) and other source property classifiers utilize point estimates from the best fit matched-filtering template \cite{Chatterjee:2019avs}. 
+ML-based search algorithms do not naturally provide SNR time series or template parameters required by these downstream tasks. 
 
-In Ref.~\cite{Chatterjee:2024pbj}, we introduced AMPLFI\footnote{\textbf{A}ccelerated \textbf{M}ultimessenger \textbf{P}arameter estimation using \textbf{LFI}; pronounced ‘amp-li-fy’.}, a parameter estimation (PE) algorithm based on likelihood-free inference (LFI), as a tool for providing low-latency PE data products. We motivated AMPLFI as a real-time followup to ML-based detection algorithms, specifically, Aframe \cite{aframe-methods}. In this paper, we describe recent improvements to AMPLFI, and demonstrate its ability to produce robust low-latency source PE data products. 
+In Ref.~\cite{Chatterjee:2024pbj}, we introduced AMPLFI\footnote{\textbf{A}ccelerated \textbf{M}ultimessenger \textbf{P}arameter estimation using \textbf{LFI}; pronounced ‘amp-li-fy’.}, a parameter estimation (PE) algorithm based on likelihood-free inference (LFI), as a tool for providing low-latency PE data products. 
+We motivated AMPLFI as a real-time followup to ML-based detection algorithms, specifically, Aframe \cite{aframe-methods}. 
+In this paper, we describe recent improvements to AMPLFI, and demonstrate its ability to produce robust low-latency source PE data products. 
 
-This paper is organized as follows. In Sec.~\ref{amp_res_sec:lfi} we provide a summary of LFI in GW astronomy. In Sec.~\ref{amp_res_sec:review} we discuss the AMPLFI algorithm previously presented in Ref.~\cite{Chatterjee:2024pbj} including improvements made since. In Sec.~\ref{amp_res_sec:testing-data} we present the dataset used to evaluate AMPLFI's performance. In Sec.~\ref{amp_res_sec:sky-localization}, we discuss and benchmark our method for producing sky localizations from AMPLFI posterior samples. In Sec.~\ref{amp_res_sec:results-skyloc} we compare AMPLFI's sky localization performance with BAYESTAR \cite{bayestar}. In Sec.~\ref{amp_res_sec:results-consistency} we demonstrate the self-consistency of AMPLFI sky localizations. In Sec.~\ref{amp_res_sec:results-robustness}, we illustrate AMPLFI's robustness to changing detector background over a time scale of several months. Finally, in Sec.~\ref{amp_res_sec:results-gwtc3} we analyze real GW candidates from GWTC-3 and show consistency with published GWTC-3 results. 
+This paper is organized as follows. 
+In Sec.~\ref{amp_res_sec:lfi} we provide a summary of LFI in GW astronomy. 
+In Sec.~\ref{amp_res_sec:review} we discuss the AMPLFI algorithm previously presented in Ref.~\cite{Chatterjee:2024pbj} including improvements made since. 
+In Sec.~\ref{amp_res_sec:testing-data} we present the dataset used to evaluate AMPLFI's performance. 
+In Sec.~\ref{amp_res_sec:sky-localization}, we discuss and benchmark our method for producing sky localizations from AMPLFI posterior samples. 
+In Sec.~\ref{amp_res_sec:results-skyloc} we compare AMPLFI's sky localization performance with BAYESTAR \cite{bayestar}. 
+In Sec.~\ref{amp_res_sec:results-consistency} we demonstrate the self-consistency of AMPLFI sky localizations. 
+In Sec.~\ref{amp_res_sec:results-robustness}, we illustrate AMPLFI's robustness to changing detector background over a time scale of several months. 
+Finally, in Sec.~\ref{amp_res_sec:results-gwtc3} we analyze real GW candidates from GWTC-3 and show consistency with published GWTC-3 results. 
 
 
 
 \section{Likelihood Free Inference} \label{amp_res_sec:lfi}
-In GW astronomy, estimating the parameters $\theta$ of a source given strain data $d$ is typically done using Bayesian inference. Traditional Bayesian PE algorithms rely on repeated evaluations of an explicit likelihood function, utilizing stochastic sampling techniques such as Markov Chain Monte Carlo (MCMC) or nested sampling to explore the signal parameter space \cite{bilby_paper, lalinference_paper}. For GW PE, this process can be arduous. Each likelihood evaluation requires simulating a waveform, which can be expensive. In addition, the full 15 dimensional signal parameter space must be fully explored. Low-latency PE methods typically make approximations, to either the likelihood function or waveform physics, to simplify the exploration of the posterior \cite{Canizares:2014fya,Morisaki:2023kuq,Morisaki:2020oqk,SiPr2016}.
+In GW astronomy, estimating the parameters $\theta$ of a source given strain data $d$ is typically done using Bayesian inference. 
+Traditional Bayesian PE algorithms rely on repeated evaluations of an explicit likelihood function, utilizing stochastic sampling techniques such as Markov Chain Monte Carlo (MCMC) or nested sampling to explore the signal parameter space \cite{bilby_paper, lalinference_paper}. 
+For GW PE, this process can be arduous. 
+Each likelihood evaluation requires simulating a waveform, which can be expensive. 
+In addition, the full 15 dimensional signal parameter space must be fully explored. 
+Low-latency PE methods typically make approximations, to either the likelihood function or waveform physics, to simplify the exploration of the posterior \cite{Canizares:2014fya,Morisaki:2023kuq,Morisaki:2020oqk,SiPr2016}.
 
-Posterior estimation using LFI involves training a probabilistic neural network with tuneable parameters $\phi$, $q_\phi(\theta | d)$, to approximate the true posterior $p(\theta | d)$. A type of probabilistic neural network known as a conditional normalizing flow~\cite{papamakarios2021normalizing} is a popular choice for constructing the approximation $q_\phi(\theta | d)$. Conditional normalizing flows consist of flexible, parameterized variable transforms which map between a simple base distribution, $\pi(u)$, typically taken to be a standard normal, and a more complex distribution which is being approximated (e.g. $q_\phi(\theta|d)$). The normalizing flow is conditional in the sense that the parameters that define the transformations from the base distribution to the more complex distribution are a function of the data $d$. Normalizing flows have been utilized in GW astronomy for a variety of use cases \cite{Dax_2021, Dax_2025, Williams:2021qyt, PhysRevD.109.102004}.
+Posterior estimation using LFI involves training a probabilistic neural network with tuneable parameters $\phi$, $q_\phi(\theta | d)$, to approximate the true posterior $p(\theta | d)$. 
+A type of probabilistic neural network known as a conditional normalizing flow~\cite{papamakarios2021normalizing} is a popular choice for constructing the approximation $q_\phi(\theta | d)$. 
+Conditional normalizing flows consist of flexible, parameterized variable transforms which map between a simple base distribution, $\pi(u)$, typically taken to be a standard normal, and a more complex distribution which is being approximated (e.g. $q_\phi(\theta|d)$). 
+The normalizing flow is conditional in the sense that the parameters that define the transformations from the base distribution to the more complex distribution are a function of the data $d$. 
+Normalizing flows have been utilized in GW astronomy for a variety of use cases \cite{Dax_2021, Dax_2025, Williams:2021qyt, PhysRevD.109.102004}.
 
-Training normalizing flow models requires large quantities of data realizations from the likelihood. This means a diverse set of both noise instances, $n$, and signal simulations $h(\theta)$ such that one can simulate $d = n + h(\theta) \sim p(d|\theta)$. One advantage of LFI is that once the approximator is trained, generating samples from the posterior $\theta \sim q_\phi(\theta | d)$ can be done rapidly by drawing samples from the base distribution and applying the learned transformations to obtain the posterior sample. Drawing thousands of samples takes seconds when done on accelerated hardware like GPUs. In addition, LFI also provides density estimation, or scoring, of samples i.e. $p(\theta \vert d)\approx q_\phi(\theta \vert d)$.
+Training normalizing flow models requires large quantities of data realizations from the likelihood. 
+This means a diverse set of both noise instances, $n$, and signal simulations $h(\theta)$ such that one can simulate $d = n + h(\theta) \sim p(d|\theta)$. 
+One advantage of LFI is that once the approximator is trained, generating samples from the posterior $\theta \sim q_\phi(\theta | d)$ can be done rapidly by drawing samples from the base distribution and applying the learned transformations to obtain the posterior sample. 
+Drawing thousands of samples takes seconds when done on accelerated hardware like GPUs. 
+In addition, LFI also provides density estimation, or scoring, of samples i.e. $p(\theta \vert d)\approx q_\phi(\theta \vert d)$.
 
 \section{AMPLFI} \label{amp_res_sec:review}
-AMPLFI is a PE algorithm based on LFI and was presented in detail in Ref.~\cite{Chatterjee:2024pbj}. In Sec.~\ref{amp_res_sec:amplfi-summary} we summarize the algorithm and in Sec.~\ref{amp_res_sec:improvements} we discuss in more detail improvements that have been made regarding training data usage and neural network architecture.
+AMPLFI is a PE algorithm based on LFI and was presented in detail in Ref.~\cite{Chatterjee:2024pbj}. 
+In Sec.~\ref{amp_res_sec:amplfi-summary} we summarize the algorithm and in Sec.~\ref{amp_res_sec:improvements} we discuss in more detail improvements that have been made regarding training data usage and neural network architecture.
 
 \subsection{Summary} \label{amp_res_sec:amplfi-summary}
-Applications of LFI with normalizing flows to GW PE of CBC sources have been pioneered in Ref.~\cite{Dax_2021}. While the core principle of AMPLFI is similar, there are significant implementation differences, namely
+Applications of LFI with normalizing flows to GW PE of CBC sources have been pioneered in Ref.~\cite{Dax_2021}. 
+While the core principle of AMPLFI is similar, there are significant implementation differences, namely
 
 \begin{itemize}
     \item An empirical noise model that makes use of real detector data to sample noise instances for generating simulations from the likelihood (see Sec.~\ref{amp_res_sec:results-robustness}).
-    \item Implementation of GW signal approximants with PyTorch \cite{Bellm_2018} such that signals can be generated using GPUs on-the-fly during the training process. This implies that the training dataset is effectively infinite, and does not need to be pre-generated or saved to disk.
+    \item Implementation of GW signal approximants with PyTorch \cite{Bellm_2018} such that signals can be generated using GPUs on-the-fly during the training process. 
+    This implies that the training dataset is effectively infinite, and does not need to be pre-generated or saved to disk.
     \item Real-time data processing steps like filtering, power spectral density (PSD) estimation, and whitening employed on the GPU.
 \end{itemize}
-These algorithmic and data processing choices allow a maximally diverse, high entropy training dataset while still maintaining effective GPU utilization. In more detail, the training loop for a batch size of $N$ training examples includes
+These algorithmic and data processing choices allow a maximally diverse, high entropy training dataset while still maintaining effective GPU utilization. 
+In more detail, the training loop for a batch size of $N$ training examples includes
 
 \begin{enumerate}
-    \item Sampling $N$ parameter instances $\theta^{(i)}$, $i \in \{1,...,N\}$, from a prior distribution $p(\theta)$ of waveform parameters. We use the \texttt{torch.distributions} library for the priors which allows direct sampling on the GPU.
-    \item Generating intrinsic signal polarizations $h_{\times}(\theta^{(i)})$ and $h_{+}(\theta^{(i)})$ in batch. This is done using signal generators implemented in \texttt{torch} and publicly available in the ml4gw library\footnote{\url{https://github.com/ML4GW/ml4gw}}.
+    \item Sampling $N$ parameter instances $\theta^{(i)}$, $i \in \{1,...,N\}$, from a prior distribution $p(\theta)$ of waveform parameters. 
+    We use the \texttt{torch.distributions} library for the priors which allows direct sampling on the GPU.
+    \item Generating intrinsic signal polarizations $h_{\times}(\theta^{(i)})$ and $h_{+}(\theta^{(i)})$ in batch. 
+    This is done using signal generators implemented in \texttt{torch} and publicly available in the ml4gw library\footnote{\url{https://github.com/ML4GW/ml4gw}}.
     \item Sampling right ascension, declination and polarization angle uniformly and projecting waveforms onto the interferometers, producing the observed signal $h_k(\theta^{(i)})$ in the $k^{th}$ interferometer. 
-    \item Sampling $N$ noise instances $n_k^{(i)}$ from data stored on disk, independently in time for each interferometer $k$. This includes data used for estimating the PSD (see Sec.~\ref{amp_res_sec:results-robustness} for details).
-    \item Injecting the waveforms into detector noise i.e., $d_k^{(i)} = h_k(\theta^{(i)}) + n_k^{(i)}$. The injection is performed in the time domain into 3 seconds of noise. The coalescence time is randomly placed with uniform probability between 0.4 and 0.6 seconds from the right edge of the window.
-    \item Creating whitened data, $\tilde{d}^{(i)}_k$, using a PSD estimate $S_k^{(i)}$ local to each training sample. See Sec.~\ref{amp_res_sec:improvements} for details of PSD estimation.
+    \item Sampling $N$ noise instances $n_k^{(i)}$ from data stored on disk, independently in time for each interferometer $k$. 
+    This includes data used for estimating the PSD (see Sec.~\ref{amp_res_sec:results-robustness} for details).
+    \item Injecting the waveforms into detector noise i.e., $d_k^{(i)} = h_k(\theta^{(i)}) + n_k^{(i)}$. 
+    The injection is performed in the time domain into 3 seconds of noise. 
+    The coalescence time is randomly placed with uniform probability between 0.4 and 0.6 seconds from the right edge of the window.
+    \item Creating whitened data, $\tilde{d}^{(i)}_k$, using a PSD estimate $S_k^{(i)}$ local to each training sample. 
+    See Sec.~\ref{amp_res_sec:improvements} for details of PSD estimation.
     \item Jointly mapping the whitened data and PSD estimates for all interferometers, $\{\tilde{d}^{(i)}_k, S_k^{(i)}\}$, to a lower dimensional data summary $\gamma^{(i)} = \Gamma_\psi(\{\tilde{d}^{(i)}_k, S_k^{(i)}\})$ using a neural network $\Gamma$ with weights $\psi$ that are optimized during training.
     \item Providing the $N$ combinations of parameters and data summaries, $\{\theta^{(i)}, \gamma^{(i)}\}$ to the neural network, with the training objective of minimizing the negative log-probability with respect to weights $\psi$ and $\phi$.
     \begin{equation}
@@ -59,27 +105,58 @@ In this work, strain data is sampled at 2048 Hz.
 
 \subsection{Improvements} \label{amp_res_sec:improvements}
 \subsubsection{Training Data}
-In Ref.~\cite{Chatterjee:2024pbj}, AMPLFI was trained and evaluated using a fraction of a day of strain data. As such, accounting for variability in detector noise was not critical to performance. So, a single, global estimate of the PSD was used to whiten the data for each training batch. When deployed to a production environment, any deviations in noise properties could lead to model under performance. Practically, using a global PSD estimate encoded the assumption of noise-stationarity into the model. 
+In Ref.~\cite{Chatterjee:2024pbj}, AMPLFI was trained and evaluated using a fraction of a day of strain data. 
+As such, accounting for variability in detector noise was not critical to performance. 
+So, a single, global estimate of the PSD was used to whiten the data for each training batch. 
+When deployed to a production environment, any deviations in noise properties could lead to model under performance. 
+Practically, using a global PSD estimate encoded the assumption of noise-stationarity into the model. 
 
-In this work, the quantity of strain data used for training is increased to $\sim$ 2 months. A global PSD estimate is no longer sufficient at modeling the varying noise profiles of the detectors across this long of a period. Instead, we now utilize data local to each training sample to estimate the PSD. For each training noise instance, 64 seconds of strain data immediately preceding the sample is used to estimate the PSD using Welch's method with median averaging. Increasing the quantity of strain data and using local PSD estimates allows a richer sampling of detector noise states, leading to improved generalization and model longevity. This amount of data cannot fit into memory at once. We take advantage of an efficient out-of-memory data loader implemented in ml4gw so that data loading does not bottleneck the training process. This is the same data loader implementation is used to train the Aframe detection algorithm \cite{aframe-methods}.
+In this work, the quantity of strain data used for training is increased to $\sim$ 2 months. 
+A global PSD estimate is no longer sufficient at modeling the varying noise profiles of the detectors across this long of a period. 
+Instead, we now utilize data local to each training sample to estimate the PSD. 
+For each training noise instance, 64 seconds of strain data immediately preceding the sample is used to estimate the PSD using Welch's method with median averaging. 
+Increasing the quantity of strain data and using local PSD estimates allows a richer sampling of detector noise states, leading to improved generalization and model longevity. 
+This amount of data cannot fit into memory at once. 
+We take advantage of an efficient out-of-memory data loader implemented in ml4gw so that data loading does not bottleneck the training process. 
+This is the same data loader implementation is used to train the Aframe detection algorithm \cite{aframe-methods}.
 
-Lastly, in Ref.~\cite{Chatterjee:2024pbj}, AMPLFI was trained with a GPU-accelerated IMRPhenomD approximant \cite{phenomD}. Since then, we have implemented the IMRPhenomPv2 waveform approximant, allowing AMPLFI to be trained with a waveform that includes spin precession physics.
+Lastly, in Ref.~\cite{Chatterjee:2024pbj}, AMPLFI was trained with a GPU-accelerated IMRPhenomD approximant \cite{phenomD}. 
+Since then, we have implemented the IMRPhenomPv2 waveform approximant, allowing AMPLFI to be trained with a waveform that includes spin precession physics.
 
 \subsubsection{Neural Network}
-In Ref.~\cite{Chatterjee:2024pbj}, the AMPLFI embedding network $\Gamma_\psi$ consisted of a 1 dimensional convolutional ResNet \cite{resnet}, which processed time-domain representations of the data to produce a lower-dimensional data summary. Here, we introduce a parallel embedding network that processes a frequency-domain representation of the signal and a local PSD estimate, $S$. The frequency-domain embedding network consists of the same ResNet architecture used for the time-domain data. The data summaries produced by the time and frequency embedding networks, denoted $\gamma_t$ and $\gamma_f$, respectively, are concatenated into a final data summary, $\gamma$, which is used to condition the normalizing flow.
+In Ref.~\cite{Chatterjee:2024pbj}, the AMPLFI embedding network $\Gamma_\psi$ consisted of a 1 dimensional convolutional ResNet \cite{resnet}, which processed time-domain representations of the data to produce a lower-dimensional data summary. 
+Here, we introduce a parallel embedding network that processes a frequency-domain representation of the signal and a local PSD estimate, $S$. 
+The frequency-domain embedding network consists of the same ResNet architecture used for the time-domain data. 
+The data summaries produced by the time and frequency embedding networks, denoted $\gamma_t$ and $\gamma_f$, respectively, are concatenated into a final data summary, $\gamma$, which is used to condition the normalizing flow.
 \begin{align}
     \gamma_t &= \Gamma_{\psi_t}^{t}(\tilde{d}) \\ \label{eq:gamma_t}
     \gamma_f &= \Gamma_{\psi_f}^{f}(FFT(\tilde{d}), S) \\ \label{eq:gamma_f}
     \gamma &= \text{Concat}(\gamma_t, \gamma_f)
 \end{align}
-The real and imaginary parts of the frequency domain data are processed as separate channels by the frequency domain embedding network. In equations \ref{eq:gamma_t} and \ref{eq:gamma_f}, $\psi_t$ and $\psi_f$ correspond to the trainable parameters of the time domain and frequency domain embedding networks, $\Gamma_{\psi_t}^{t}$ and $\Gamma_{\psi_f}^{f}$, respectively. The dimensions of $\gamma_t$ and $\gamma_f$ are hyperparameters that can be optimized, and control how much information from each domain is passed to the normalizing flow.
+The real and imaginary parts of the frequency domain data are processed as separate channels by the frequency domain embedding network. 
+In equations \ref{eq:gamma_t} and \ref{eq:gamma_f}, $\psi_t$ and $\psi_f$ correspond to the trainable parameters of the time domain and frequency domain embedding networks, $\Gamma_{\psi_t}^{t}$ and $\Gamma_{\psi_f}^{f}$, respectively. 
+The dimensions of $\gamma_t$ and $\gamma_f$ are hyperparameters that can be optimized, and control how much information from each domain is passed to the normalizing flow.
 
 
-Providing redundant data in the form of the Fourier transform can be interpreted as an inductive bias. Intuitively, different data representations provide easier pathways for the neural network to learn certain parameters. As an example, the coalescence time might be easier to identify in the time domain, whereas the chirp mass, a quantity determined by a power law in frequency, might be easier in the frequency-domain. Multi-modal learning approaches have been explored in other GW data analysis contexts \cite{Bhardwaj:2023xph, Sun:2023vlq}.
+Providing redundant data in the form of the Fourier transform can be interpreted as an inductive bias. 
+Intuitively, different data representations provide easier pathways for the neural network to learn certain parameters. 
+As an example, the coalescence time might be easier to identify in the time domain, whereas the chirp mass, a quantity determined by a power law in frequency, might be easier in the frequency-domain. 
+Multi-modal learning approaches have been explored in other GW data analysis contexts \cite{Bhardwaj:2023xph, Sun:2023vlq}.
 
-In addition, we also increase the number of trainable parameters of the normalizing flow. In, Ref.~\cite{Chatterjee:2024pbj}, affine flow transforms were used \cite{realnvp}. Here, we use the more expressive spline-based transforms \cite{spline3}. We reduce the number of auto-regressive transforms, and compensate by increasing the hidden dimensions and number of hidden layers of the hyper-networks used to learn the parameters of the spline transformations. Normalizing flows are implemented with the zuko library \cite{rozet2022zuko}. 
+In addition, we also increase the number of trainable parameters of the normalizing flow. 
+In Ref.~\cite{Chatterjee:2024pbj}, affine flow transforms were used \cite{realnvp}. 
+Here, we use the more expressive spline-based transforms \cite{spline3}. 
+We reduce the number of auto-regressive transforms, and compensate by increasing the hidden dimensions and number of hidden layers of the hyper-networks used to learn the parameters of the spline transformations. 
+Normalizing flows are implemented with the zuko library \cite{rozet2022zuko}. 
 
-For the studies that follow, we train two AMPLFI models for Hanford-Livingston (HL) and Hanford-Livingston-Virgo (HLV) detector configurations. Both HL and HLV neural networks utilize the same fundamental architecture described above. However, the HLV network utilizes a larger normalizing flow component. See Table~\ref{amp_res_tab:hps} for hyperparameters used in this work. For each detector configuration, we use coincident science mode segments from the beginning of the second half of the third observing run (O3b) until the start of the testing dataset (see Sec.~\ref{amp_res_sec:testing-data}) for training. We train the models using the low-latency calibrated strain data. The embedding network and normalizing flow for the HLV (HL) model have a total of 70 (30) million parameters, a factor of $\sim 10$ increase from Ref.~\cite{Chatterjee:2024pbj}. Training this larger model takes $\sim 10$ days using 2 NVIDIA A100 GPUs.
+For the studies that follow, we train two AMPLFI models for Hanford-Livingston (HL) and Hanford-Livingston-Virgo (HLV) detector configurations. 
+Both HL and HLV neural networks utilize the same fundamental architecture described above. 
+However, the HLV network utilizes a larger normalizing flow component. 
+See Table~\ref{amp_res_tab:hps} for hyperparameters used in this work. 
+For each detector configuration, we use coincident science mode segments from the beginning of the second half of the third observing run (O3b) until the start of the testing dataset (see Sec.~\ref{amp_res_sec:testing-data}) for training. 
+We train the models using the low-latency calibrated strain data. 
+The embedding network and normalizing flow for the HLV (HL) model have a total of 70 (30) million parameters, a factor of $\sim 10$ increase from Ref.~\cite{Chatterjee:2024pbj}. 
+Training this larger model takes $\sim 10$ days using 2 NVIDIA A100 GPUs.
 
 \begin{table}[h]
     \begin{tabular}{lcc} 
@@ -97,23 +174,37 @@ For the studies that follow, we train two AMPLFI models for Hanford-Livingston (
     size of $\gamma_t$ & 12 & 20 \\
     \hline
     \end{tabular}
-    \caption{Neural network hyperparameters for the HL and HLV models used in this work.}
+    \caption[Neural network hyperparameters for the HL and HLV models used to analyze the O3 MDC.]{Neural network hyperparameters for the HL and HLV models used in this work.}
     \label{amp_res_tab:hps}
 \end{table}
 
 
 \section{Testing Dataset} \label{amp_res_sec:testing-data}
-In preparation for O4, Ref.~\cite{Chaudhary:2023vec} performed a study which added simulated CBC signals (known colloquially as \emph{injections}) into a real-time data replay. The injections were added across a one month period during O3b, between 2020-01-05T:23:59:42 and 2020-02-14T23:59:42. Search pipelines analyzed the data replay using their online configurations. GWCelery\footnote{\url{https://git.ligo.org/emfollow/gwcelery}} \footnote{\url{https://rtd.igwn.org/projects/gwcelery/en/latest/}}processed pipeline triggers, mimicking the end-to-end real-time alert infrastructure. This study provided matched-filter pipeline SNR time series for injections across a broad parameter space. 
+In preparation for O4, Ref.~\cite{Chaudhary:2023vec} performed a study which added simulated CBC signals (known colloquially as \emph{injections}) into a real-time data replay. 
+The injections were added across a one month period during O3b, between 2020-01-05T:23:59:42 and 2020-02-14T23:59:42. 
+Search pipelines analyzed the data replay using their online configurations. GWCelery\footnote{\url{https://git.ligo.org/emfollow/gwcelery}} \footnote{\url{https://rtd.igwn.org/projects/gwcelery/en/latest/}}processed pipeline triggers, mimicking the end-to-end real-time alert infrastructure. 
+This study provided matched-filter pipeline SNR time series for injections across a broad parameter space. 
 
-During the real-time analysis, a given injection may be detected by multiple different matched-filter pipelines, creating several associated SNR time series to use for localization. For comparison, we choose the localization corresponding to the preferred event in GraceDB. This corresponds to the matched-filter event with the highest SNR. In some instances, the preferred event is associated with the un-modeled cWB pipeline which does not produce sky localizations with BAYESTAR. For these instances, we select the matched-filter event with the highest SNR. 
+During the real-time analysis, a given injection may be detected by multiple different matched-filter pipelines, creating several associated SNR time series to use for localization. 
+For comparison, we choose the localization corresponding to the preferred event in GraceDB. 
+This corresponds to the matched-filter event with the highest SNR. 
+In some instances, the preferred event is associated with the un-modeled cWB pipeline which does not produce sky localizations with BAYESTAR. 
+For these instances, we select the matched-filter event with the highest SNR. 
 
-Using these SNR time series, we create a dataset of BAYESTAR localizations. We first filter the injections to those consistent with AMPLFI's training prior (see Table~\ref{amp_res_tab:priors}). The injections are binary black hole mergers with chirp masses between 10 and 100 $M_{\odot}$. We ensure the injections were performed using science quality data from each interferometer. Using the SNR time series, we create Hanford-Livingston (HL), and if available, Hanford-Livingston-Virgo (HLV) BAYESTAR localizations. BAYESTAR is configured to use the same distance prior used to train AMPLFI. After these cuts, this leaves 1233 HL and 903 HLV injections.  Figure~\ref{amp_res_fig:mdc_dist} visualizes the distribution of signal parameters. The dataset consists of a broad parameter space of signals, nearly uniform in chirp mass between 10 and 100 $M_\odot$ and covering a wide range of SNRs.
+Using these SNR time series, we create a dataset of BAYESTAR localizations. 
+We first filter the injections to those consistent with AMPLFI's training prior (see Table~\ref{amp_res_tab:priors}). 
+The injections are binary black hole mergers with chirp masses between 10 and 100 $M_{\odot}$. 
+We ensure the injections were performed using science quality data from each interferometer. 
+Using the SNR time series, we create Hanford-Livingston (HL), and if available, Hanford-Livingston-Virgo (HLV) BAYESTAR localizations. 
+BAYESTAR is configured to use the same distance prior used to train AMPLFI. After these cuts, this leaves 1233 HL and 903 HLV injections. 
+Figure~\ref{amp_res_fig:mdc_dist} visualizes the distribution of signal parameters. 
+The dataset consists of a broad parameter space of signals, nearly uniform in chirp mass between 10 and 100 $M_\odot$ and covering a wide range of SNRs.
 
 
 \begin{figure}
     \centering
     \includegraphics[width=0.95\columnwidth]{figures/distributions.pdf}
-    \caption{Histograms of chirp mass (top), SNR (middle) and mass ratio (bottom) for the 1233 HL injections used in this study to compare with BAYESTAR. The HLV injections are a strict subset of the HL injections.}
+    \caption[Histograms of chirp mass, SNR, and mass ratio for the 1233 HL injections used in this study compared with BAYESTAR]{Histograms of chirp mass (top), SNR (middle) and mass ratio (bottom) for the 1233 HL injections used in this study to compare with BAYESTAR. The HLV injections are a strict subset of the HL injections.}
     \label{amp_res_fig:mdc_dist}
 \end{figure}
 
@@ -144,41 +235,75 @@ $\psi$ \hfill (Polarization angle) & Uniform(0, $\pi$) \\
 \hline
 \hline
 \end{tabular}
-\caption{Prior distributions for source parameters used to generate waveforms during training. Parameters which AMPLFI is trained to infer are specified. We use a spin parameterization consistent with Bilby. Note that the distance prior is uniform in distance. So, cosmological effects are not included, but can be incorporated in post-processing through importance sampling. The coalescence time prior is such that $t_c=0$ corresponds to 0.5 seconds from the right edge of the analysis window.}
+\caption[Prior distributions for source parameters used to generate waveforms during AMPLFI training]{Prior distributions for source parameters used to generate waveforms during training. 
+Parameters which AMPLFI is trained to infer are specified. We use a spin parameterization consistent with Bilby. Note that the distance prior is uniform in distance. 
+So, cosmological effects are not included, but can be incorporated in post-processing through importance sampling. 
+The coalescence time prior is such that $t_c=0$ corresponds to 0.5 seconds from the right edge of the analysis window.}
 \label{amp_res_tab:priors}
 \end{table}
 
 \section{Sky Map Production} \label{amp_res_sec:sky-localization}
-GW sky maps are probability density distributions on the sky constructed using the HEALPix\footnote{\url{http://healpix.sourceforge.net}} format \cite{Zonca2019}. For CBC events with distance calibrated waveform models, three-dimensional volume information can also be estimated. BAYESTAR estimates the parameters of a conditional distance distribution ansatz for each sky pixel which is distributed as part of the sky map in low-latency GW discovery alerts \cite{Si2016}. 
+GW sky maps are probability density distributions on the sky constructed using the HEALPix\footnote{\url{http://healpix.sourceforge.net}} format \cite{Zonca2019}. 
+For CBC events with distance calibrated waveform models, three-dimensional volume information can also be estimated. 
+BAYESTAR estimates the parameters of a conditional distance distribution ansatz for each sky pixel which is distributed as part of the sky map in low-latency GW discovery alerts \cite{Si2016}. 
 
-For stochastic sampling algorithms which draw samples from the posterior, a method for estimating each sky pixels probability density and distance ansatz parameters from the samples is required. Here, we compare two techniques for estimating the densities and distance ansatz parameters: a kernel density estimate (KDE) using the \texttt{ligo-skymap-from-samples} tool, and an adaptive histogram estimator which adaptively grids the sky, creating higher resolutions in regions with higher numbers of posterior samples. Both of these tools are available via the \texttt{ligo.skymap}\footnote{\url{https://git.ligo.org/lscsoft/ligo.skymap}} library. We show that the searched area performance for the two methods is equivalent. For searched volume, the performance is comparable at mid to high SNRs. However, the KDE begins to outperform the adaptive histogram estimator at low SNRs ($\lesssim 10$). 
+For stochastic sampling algorithms which draw samples from the posterior, a method for estimating each sky pixels probability density and distance ansatz parameters from the samples is required. 
+Here, we compare two techniques for estimating the densities and distance ansatz parameters: a kernel density estimate (KDE) using the \texttt{ligo-skymap-from-samples} tool, and an adaptive histogram estimator which adaptively grids the sky, creating higher resolutions in regions with higher numbers of posterior samples. 
+Both of these tools are available via the \texttt{ligo.skymap}\footnote{\url{https://git.ligo.org/lscsoft/ligo.skymap}} library. 
+We show that the searched area performance for the two methods is equivalent. 
+For searched volume, the performance is comparable at mid to high SNRs. 
+However, the KDE begins to outperform the adaptive histogram estimator at low SNRs ($\lesssim 10$). 
 
 
 The adaptive histogram density is estimated as follows
 
 \begin{enumerate}
-    \item Draw approximately $10^4$ samples from the normalizing flow. This step takes $\sim 1-2$ seconds on an NVIDIA A30 GPU.
+    \item Draw approximately $10^4$ samples from the normalizing flow. 
+    This step takes $\sim 1-2$ seconds on an NVIDIA A30 GPU.
     \item Bin the samples using an adaptive HEALPix grid. 
     Resample the grid to a flat resolution with NSIDE=64.
-    This corresponds to pixel area of $\sim 1\;\mathrm{deg.}^2$ and
-    provides sufficient resolution for all-sky survey instruments which have fields
-    of view $1-50\;\mathrm{deg}^2$ \cite{andreoni2024rubin2024envisioningvera, Bellm_2018}.
-    \item Using the posterior samples in each sky pixel, calculate the first two distance moments,
-    and solve for the distance distribution ansatz parameters as described in Ref.~\cite{Singer_2016}.
-    \item De-rasterize the sky map into multi-order scheme \cite{Fernique}. This reduces the data size of the sky map with no information loss, allowing for low-latency distribution via alert brokers (e.g. GCN and SCiMMA\footnote{\url{https://scimma.org/}}).
+    This corresponds to pixel area of $\sim 1\;\mathrm{deg.}^2$ and provides sufficient resolution for all-sky survey instruments which have fields of view $1-50\;\mathrm{deg}^2$ \cite{andreoni2024rubin2024envisioningvera, Bellm_2018}.
+    \item Using the posterior samples in each sky pixel, calculate the first two distance moments, and solve for the distance distribution ansatz parameters as described in Ref.~\cite{Singer_2016}.
+    \item De-rasterize the sky map into multi-order scheme \cite{Fernique}. 
+    This reduces the data size of the sky map with no information loss, allowing for low-latency distribution via alert brokers (e.g. GCN and SCiMMA\footnote{\url{https://scimma.org/}}).
 \end{enumerate}
-We calculate the conditional distance ansatz parameters for pixels with $\geq 5$ samples. For pixels which have a smaller number or no samples, we use placeholder values as done in Ref.~\cite{Singer_2016}. The adaptive histogram estimator including distance estimation can be run in less than a second.
+We calculate the conditional distance ansatz parameters for pixels with $\geq 5$ samples. 
+For pixels which have a smaller number or no samples, we use placeholder values as done in Ref.~\cite{Singer_2016}. 
+The adaptive histogram estimator including distance estimation can be run in less than a second.
 
-The KDE is constructed by modeling p($\alpha, \delta, d_L$) as the product of the 2D marginal distribution p($\alpha, \delta$) and the conditional distance distribution p($d \vert \alpha, \delta$). For both, posterior samples are clustered using a k-means algorithm into $k$ clusters. A brute-force search over $k$ is performed in order to maximize the Bayesian information criterion. For each cluster, a separate KDE is constructed, and the total distribution is modeled by summing the cluster KDEs with appropriate weights. The conditional distance distribution p($d \vert \alpha, \delta$) is evaluated as $p(\alpha, \delta, d_L) / p(\alpha, \delta)$ by analytically marginalizing the 3D KDEs. See Sec.~5 in \cite{Singer_2016} for more details. Due to the brute-force search over $k$, the runtime is $\sim 11$ seconds parallelized on 64 CPUs, which is not suitable for extremely rapid alerts.
+The KDE is constructed by modeling p($\alpha, \delta, d_L$) as the product of the 2D marginal distribution p($\alpha, \delta$) and the conditional distance distribution p($d \vert \alpha, \delta$). 
+For both, posterior samples are clustered using a k-means algorithm into $k$ clusters. 
+A brute-force search over $k$ is performed in order to maximize the Bayesian information criterion. 
+For each cluster, a separate KDE is constructed, and the total distribution is modeled by summing the cluster KDEs with appropriate weights. 
+The conditional distance distribution p($d \vert \alpha, \delta$) is evaluated as $p(\alpha, \delta, d_L) / p(\alpha, \delta)$ by analytically marginalizing the 3D KDEs. 
+See Sec.~5 in \cite{Singer_2016} for more details. 
+Due to the brute-force search over $k$, the runtime is $\sim 11$ seconds parallelized on 64 CPUs, which is not suitable for extremely rapid alerts.
 
 
-Using the dataset of injections described in Sec.~\ref{amp_res_sec:testing-data}, we compare the accuracy of the AMPLFI sky map produced using the histogram and KDE estimators. For each injection, we calculate searched area and searched volume metrics for both estimators. Searched area (volume) is measured by sorting sky area (volume) pixels by descending probability, and accumulating area (volume) until the pixel containing the true location of the simulated signal is reached. For the adaptive histogram estimator, we draw 20,000 samples from the model. The top row of Figure~\ref{amp_res_fig:kde-vs-hist} shows that searched areas from the two methods are in statistical agreement. However, the histogram estimator has a minimum searched area of $\sim 1$ $\mathrm{deg^2}$ due to the pixel resolution of NSIDE=64, and is therefore unable to achieve searched areas smaller than this. The bottom row compares the searched volumes between the estimators. The methods agree for searched volumes $\lesssim 10^9$ $\mathrm{Mpc}^3$. For larger searched volumes, the KDE method performs better. This behavior is due to the large number of samples required for the histogram estimator to properly converge for low SNR events, where the sky localization probability is spread across a larger number of pixels. In practice, these low SNR events are not as likely to be pursued for EM followup. For example, the Rubin target of opportunity observing strategy plans to pursue EM followup for events with sky localizations less than $\sim 100\;\text{deg}^2$ \cite{andreoni2024rubin2024envisioningvera}. In this regime, the histogram methods searched volume is comparable with the KDE. 
+Using the dataset of injections described in Sec.~\ref{amp_res_sec:testing-data}, we compare the accuracy of the AMPLFI sky map produced using the histogram and KDE estimators. 
+For each injection, we calculate searched area and searched volume metrics for both estimators. 
+Searched area (volume) is measured by sorting sky area (volume) pixels by descending probability, and accumulating area (volume) until the pixel containing the true location of the simulated signal is reached. 
+For the adaptive histogram estimator, we draw 20,000 samples from the model. 
+The top row of Figure~\ref{amp_res_fig:kde-vs-hist} shows that searched areas from the two methods are in statistical agreement.
+However, the histogram estimator has a minimum searched area of $\sim 1$ $\mathrm{deg^2}$ due to the pixel resolution of NSIDE=64, and is therefore unable to achieve searched areas smaller than this. 
+The bottom row compares the searched volumes between the estimators. 
+The methods agree for searched volumes $\lesssim 10^9$ $\mathrm{Mpc}^3$. 
+For larger searched volumes, the KDE method performs better. 
+This behavior is due to the large number of samples required for the histogram estimator to properly converge for low SNR events, where the sky localization probability is spread across a larger number of pixels. 
+In practice, these low SNR events are not as likely to be pursued for EM followup. 
+For example, the Rubin target of opportunity observing strategy plans to pursue EM followup for events with sky localizations less than $\sim 100\;\text{deg}^2$ \cite{andreoni2024rubin2024envisioningvera}.
+In this regime, the histogram methods searched volume is comparable with the KDE. 
 
 
 \begin{figure} 
     \includegraphics[width=0.95\columnwidth]{figures/amplfi_kde_vs_hist_searched_area.pdf}
     \includegraphics[width=0.95\columnwidth]{figures/amplfi_kde_vs_hist_searched_vol.pdf}
-    \caption{Top Left: Scatter plot of searched areas comparing the histogram and KDE estimators for the HL (blue) and HLV (orange) injections. Top Right: Cumulative histogram of searched areas for the same events. Error bars correspond to 1$\sigma$ confidence intervals calculated by bootstrapping are shown. Searched areas from the two density estimation methods are in statistical agreement. Bottom: Same as top, but for searched volumes. Searched volumes for the two methods broadly agree up until $\sim10^{9}$ $\mathrm{Mpc}^3$ for HLV and $\sim 10^{8}$ $\mathrm{Mpc}^3$ for HL network , where the KDE method begins to outperform the histogram estimator.}
+    \caption[Comparison between searched areas and volumes for the histogram and KDE estimators]{Top Left: Scatter plot of searched areas comparing the histogram and KDE estimators for the HL (blue) and HLV (orange) injections. 
+    Top Right: Cumulative histogram of searched areas for the same events. 
+    Error bars correspond to 1$\sigma$ confidence intervals calculated by bootstrapping are shown. 
+    Searched areas from the two density estimation methods are in statistical agreement. 
+    Bottom: Same as top, but for searched volumes. 
+    Searched volumes for the two methods broadly agree up until $\sim10^{9}$ $\mathrm{Mpc}^3$ for HLV and $\sim 10^{8}$ $\mathrm{Mpc}^3$ for HL network, where the KDE method begins to outperform the histogram estimator.}
     \label{amp_res_fig:kde-vs-hist}
 \end{figure} 
 
@@ -186,7 +311,13 @@ Using the dataset of injections described in Sec.~\ref{amp_res_sec:testing-data}
 \begin{figure*}
 \includegraphics[scale=0.5]{figures/amplfi_vs_bayestar_searched_area.pdf}
 \includegraphics[scale=0.5]{figures/amplfi_vs_bayestar_searched_volume.pdf}
-\caption{Top Left: Scatter plot comparing searched areas of AMPLFI and BAYESTAR. HLV injections are show in orange, and HL injections are shown in blue. Top Right: Cumulative histogram of searched areas for the same events. Error bars correspond to 1$\sigma$ confidence intervals calculated by bootstrapping are shown. The cumulative distribution of searched areas from the two methods are statistically equivalent. Bottom: Same as top, but for searched volumes. AMPLFI provides smaller searched volumes than BAYESTAR} \label{amp_res_fig:amplfi-vs-bayestar}
+\caption[Comparison between searched areas and volumes for AMPLFI and BAYESTAR]{Top Left: Scatter plot comparing searched areas of AMPLFI and BAYESTAR. 
+HLV injections are show in orange, and HL injections are shown in blue. 
+Top Right: Cumulative histogram of searched areas for the same events. 
+Error bars correspond to 1$\sigma$ confidence intervals calculated by bootstrapping are shown. 
+The cumulative distribution of searched areas from the two methods are statistically equivalent. 
+Bottom: Same as top, but for searched volumes. 
+AMPLFI provides smaller searched volumes than BAYESTAR} \label{amp_res_fig:amplfi-vs-bayestar}
 \end{figure*} 
 
 \section{Performance Studies} \label{amp_res_sec:results}
@@ -196,29 +327,56 @@ Using the dataset of injections described in Sec.~\ref{amp_res_sec:testing-data}
 \begin{figure}
     \centering
     \includegraphics[width=\columnwidth]{figures/angle_offset_HLV.pdf}
-    \caption{Normalized histogram of cos $\delta \theta$ for the HLV injection set, where $\delta \theta$ is the angular offset between the true pixel of the injection and the maximum a posterior pixel}
+    \caption[Normalized histogram of cos $\delta \theta$ for the HLV injection set]{Normalized histogram of cos $\delta \theta$ for the HLV injection set, where $\delta \theta$ is the angular offset between the true pixel of the injection and the maximum a posterior pixel}
     \label{amp_res_fig:dtheta}
 \end{figure}
 
 
 \subsubsection{Accuracy}
-We compare AMPLFI's sky localization performance with BAYESTAR using the dataset set described in Sec.~\ref{amp_res_sec:testing-data}. In Figure~\ref{amp_res_fig:amplfi-vs-bayestar} we compare searched areas (top) and searched volumes (bottom) between AMPLFI and BAYESTAR sky maps for both HLV and HL datasets. Bootstrapped confidence intervals show the searched area cumulative histograms agree within 2$\sigma$. The searched volume cumulative histogram shows that AMPLFI provides smaller searched volumes than BAYESTAR. One drawback of searched area and volume as performance metrics is they do not capture sky map multi-modality (see Ref.~\cite{Essick:2014wwa} for a discussion). In Figure~\ref{amp_res_fig:dtheta} we compare the angular offset between the sky maps maximum a posterior pixel and the true pixel of the injection. We plot $\cos \delta \theta$ which highlights groupings at the true and antipodal location. We see agreement between the BAYESTAR and AMPLFI distributions.
+We compare AMPLFI's sky localization performance with BAYESTAR using the dataset set described in Sec.~\ref{amp_res_sec:testing-data}. 
+In Figure~\ref{amp_res_fig:amplfi-vs-bayestar} we compare searched areas (top) and searched volumes (bottom) between AMPLFI and BAYESTAR sky maps for both HLV and HL datasets. 
+Bootstrapped confidence intervals show the searched area cumulative histograms agree within 2$\sigma$. 
+The searched volume cumulative histogram shows that AMPLFI provides smaller searched volumes than BAYESTAR. 
+One drawback of searched area and volume as performance metrics is they do not capture sky map multi-modality (see Ref.~\cite{Essick:2014wwa} for a discussion).
+In Figure~\ref{amp_res_fig:dtheta} we compare the angular offset between the sky maps maximum a posterior pixel and the true pixel of the injection. 
+We plot $\cos \delta \theta$ which highlights groupings at the true and antipodal location. 
+We see agreement between the BAYESTAR and AMPLFI distributions.
 
 \subsubsection{Consistency} \label{amp_res_sec:results-consistency}
-Searched area and volume measure accuracy, but not calibration (i.e. probabilistic consistency). Sky map calibration can be evaluated by performing probability-probability (P-P) tests on a dataset of simulated signals. For well calibrated sky maps, reported confidence intervals should correspond to the probability of finding the true location of the GW source in that area or volume region. This probability can be estimated empirically by analyzing injections. 
+Searched area and volume measure accuracy, but not calibration (i.e. probabilistic consistency). 
+Sky map calibration can be evaluated by performing probability-probability (P-P) tests on a dataset of simulated signals. 
+For well calibrated sky maps, reported confidence intervals should correspond to the probability of finding the true location of the GW source in that area or volume region. 
+This probability can be estimated empirically by analyzing injections. 
 
-For BAYESTAR, this calibration is achieved by rescaling the SNR timeseries by a correction factor which is tuned to injections \cite{bayestar}. Notably, this correction factor is dependent on algorithmic details of the matched-filter pipeline that provides the SNR timeseries. The default value of 0.83 is tuned to injections analyzed by the GstLAL pipeline. Using this default correction factor, BAYESTAR sky maps produced from the SNR timeseries provided by the PyCBC live analysis have been shown to be biased (see Figure 5 in Ref.~\cite{Nitz_2018}). The source of this correction factor was further studied in Ref.~\cite{Duverne_2024} using PyCBC. The correction factor was shown to depend on variables like the construction of the matched-filtering template bank, and detector configuration. The variability of this correction factor upon pipeline specifics is undesirable, since it requires tuning to algorithmic choices.
+For BAYESTAR, this calibration is achieved by rescaling the SNR timeseries by a correction factor which is tuned to injections \cite{bayestar}. 
+Notably, this correction factor is dependent on algorithmic details of the matched-filter pipeline that provides the SNR timeseries. 
+The default value of 0.83 is tuned to injections analyzed by the GstLAL pipeline. 
+Using this default correction factor, BAYESTAR sky maps produced from the SNR timeseries provided by the PyCBC live analysis have been shown to be biased (see Figure 5 in Ref.~\cite{Nitz_2018}). 
+The source of this correction factor was further studied in Ref.~\cite{Duverne_2024} using PyCBC. 
+The correction factor was shown to depend on variables like the construction of the matched-filtering template bank, and detector configuration. 
+The variability of this correction factor upon pipeline specifics is undesirable, since it requires tuning to algorithmic choices.
 
-Figure~\ref{amp_res_fig:self-consistency} shows self-consistency tests for the HLV AMPLFI model using injections with SNR $\geq 12$. Consistency tests for area and volume are shown to be unbiased. A small bias in distance is present. Since AMPLFI is trained directly on strain data it does not require additional pipeline dependent tuning factors to achieve self consistency.
+Figure~\ref{amp_res_fig:self-consistency} shows self-consistency tests for the HLV AMPLFI model using injections with SNR $\geq 12$. 
+Consistency tests for area and volume are shown to be unbiased. 
+A small bias in distance is present. 
+Since AMPLFI is trained directly on strain data it does not require additional pipeline dependent tuning factors to achieve self consistency.
 
 \subsection{Intrinsic Parameter Recovery}
-In low-latency, matched-filter pipelines provide only point estimates of source parameters. These point estimates can suffer from systematic biases due to algorithmic choices such as template bank construction \cite{Ewing:2023qqe}. These biases have been shown to affect the performance of downstream source property classifiers which are used to publicly distribute probabilities of the source containing a neutron star, remnant, or mass gap component \cite{Chatterjee:2019avs}. Because AMPLFI provides a full posterior, estimates of uncertainty can be used in low latency. These estimates can be used to restrict the prior space for downstream PE tasks which aim to explore the full signal parameter space including spins. Restricting the prior space leads to faster PE using fewer computational resources.
-In Fig.~\ref{amp_res_fig:chirp-mass-recovery}, we illustrate AMPLFI's ability to recover the chirp mass of the source. We see the expected increase in uncertainty as the injected chirp mass increases. In addition, we perform a P-P test using 500 injections drawn from AMPLFI's training prior. Fig.~\ref{amp_res_fig:pp-plot} shows a P-P test demonstrating AMPLFI's unbiased recovery of parameters.
+In low-latency, matched-filter pipelines provide only point estimates of source parameters. 
+These point estimates can suffer from systematic biases due to algorithmic choices such as template bank construction \cite{Ewing:2023qqe}. 
+These biases have been shown to affect the performance of downstream source property classifiers which are used to publicly distribute probabilities of the source containing a neutron star, remnant, or mass gap component \cite{Chatterjee:2019avs}. 
+Because AMPLFI provides a full posterior, estimates of uncertainty can be used in low latency. 
+These estimates can be used to restrict the prior space for downstream PE tasks which aim to explore the full signal parameter space including spins. 
+Restricting the prior space leads to faster PE using fewer computational resources.
+In Fig.~\ref{amp_res_fig:chirp-mass-recovery}, we illustrate AMPLFI's ability to recover the chirp mass of the source. 
+We see the expected increase in uncertainty as the injected chirp mass increases. 
+In addition, we perform a P-P test using 500 injections drawn from AMPLFI's training prior. 
+Fig.~\ref{amp_res_fig:pp-plot} shows a P-P test demonstrating AMPLFI's unbiased recovery of parameters.
 
 \begin{figure}
     \centering
     \includegraphics[scale=0.35]{figures/chirp_mass_recovery.pdf}
-    \caption{Scatter plot comparing true chirp mass and AMPLFI's median chirp mass for simulated signals from the injection dataset described in Sec.~\ref{amp_res_sec:testing-data}. Error bars corresponding to the $5^{\mathrm{th}}$ and $95^{\mathrm{th}}$ percentiles of AMPLFI's posterior samples are shown. Orange and blue points correspond to the HL and HLV networks respectively.} 
+    \caption[Scatter plot comparing true chirp mass and AMPLFI's median chirp mass for simulated signals from the injection dataset]{Scatter plot comparing true chirp mass and AMPLFI's median chirp mass for simulated signals from the injection dataset described in Sec.~\ref{amp_res_sec:testing-data}. Error bars corresponding to the $5^{\mathrm{th}}$ and $95^{\mathrm{th}}$ percentiles of AMPLFI's posterior samples are shown. Orange and blue points correspond to the HL and HLV networks respectively.} 
     
     \label{amp_res_fig:chirp-mass-recovery}
 \end{figure}
@@ -226,38 +384,37 @@ In Fig.~\ref{amp_res_fig:chirp-mass-recovery}, we illustrate AMPLFI's ability to
 \begin{figure*}
     \centering
     \includegraphics[width=\textwidth]{figures/skymap_consistency.pdf}
-    \caption{P-P tests for AMPLFI's joint 2D (area) and 3D (volume) posterior distributions measuring sky map self consistency. The p-value for each consistency check is provided in the legend. Error bars corresponding to 1 and 3 $\sigma$ confidence intervals are plotted as shaded bands.}
+    \caption[P-P tests for AMPLFI's joint 2D (area) and 3D (volume) posterior distributions measuring sky map self consistency]{P-P tests for AMPLFI's joint 2D (area) and 3D (volume) posterior distributions measuring sky map self consistency. 
+    The p-value for each consistency check is provided in the legend. 
+    Error bars corresponding to 1 and 3 $\sigma$ confidence intervals are plotted as shaded bands.}
     \label{amp_res_fig:self-consistency}
 \end{figure*}
 
 \begin{figure*}
     \centering
     \includegraphics[width=\textwidth]{figures/pp_plot.pdf}
-    \caption{P-P tests for AMPLFI's 1 dimensional marginal posterior distributions. 500 injections from AMPLFI's training prior were analyzed. The p-value for each parameter is provided in the legend. Shaded bands correspond to 1, 2 and 3 $\sigma$ confidence intervals.}
+    \caption[P-P tests for AMPLFI's 1 dimensional marginal posterior distributions]{P-P tests for AMPLFI's 1 dimensional marginal posterior distributions. 
+    500 injections from AMPLFI's training prior were analyzed. 
+    The p-value for each parameter is provided in the legend. 
+    Shaded bands correspond to 1, 2 and 3 $\sigma$ confidence intervals.}
     \label{amp_res_fig:pp-plot}
 \end{figure*}
 
 
 
-
-
-
-
-
-\begin{comment}
-\begin{itemize}
-    \item \Ethan{Comparison with Bayestar on MDC - both HL and HLV; searched area on MDC dataset}
-    \item \Ethan{PP-plot using training prior}
-    \item Compare methods (latency / performance) for producing skymaps - histogram estimator vs KDE
-    \item Performance over time; searched area at different points across O3b, performance comparison with O3a model too
-    \item Corner plots with Bilby/Lalinference (online)
-\end{itemize}
-\end{comment}
-
 \subsection{Model Robustness} \label{amp_res_sec:results-robustness}
-GW interferometers have non-stationary noise distributions \cite{Davis_2021, LIGO:2024kkz}. Changing noise distributions pose problems to machine learning algorithms, which can suffer from overfitting to the noise statistics of the data period used for training. For production grade deployment, it is critical to validate the robustness of model performance beyond the initial training period, and the length of time over which satisfactory performance is maintained. 
+GW interferometers have non-stationary noise distributions \cite{Davis_2021, LIGO:2024kkz}. 
+Changing noise distributions pose problems to machine learning algorithms, which can suffer from overfitting to the noise statistics of the data period used for training. 
+For production grade deployment, it is critical to validate the robustness of model performance beyond the initial training period, and the length of time over which satisfactory performance is maintained. 
 
-Different strategies can be employed to construct a robust noise model. For example, in Ref.~\cite{Wildberger_2023}, data augmentations applied to a fiducial PSD are utilized to construct a noise model that captures the variation in noise properties across an observing run. In that work, the augmented PSDs are used to generate synthetic Gaussian noise for training. As described in Sec~\ref{amp_res_sec:review}, AMPLFI utilizes real detector strain data for training, and so our noise model is constructed empirically. Specifically, our training data consists of T disjoint, coincident, science quality segments $\{[a_i, b_i]\}_{i=1}^{T}$.  Let $l$ denote the length of each training sample provided to the neural network, and $s$ denote the length of data used for PSD estimation. The algorithm for sampling strain data instances during training is as follows. For each detector $k$,
+Different strategies can be employed to construct a robust noise model. 
+For example, in Ref.~\cite{Wildberger_2023}, data augmentations applied to a fiducial PSD are utilized to construct a noise model that captures the variation in noise properties across an observing run. 
+In that work, the augmented PSDs are used to generate synthetic Gaussian noise for training. 
+As described in Sec~\ref{amp_res_sec:review}, AMPLFI utilizes real detector strain data for training, and so our noise model is constructed empirically. 
+Specifically, our training data consists of T disjoint, coincident, science quality segments $\{[a_i, b_i]\}_{i=1}^{T}$. 
+Let $l$ denote the length of each training sample provided to the neural network, and $s$ denote the length of data used for PSD estimation. 
+The algorithm for sampling strain data instances during training is as follows. 
+For each detector $k$,
 \begin{enumerate}
     \item Sample segment index $i_k$, with probability proportional to the segments duration:
     \begin{align*}
@@ -269,32 +426,82 @@ Different strategies can be employed to construct a robust noise model. For exam
 \end{enumerate}
 This procedure is repeated $N$ times, where $N$ is the size of the training batch. 
 
-The idea behind this sampling procedure is that noise between different detector sites is highly uncorrelated. So, strain data sampled independently in time for each detector is a plausible, unique noise realization. This idea, well-known in the GW literature as time-slides, is commonly used to create realistic noise realizations for estimating the background distributions of search algorithms. During training, the detector strain data is stored on disk and the above sampling procedure is done on-the-fly.
+The idea behind this sampling procedure is that noise between different detector sites is highly uncorrelated. 
+So, strain data sampled independently in time for each detector is a plausible, unique noise realization. 
+This idea, well-known in the GW literature as time-slides, is commonly used to create realistic noise realizations for estimating the background distributions of search algorithms. 
+During training, the detector strain data is stored on disk and the above sampling procedure is done on-the-fly.
 
-To validate AMPLFI's robustness over time, we created 4 datasets of 1000 injections sampled from AMPLFI's training prior and added them into real detector noise. We then filter the injections to those with SNR $\geq 12$, leaving $\sim$ 500 injections in each dataset.
-For each dataset, we utilized strain data at different epochs after the initial model training period. These periods spanned from immediately after, to 11 weeks after the training period. Each period consisted of $\sim 1$ day of live time. We analyze each of these datasets using the HLV AMPLFI network. In Fig~\ref{amp_res_fig:robustness}, we show sky localization consistency and searched area performance. We see that AMPLFI's sky localizations remain well calibrated and accurate 11 weeks beyond AMPLFI's initial training period. This demonstrates that a single AMPLFI model maintains utility well beyond its initial training period. 
+To validate AMPLFI's robustness over time, we created 4 datasets of 1000 injections sampled from AMPLFI's training prior and added them into real detector noise. 
+We then filter the injections to those with SNR $\geq 12$, leaving $\sim$ 500 injections in each dataset.
+For each dataset, we utilized strain data at different epochs after the initial model training period. 
+These periods spanned from immediately after, to 11 weeks after the training period. 
+Each period consisted of $\sim 1$ day of live time. 
+We analyze each of these datasets using the HLV AMPLFI network. 
+In Fig~\ref{amp_res_fig:robustness}, we show sky localization consistency and searched area performance. 
+We see that AMPLFI's sky localizations remain well calibrated and accurate 11 weeks beyond AMPLFI's initial training period. 
+This demonstrates that a single AMPLFI model maintains utility well beyond its initial training period. 
 
 \begin{figure*}
     \centering
     \includegraphics[scale=0.5]{figures/performance_over_time_consistency.pdf}
-    \caption{Left: 2D (area) localization P-P tests for 4 datasets of injections drawn from AMPLFI's training prior created at various epochs across O3b. Analyzed injections are restricted to have SNR $\geq 12$. P-values shown in the legend indicate that sky maps produced by AMPLFI remain well calibrated across an 11 week period. Right: Cumulative histogram of searched area for the same datasets. Bootstrapped 95\% confidence intervals are plotted as shaded bands. The accuracy of AMPLFI sky maps does not degrade over time.}
+    \caption[Left: 2D (area) localization P-P tests for 4 datasets of injections drawn from AMPLFI's training prior created at various epochs across O3b. 
+    Right: Cumulative histogram of searched area for the same datasets.]{Left: 2D (area) localization P-P tests for 4 datasets of injections drawn from AMPLFI's training prior created at various epochs across O3b. 
+    Analyzed injections are restricted to have SNR $\geq 12$. 
+    P-values shown in the legend indicate that sky maps produced by AMPLFI remain well calibrated across an 11 week period. 
+    Right: Cumulative histogram of searched area for the same datasets. 
+    Bootstrapped 95\% confidence intervals are plotted as shaded bands. 
+    The accuracy of AMPLFI sky maps does not degrade over time.}
     \label{amp_res_fig:robustness}
 \end{figure*}
 
 \subsection{Analysis of GWTC-3 Events} \label{amp_res_sec:results-gwtc3}
-Several GW candidates with probability of astrophysical origin greater than $0.5$ were identified in the third Gravitational-Wave Transient Catalog (GWTC-3) \cite{Abbott_2023}. We analyze those candidates with posterior support within AMPLFI's training prior (Table \ref{amp_res_tab:priors}), and which occurred during or after the period of data used to train AMPLFI. In addition, we do not analyze candidates which required glitch mitigation. After these constraints, this leaves 5 candidates analyzed with the HLV network (\Cref{amp_res_fig:GW191215_223052-hlv,amp_res_fig:GW200129_065458-hlv,amp_res_fig:GW200208_130117-hlv,amp_res_fig:GW200224_222234-hlv,amp_res_fig:GW200311_115853-hlv}), and 3 candidates analyzed with the HL network (\Cref{amp_res_fig:GW191204_110529-hl,amp_res_fig:GW200225_060421-hl,amp_res_fig:GW200306_093714-hl}). We compare posteriors and sky maps with those produced by the GWTC-3 analysis using samples from the IMRPhenomXPHM waveform. Where available, we also compare the low-latency sky map produced by BAYESTAR. Analyzing each HLV (HL) event takes 
-$\sim$ 2 (1.5) seconds using an NVIDIA A30 GPU.
+Several GW candidates with probability of astrophysical origin greater than $0.5$ were identified in the third Gravitational-Wave Transient Catalog (GWTC-3) \cite{Abbott_2023}. 
+We analyze those candidates with posterior support within AMPLFI's training prior (Table \ref{amp_res_tab:priors}), and which occurred during or after the period of data used to train AMPLFI. 
+In addition, we do not analyze candidates which required glitch mitigation. 
+After these constraints, this leaves 5 candidates analyzed with the HLV network (\Cref{amp_res_fig:GW191215_223052-hlv,amp_res_fig:GW200129_065458-hlv,amp_res_fig:GW200208_130117-hlv,amp_res_fig:GW200224_222234-hlv,amp_res_fig:GW200311_115853-hlv}), and 3 candidates analyzed with the HL network (\Cref{amp_res_fig:GW191204_110529-hl,amp_res_fig:GW200225_060421-hl,amp_res_fig:GW200306_093714-hl}). 
+We compare posteriors and sky maps with those produced by the GWTC-3 analysis using samples from the IMRPhenomXPHM waveform. 
+Where available, we also compare the low-latency sky map produced by BAYESTAR. Analyzing each HLV (HL) event takes $\sim$ 2 (1.5) seconds using an NVIDIA A30 GPU.
 
-For several candidates, source mass posteriors from the GWTC-3 analysis were completely within AMPLFI's training prior, but luminosity distance support only partially overlapped. We analyze these events, but note that AMPLFI's luminosity distance posterior rails against the prior. Still, AMPLFI's sky maps and posterior estimates for source parameters are in rough agreement with the LVK analysis. See \Cref{amp_res_fig:GW200220_124850-dist-railing,amp_res_fig:GW200128_022011-dist-railing,amp_res_fig:GW191222_033537-dist-railing} for examples of such events. A possible solution to this problem would be to train AMPLFI to infer the chirp distance ($d_{\mathrm{chirp}} \propto d_L/\mathcal{M}^{5/6}$) \cite{Roulet_2022, Brady_2008} instead of the luminosity distance. Effectively, this adjusts the distance prior depending on the chirp mass of the source, allowing the recovery of intrinsically louder signals at farther distances. Exploring this is left to future work.
+For several candidates, source mass posteriors from the GWTC-3 analysis were completely within AMPLFI's training prior, but luminosity distance support only partially overlapped. 
+We analyze these events, but note that AMPLFI's luminosity distance posterior rails against the prior. 
+Still, AMPLFI's sky maps and posterior estimates for source parameters are in rough agreement with the LVK analysis. 
+See \Cref{amp_res_fig:GW200220_124850-dist-railing,amp_res_fig:GW200128_022011-dist-railing,amp_res_fig:GW191222_033537-dist-railing} for examples of such events. 
+A possible solution to this problem would be to train AMPLFI to infer the chirp distance ($d_{\mathrm{chirp}} \propto d_L/\mathcal{M}^{5/6}$) \cite{Roulet_2022, Brady_2008} instead of the luminosity distance. 
+Effectively, this adjusts the distance prior depending on the chirp mass of the source, allowing the recovery of intrinsically louder signals at farther distances. 
+Exploring this is left to future work.
 
-There exist several differences between the GWTC-3 and AMPLFI analyses. First, AMPLFI trains using a distance prior that is uniform, while the GWTC-3 analyses utilize a uniform in co-moving volume distribution. To account for this, we use importance sampling to re-weight AMPLFI's samples to the uniform in co-moving volume distance distribution reported by the GWTC-3 analysis. Second, AMPLFI was trained using the IMRPhenomPV2 waveform, while the LVK posteriors were produced using IMRPhenomXPHM. So, effects of higher order modes are not captured in AMPLFI's results. Third, the AMPLFI result was produced using the low-latency data, while the GWTC-3 result utilized data that includes an update to calibration, and cleaning of certain noise sources. Lastly, AMPLFI does not aim to explicitly model the Gaussian likelihood typically assumed in CBC PE. By training with real data, non-Gaussian statistics in the data is learned.
+There exist several differences between the GWTC-3 and AMPLFI analyses. 
+First, AMPLFI trains using a distance prior that is uniform, while the GWTC-3 analyses utilize a uniform in co-moving volume distribution. 
+To account for this, we use importance sampling to re-weight AMPLFI's samples to the uniform in co-moving volume distance distribution reported by the GWTC-3 analysis. 
+Second, AMPLFI was trained using the IMRPhenomPV2 waveform, while the LVK posteriors were produced using IMRPhenomXPHM. 
+So, effects of higher order modes are not captured in AMPLFI's results. 
+Third, the AMPLFI result was produced using the low-latency data, while the GWTC-3 result utilized data that includes an update to calibration, and cleaning of certain noise sources. 
+Lastly, AMPLFI does not aim to explicitly model the Gaussian likelihood typically assumed in CBC PE. 
+By training with real data, non-Gaussian statistics in the data is learned.
 
-In general, the posteriors show rough agreement. However, there are some instances with noticeable differences. For example, AMPLFI does not show multi-modality in masses exhibited by the GWTC-3 result in GW200129\_065458 (see Figure~\ref{amp_res_fig:GW200129_065458-hlv}). For this same event, AMPLFI's distance and inclination estimates disagree with the GWTC-3 result. With an SNR of $\sim$ 27, waveform systematics become more important and could explain this discrepancy. For GW191215\_223052 and GW200220\_124850 AMPLFI does not show multi-modality in inclination exhibited by the GWTC-3 result (see~\Cref{amp_res_fig:GW191215_223052-hlv,amp_res_fig:GW200220_124850-dist-railing}). Differences between the AMPLFI and GWTC-3 results may stem from two qualitatively distinct sources. First, there are differences in the underlying physical assumptions of the likelihood, such as the choice of waveform physics (for example, the inclusion of higher-order modes in GWTC-3) and the treatment of noise statistics (Gaussian noise in GWTC-3 versus real detector noise in AMPLFI). Second, deviations may arise from limitations in neural network performance, including suboptimal model convergence or restricted expressivity. Given the observed deviations in parameters like inclination, it is probable that neural-network inaccuracies are a primary driver of the differences. We note that through importance sampling to a Gaussian likelihood, it is possible to mitigate differences due to suboptimal model convergence and assumed noise statistics \cite{Dax_2023}.
+In general, the posteriors show rough agreement. 
+However, there are some instances with noticeable differences. 
+For example, AMPLFI does not show multi-modality in masses exhibited by the GWTC-3 result in GW200129\_065458 (see Figure~\ref{amp_res_fig:GW200129_065458-hlv}). 
+For this same event, AMPLFI's distance and inclination estimates disagree with the GWTC-3 result. 
+With an SNR of $\sim$ 27, waveform systematics become more important and could explain this discrepancy. 
+For GW191215\_223052 and GW200220\_124850 AMPLFI does not show multi-modality in inclination exhibited by the GWTC-3 result (see~\Cref{amp_res_fig:GW191215_223052-hlv,amp_res_fig:GW200220_124850-dist-railing}). 
+Differences between the AMPLFI and GWTC-3 results may stem from two qualitatively distinct sources. 
+First, there are differences in the underlying physical assumptions of the likelihood, such as the choice of waveform physics (for example, the inclusion of higher-order modes in GWTC-3) and the treatment of noise statistics (Gaussian noise in GWTC-3 versus real detector noise in AMPLFI). 
+Second, deviations may arise from limitations in neural network performance, including suboptimal model convergence or restricted expressivity. 
+Given the observed deviations in parameters like inclination, it is probable that neural-network inaccuracies are a primary driver of the differences. 
+We note that through importance sampling to a Gaussian likelihood, it is possible to mitigate differences due to suboptimal model convergence and assumed noise statistics \cite{Dax_2023}.
 
 \section{Conclusion and Future Work}
-We have presented the performance of the AMPLFI algorithm across several metrics. We have demonstrated AMPLFI's sky localization performance is equivalent to BAYESTAR using injections from an online data replay. We have shown that a single AMPLFI algorithm trained using $\sim 2$ months of real data maintains performance months beyond its training period. Finally, we analyzed real gravitational wave candidates within AMPLFI's training prior and have shown posterior results in rough agreement with the GWTC-3 analyses. 
+We have presented the performance of the AMPLFI algorithm across several metrics. 
+We have demonstrated AMPLFI's sky localization performance is equivalent to BAYESTAR using injections from an online data replay. 
+We have shown that a single AMPLFI algorithm trained using $\sim 2$ months of real data maintains performance months beyond its training period. 
+Finally, we analyzed real gravitational wave candidates within AMPLFI's training prior and have shown posterior results in rough agreement with the GWTC-3 analyses. 
 
-Still, there remains several avenues for improving the utility of AMPLFI. Broadening the parameter space to include neutron star black hole and and binary neutron star (BNS) mergers will be critical for analyzing more likely candidates of EM emission. For BNS signals that can last for minutes in the detectors' sensitive band, utilizing data compression methods will be important. In addition, exploring parameterizations of the CBC signal parameter space that eliminate known degeneracies could help the learning process \cite{Roulet_2022}. For example, training AMPLFI to infer chirp distance \cite{Brady_2008} instead of luminosity distance could help alleviate the distance prior railing exhibited in AMPLFI's analysis of several real candidates. 
+Still, there remains several avenues for improving the utility of AMPLFI.
+Broadening the parameter space to include neutron star black hole and and binary neutron star (BNS) mergers will be critical for analyzing more likely candidates of EM emission. 
+For BNS signals that can last for minutes in the detectors' sensitive band, utilizing data compression methods will be important. 
+In addition, exploring parameterizations of the CBC signal parameter space that eliminate known degeneracies could help the learning process \cite{Roulet_2022}. 
+For example, training AMPLFI to infer chirp distance \cite{Brady_2008} instead of luminosity distance could help alleviate the distance prior railing exhibited in AMPLFI's analysis of several real candidates. 
 
 As of August 2025, AMPLFI has been deployed in production for real-time follow-up of CBC candidates detected by the Aframe search algorithm, and has contributed to several public alerts\footnote{\url{https://gracedb.ligo.org/superevents/public/O4c/}}. 
 
@@ -348,7 +555,7 @@ One can imagine how this approach can be extended to include more detector subse
 \begin{figure*}
     \centering
     \includegraphics[scale=0.4]{figures/events/GW191215_223052.pdf}
-    \caption{Posterior comparison between AMPLFI and GWTC-3 result for GW191215\_223052. Hanford, Livingston and Virgo data is analyzed. The BAYESTAR sky map produced in low-latency is plotted in purple. Sky map contours correspond to 90\% confidence intervals.}
+    \caption[Posterior comparison between AMPLFI and GWTC-3 for GW191215\_223052]{Posterior comparison between AMPLFI and GWTC-3 result for GW191215\_223052. Hanford, Livingston and Virgo data is analyzed. The BAYESTAR sky map produced in low-latency is plotted in purple. Sky map contours correspond to 90\% confidence intervals.}
     \label{amp_res_fig:GW191215_223052-hlv}
 \end{figure*}
 
@@ -356,7 +563,7 @@ One can imagine how this approach can be extended to include more detector subse
 \begin{figure*}
     \centering
     \includegraphics[scale=0.4]{figures/events/GW200129_065458.pdf}
-    \caption{Posterior comparison between AMPLFI and GWTC-3 result for GW200129\_065458. Hanford, Livingston and Virgo data is analyzed. The BAYESTAR sky map produced in low-latency is plotted in purple. Sky map contours correspond to 90\% confidence intervals. For this event, bi-modalities in $m_1$ and $m_2$ are not captured by AMPLFI. In addition, AMPLFI's distance and inclination posteriors disagree with the GWTC-3 result.}
+    \caption[Posterior comparison between AMPLFI and GWTC-3 for GW200129\_065458]{Posterior comparison between AMPLFI and GWTC-3 result for GW200129\_065458. Hanford, Livingston and Virgo data is analyzed. The BAYESTAR sky map produced in low-latency is plotted in purple. Sky map contours correspond to 90\% confidence intervals. For this event, bi-modalities in $m_1$ and $m_2$ are not captured by AMPLFI. In addition, AMPLFI's distance and inclination posteriors disagree with the GWTC-3 result.}
     \label{amp_res_fig:GW200129_065458-hlv}
 \end{figure*}
 
@@ -364,21 +571,21 @@ One can imagine how this approach can be extended to include more detector subse
 \begin{figure*}
     \centering
     \includegraphics[scale=0.4]{figures/events/GW200208_130117.pdf}
-    \caption{Posterior comparison between AMPLFI and GWTC-3 result for GW200208\_130117. Hanford, Livingston and Virgo data is analyzed. The BAYESTAR sky map produced in low-latency is plotted in purple. Sky map contours correspond to 90\% confidence intervals.}
+    \caption[Posterior comparison between AMPLFI and GWTC-3 for GW200208\_130117]{Posterior comparison between AMPLFI and GWTC-3 result for GW200208\_130117. Hanford, Livingston and Virgo data is analyzed. The BAYESTAR sky map produced in low-latency is plotted in purple. Sky map contours correspond to 90\% confidence intervals.}
     \label{amp_res_fig:GW200208_130117-hlv}
 \end{figure*}
 
 \begin{figure*}
     \centering
     \includegraphics[scale=0.4]{figures/events/GW200311_115853.pdf}
-    \caption{Posterior comparison between AMPLFI and GWTC-3 result for GW200311\_115853. Hanford, Livingston and Virgo data is analyzed. The BAYESTAR sky map produced in low-latency is plotted in purple. Sky map contours correspond to 90\% confidence intervals.}
+    \caption[Posterior comparison between AMPLFI and GWTC-3 for GW200311\_115853]{Posterior comparison between AMPLFI and GWTC-3 result for GW200311\_115853. Hanford, Livingston and Virgo data is analyzed. The BAYESTAR sky map produced in low-latency is plotted in purple. Sky map contours correspond to 90\% confidence intervals.}
     \label{amp_res_fig:GW200311_115853-hlv}
 \end{figure*}
 
 \begin{figure*}
     \centering
     \includegraphics[scale=0.4]{figures/events/GW200224_222234.pdf}
-    \caption{Posterior comparison between AMPLFI and GWTC-3 result for GW200224\_222234. Hanford, Livingston and Virgo data is analyzed. The BAYESTAR sky map produced in low-latency is plotted in purple. Sky map contours correspond to 90\% confidence intervals.}
+    \caption[Posterior comparison between AMPLFI and GWTC-3 for GW200224\_222234]{Posterior comparison between AMPLFI and GWTC-3 result for GW200224\_222234. Hanford, Livingston and Virgo data is analyzed. The BAYESTAR sky map produced in low-latency is plotted in purple. Sky map contours correspond to 90\% confidence intervals.}
     \label{amp_res_fig:GW200224_222234-hlv}
 \end{figure*}
 
@@ -386,21 +593,21 @@ One can imagine how this approach can be extended to include more detector subse
 \begin{figure*}
     \centering
     \includegraphics[scale=0.4]{figures/events/GW200225_060421.pdf}
-    \caption{Posterior comparison between AMPLFI and GWTC-3 result for GW200225\_060421. Hanford and Livingston data is analyzed. The BAYESTAR sky map produced in low-latency is plotted in purple. Sky map contours correspond to 90\% confidence intervals.}
+    \caption[Posterior comparison between AMPLFI and GWTC-3 for GW200225\_060421]{Posterior comparison between AMPLFI and GWTC-3 result for GW200225\_060421. Hanford and Livingston data is analyzed. The BAYESTAR sky map produced in low-latency is plotted in purple. Sky map contours correspond to 90\% confidence intervals.}
     \label{amp_res_fig:GW200225_060421-hl}
 \end{figure*}
 
 \begin{figure*}
     \centering
     \includegraphics[scale=0.4]{figures/events/GW191204_110529.pdf}
-    \caption{Posterior comparison between AMPLFI and GWTC-3 result for GW191204\_110529. Hanford and Livingston data is analyzed. Sky map contours correspond to 90\% confidence intervals.}
+    \caption[Posterior comparison between AMPLFI and GWTC-3 for GW191204\_110529]{Posterior comparison between AMPLFI and GWTC-3 result for GW191204\_110529. Hanford and Livingston data is analyzed. Sky map contours correspond to 90\% confidence intervals.}
     \label{amp_res_fig:GW191204_110529-hl}
 \end{figure*}
 
 \begin{figure*}
     \centering
     \includegraphics[scale=0.4]{figures/events/GW200306_093714.pdf}
-    \caption{Posterior comparison between AMPLFI and GWTC-3 result for GW200306\_093714. Hanford and Livingston data is analyzed. Sky map contours correspond to 90\% confidence intervals.}
+    \caption[Posterior comparison between AMPLFI and GWTC-3 for GW200306\_093714]{Posterior comparison between AMPLFI and GWTC-3 result for GW200306\_093714. Hanford and Livingston data is analyzed. Sky map contours correspond to 90\% confidence intervals.}
     \label{amp_res_fig:GW200306_093714-hl}
 \end{figure*}
 
@@ -410,21 +617,21 @@ One can imagine how this approach can be extended to include more detector subse
 \begin{figure*}
     \centering
     \includegraphics[scale=0.4]{figures/events/GW200220_124850.pdf}
-    \caption{Posterior comparison between AMPLFI and GWTC-3 result for GW200220\_124850. Hanford and Livingston data is analyzed. This illustrates the scenario where the distance posterior has support well beyond AMPLFI's training prior. Still, AMPLFI is able to recover source parameters and localizations in rough agreement with the GWTC-3 result.}
+    \caption[Posterior comparison between AMPLFI and GWTC-3 for GW200220\_124850]{Posterior comparison between AMPLFI and GWTC-3 result for GW200220\_124850. Hanford and Livingston data is analyzed. This illustrates the scenario where the distance posterior has support well beyond AMPLFI's training prior. Still, AMPLFI is able to recover source parameters and localizations in rough agreement with the GWTC-3 result.}
     \label{amp_res_fig:GW200220_124850-dist-railing}
 \end{figure*}
 
 \begin{figure*}
     \centering
     \includegraphics[scale=0.4]{figures/events/GW200128_022011.pdf}
-    \caption{Posterior comparison between AMPLFI and GWTC-3 result for GW200128\_022011. Hanford and Livingston data is analyzed. The BAYESTAR sky map produced in low-latency is plotted in purple. This illustrates the scenario where the distance posterior has support well beyond AMPLFI's training prior. Still, AMPLFI is able to recover source parameters and localizations in rough agreement with the GWTC-3 result.}
+    \caption[Posterior comparison between AMPLFI and GWTC-3 for GW200128\_022011]{Posterior comparison between AMPLFI and GWTC-3 result for GW200128\_022011. Hanford and Livingston data is analyzed. The BAYESTAR sky map produced in low-latency is plotted in purple. This illustrates the scenario where the distance posterior has support well beyond AMPLFI's training prior. Still, AMPLFI is able to recover source parameters and localizations in rough agreement with the GWTC-3 result.}
     \label{amp_res_fig:GW200128_022011-dist-railing}
 \end{figure*}
 
 \begin{figure*}
     \centering
     \includegraphics[scale=0.4]{figures/events/GW191222_033537.pdf}
-    \caption{Posterior comparison between AMPLFI and GWTC-3 result for GW191222\_033537. Hanford and Livingston data is analyzed. The BAYESTAR sky map produced in low-latency is plotted in purple. This illustrates the scenario where the distance posterior has support well beyond AMPLFI's training prior. Still, AMPLFI is able to recover source parameters and localizations in rough agreement with the GWTC-3 result.}
+    \caption[Posterior comparison between AMPLFI and GWTC-3 for GW191222\_033537]{Posterior comparison between AMPLFI and GWTC-3 result for GW191222\_033537. Hanford and Livingston data is analyzed. The BAYESTAR sky map produced in low-latency is plotted in purple. This illustrates the scenario where the distance posterior has support well beyond AMPLFI's training prior. Still, AMPLFI is able to recover source parameters and localizations in rough agreement with the GWTC-3 result.}
     \label{amp_res_fig:GW191222_033537-dist-railing}
     
 \end{figure*}

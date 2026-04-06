@@ -94,7 +94,7 @@ We also make some optimizations compared to previous efforts in light of an onli
 \begin{figure}
     \centering
     \includegraphics[width=0.8\textwidth]{figures/waveforms.pdf}
-    \caption{A comparison of time-domain {\phenomd} between that implemented in this study, as a part of the {\mlgw} library. 
+    \caption[A comparison of time-domain {\phenomd} between that implemented as a part of the {\mlgw} library and that implemented in LALsim]{A comparison of time-domain {\phenomd} between that implemented in this study, as a part of the {\mlgw} library. 
     The parameters of the waveform is ${\mc = 26\;\msun, q = 1.0, \dl = 1000\;\mpc, \chi_{1,2} = 0.0}$.
     We find that while there are differences in the waveform strain, the residuals are below three orders of magnitude compared to the signal for most of the evolution, except the final few cycles where it is two orders of magnitude lower.}
     \label{amp_meth_fig:waveform}
@@ -120,7 +120,7 @@ Though we show comparison with a single representative system in Figure~\ref{amp
 \begin{figure}
     \centering
     \includegraphics[width=0.85\textwidth]{figures/dataviews-v3.pdf}
-    \caption{The figure shows the whitened time-domain background strain from Hanford and Livingston (HL) in two different colors. 
+    \caption[Demonstration of time-shifted waveform injection in HL strain]{The figure shows the whitened time-domain background strain from Hanford and Livingston (HL) in two different colors. 
     This is a stretch of data from May 2019 (early O3). A simulated BBH waveform, $h(t)$, is injected, shown by the dashed curve. 
     The left y-axis denotes the range of the whitened data after injection, while the right y-axis denotes the waveform strain $h(t)$.
     In the bottom panel, we see the same background strain with a time-shifted waveform injected, the parameters of which are otherwise the same as the top panel. 
@@ -210,7 +210,7 @@ This technique can be extended to other nuisance parameters in case of GWs, for 
 \label{amp_meth_sec:estimation}
 
 \begin{table}
-\caption{Prior distributions of parameters.
+\caption[Prior distributions of parameters used to train AMPLFI]{Prior distributions of parameters.
 Note that the distance prior is a power-law with index 2 i.e. uniform in volume; cosmological effects are not included.}
 \centering
 \begin{tabular}{ll}
@@ -298,7 +298,8 @@ Doubling the resolution, i.e. using $\nside = 64$ takes $\sim 1.2$ seconds and $
 \begin{figure}
     \centering
     \includegraphics[width=\textwidth]{figures/injection_comparison.pdf}
-    \caption{Example posterior for a signal with parameters $\{\mc=45\msun, q = 0.7, \dl = 1000~\mpc,
+    \caption[Example posterior for a signal with parameters $\{\mc=45\msun, q = 0.7, \dl = 1000~\mpc,
+    \thetajn=30\;\mathrm{deg.}, \alpha=1\;\mathrm{rad.}, \delta=0\;\mathrm{rad.}\}$ injected in 20 different background instances]{Example posterior for a signal with parameters $\{\mc=45\msun, q = 0.7, \dl = 1000~\mpc,
     \thetajn=30\;\mathrm{deg.}, \alpha=1\;\mathrm{rad.}, \delta=0\;\mathrm{rad.}\}$ injected in 20 different background instances, sampled using {\amplfi} is shown in sky blue. 
     All posteriors are consistent with one another. 
     Posteriors from the same signal injected in 5 different background instances (same background stretch as the {\amplfi} injections) and analyzed via nested sampling with Bilby, is overlayed in varying Orange-red colors.
@@ -312,7 +313,7 @@ Doubling the resolution, i.e. using $\nside = 64$ takes $\sim 1.2$ seconds and $
 \begin{figure}
     \centering
     \includegraphics[width=\textwidth]{figures/injection_comparison_low_mass.pdf}
-    \caption{Example posterior for a signal with parameters $\{\mc=15\msun, q = 0.9, \dl = 1000~\mpc, \thetajn=30\;\mathrm{deg.}, \alpha=1\;\mathrm{rad.}, \delta=0\;\mathrm{rad.}\}$ injected in 20 different background instances, sampled using {\amplfi} is shown in sky blue. 
+    \caption[Example posterior for a signal with parameters $\{\mc=15\msun, q = 0.9, \dl = 1000~\mpc, \thetajn=30\;\mathrm{deg.}, \alpha=1\;\mathrm{rad.}, \delta=0\;\mathrm{rad.}\}$ injected in 20 different background instances]{Example posterior for a signal with parameters $\{\mc=15\msun, q = 0.9, \dl = 1000~\mpc, \thetajn=30\;\mathrm{deg.}, \alpha=1\;\mathrm{rad.}, \delta=0\;\mathrm{rad.}\}$ injected in 20 different background instances, sampled using {\amplfi} is shown in sky blue. 
     All posteriors are consistent with one another. 
     Posteriors from the same signal injected in 5 different background instances (same background stretch as the {\amplfi} injections) and analyzed via nested sampling with Bilby, is overlayed in varied Orange-red colors.
     The values mentioned above each marginal distribution correspond to the {\amplfi} median value with the 5th and 95th percentiles. 
@@ -325,7 +326,7 @@ Doubling the resolution, i.e. using $\nside = 64$ takes $\sim 1.2$ seconds and $
 \begin{figure}
     \centering
     \includegraphics[width=\textwidth]{figures/injection_comparison_low_mass_review.pdf}
-    \caption{Example posterior for a signal with parameters $\{\mc=15\msun, q = 0.9, \dl = 400~\mpc, \thetajn=30\;\mathrm{deg.}, \alpha=1\;\mathrm{rad.}, \delta=0\;\mathrm{rad.}\}$ injected in 20 different background instances, sampled using {\amplfi} is shown in sky blue. 
+    \caption[Example posterior for a signal with parameters $\{\mc=15\msun, q = 0.9, \dl = 400~\mpc, \thetajn=30\;\mathrm{deg.}, \alpha=1\;\mathrm{rad.}, \delta=0\;\mathrm{rad.}\}$ injected in 20 different background instances]{Example posterior for a signal with parameters $\{\mc=15\msun, q = 0.9, \dl = 400~\mpc, \thetajn=30\;\mathrm{deg.}, \alpha=1\;\mathrm{rad.}, \delta=0\;\mathrm{rad.}\}$ injected in 20 different background instances, sampled using {\amplfi} is shown in sky blue. 
     All other parameters are kept the same as in Figure~\ref{amp_meth_fig:low-mass-compare}. 
     The choice of $\dl=400\mpc$ ensures that the optimal SNR of this source is similar to that used for Figure~\ref{amp_meth_fig:high-mass-compare}.
     The analysis with nested sampling in 5 different background instances is performed as in the previous cases and is overlayed in varied Orange-red colors. 
@@ -337,7 +338,7 @@ Doubling the resolution, i.e. using $\nside = 64$ takes $\sim 1.2$ seconds and $
     \centering
     \includegraphics[width=0.6\textwidth]{figures/pp-plot.pdf}
     \includegraphics[width=0.38\textwidth, trim=0.3cm 0.3cm 0.3cm 0.3cm, clip]{figures/sampling-times.pdf}
-    \caption{\textbf{Left}: Percentile-percentile (PP) plot showing recovery accuracy for 500 BBH injections performed in a testing background, different from training background.
+    \caption[\textbf{Left}: Percentile-percentile (PP) plot showing recovery accuracy for 500 BBH injections performed in a testing background. \textbf{Right}: Sampling times for {\amplfi} vs. nested sampling runs done on injections using Bilby.]{\textbf{Left}: Percentile-percentile (PP) plot showing recovery accuracy for 500 BBH injections performed in a testing background, different from training background.
     The different lines track the cumulative fraction of events within a corresponding confidence interval for the parameters mentioned in Eq.~\ref{eq:parameters}.
     The shaded bands represent the 1, 2, 3-$\sigma$ confidence bands, in decreasing opacity, with respect to a uniform distribution. 
     The mentioned p-values are from a KS test done with respect to a uniform distribution.
@@ -351,7 +352,7 @@ Doubling the resolution, i.e. using $\nside = 64$ takes $\sim 1.2$ seconds and $
 \begin{figure}
     \centering
         \includegraphics[width=0.8\textwidth]{figures/searched-area.pdf}
-    \caption{Searched area for a representative system with $\mc = 45\msun$ and $\mc = 15\msun$ at $\dl = 1$ Gpc done across the sky. 
+    \caption[Searched area for a representative system with $\mc = 45\msun$ and $\mc = 15\msun$ at $\dl = 1$ Gpc done across the sky]{Searched area for a representative system with $\mc = 45\msun$ and $\mc = 15\msun$ at $\dl = 1$ Gpc done across the sky. 
     We note that, as expected, larger chirp mass give better searched area as a result of being louder signals. 
     However, the median searched area is $\mathcal{O}(1000) \mathrm{deg}^2$.}
     \label{amp_meth_fig:searched-area}
@@ -407,7 +408,7 @@ However, the searched area is several $\mathcal{O}(1000)$ degrees for the two de
     \includegraphics[width=0.485\textwidth]{figures/amplfi-S190513bm.pdf} \includegraphics[width=0.485\textwidth]{figures/bayestar-S190513bm.pdf}\\
     \scriptsize{$\mathrm{S190701ah}$} \\
     \includegraphics[width=0.485\textwidth]{figures/amplfi-S190701ah.pdf} \includegraphics[width=0.485\textwidth]{figures/bayestar-S190701ah.pdf}\\
-    \caption{\textbf{Left}: {\amplfi} skymaps \textbf{Right} Bayestar maps from events, using HL data, spanning different months of the third observing run, O3. 
+    \caption[\textbf{Left}: {\amplfi} skymaps \textbf{Right} Bayestar maps from events, using HL data, spanning different months of the third observing run, O3]{\textbf{Left}: {\amplfi} skymaps \textbf{Right} Bayestar maps from events, using HL data, spanning different months of the third observing run, O3. 
     We find that the skymaps are broadly consistent, although there is no clear trend of one being more constraining. 
     However, it demonstrates model validity to differing backgrounds up to several months from that used in training.}
     \label{amp_meth_fig:bayestar-maps}
@@ -446,7 +447,7 @@ The suitable re-training cadence is yet to be determined and will be reported in
     \\
     \includegraphics[width=0.48\textwidth, trim=0cm 3cm 0cm 3cm, clip]{figures/gw150914_skymaps.Sept12.pdf}
     \includegraphics[width=0.48\textwidth, trim=0cm 3cm 0cm 3cm, clip]{figures/gw150914_skymaps.Sept15.pdf}
-    \caption{\textbf{Left panels}: The posteriors for \{ \mc, $q$, \dl \} and sky-localization of GW15019 using an {\amplfi} model trained on O1 background. 
+    \caption[\textbf{Left panels}: The posteriors for \{ \mc, $q$, \dl \} and sky-localization of GW15019 using an {\amplfi} model trained on O1 background. \textbf{Right panels}: Same as left, except with a model which is retrained with background data from Sept 15, 2015 starting with the model state from the left panel after training.]{\textbf{Left panels}: The posteriors for \{ \mc, $q$, \dl \} and sky-localization of GW15019 using an {\amplfi} model trained on O1 background. 
     The different colors represents ``jitter'' in the data segments chosen for inference around the $t_0 = 1126259462.4$ for GW150914.
     The solid black curve corresponds to the posteriors reported in GWOSC.
     We find that the results are consistent although with wider confidence intervals, a trend reported in Figures~\ref{amp_meth_fig:high-mass-compare},~\ref{amp_meth_fig:low-mass-compare},~\ref{amp_meth_fig:low-mass-compare-same-snr}.
@@ -515,7 +516,7 @@ In this case, a sine-gaussian parameter estimation may lead to measurement of fu
 
 \section{\label{appendix:embedding-hpo}Hyperparameter Tuning of the Embedding Network}
 \begin{table}
-\caption{Top 10 hyper-parameter configurations for hyper-parameter optimization runs for the embedding
+\caption[Top ten embedding network hyper-parameter configurations]{Top 10 hyper-parameter configurations for hyper-parameter optimization runs for the embedding
 network. The best trial configuration is shown in boldface.}
 \footnotesize
 \begin{tabular}{ccccccccccc}
@@ -538,7 +539,7 @@ ResNet conf. & kernel size & $\lambda_1$ & $\lambda_2$ & $\lambda_3$ & $D_{\gamm
     \centering
     \includegraphics[width=0.7\textwidth]{figures/embedding-hpo.pdf}
     \includegraphics[width=0.28\textwidth]{figures/sim-training.pdf}
-    \caption{\textbf{Left}: Avg. VICReg validation loss as a function of training epoch from the top 10 HPO runs in Table~\ref{amp_meth_tab:embedding-hpo-table}. 
+    \caption[Embedding network hyperparameter optimization validation loss]{\textbf{Left}: Avg. VICReg validation loss as a function of training epoch from the top 10 HPO runs in Table~\ref{amp_meth_tab:embedding-hpo-table}. 
     The best configuration is plotted in thick solid line; corresponding configuration is boldfaced entry in Table~\ref{amp_meth_tab:embedding-hpo-table}.
     \textbf{Right}: Training/Validation loss for best model configuration from the left panel until early-stopping.}
     \label{amp_meth_fig:embedding-hpo-top-runs}
@@ -554,7 +555,7 @@ The right panel of the figure shows the training/validation of the best model co
 
 \section{\label{appendix:flow-hpo}Hyperparameter Tuning of the Normalizing Flow}
 \begin{table}
-    \caption{Top 10 hyper-parameter configurations for run involving 30 epochs. Validation loss is noted at the end of the 30th epoch.}
+    \caption[Top ten normalizing flow hyper-parameter configurations]{Top 10 hyper-parameter configurations for run involving 30 epochs. Validation loss is noted at the end of the 30th epoch.}
     \footnotesize
     \begin{tabular}{ccccccc}
     \# transforms & \# blocks & \# hidden feat. & LR & batch size & wt. decay & val. loss
@@ -575,9 +576,9 @@ The right panel of the figure shows the training/validation of the best model co
 \end{table}
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.7\textwidth]{figures/flow-hpo.pdf}
-    \includegraphics[width=0.28\textwidth]{figures/flow-training.pdf}
-    \caption{\textbf{Left}: Validation loss from the top 10 HPO runs in Table~\ref{amp_meth_tab:flow-hpo-table}.
+    \includegraphics[width=0.6\textwidth]{figures/flow-hpo.pdf}
+    \includegraphics[width=0.38\textwidth]{figures/flow-training.pdf}
+    \caption[Normalizing flow hyperparameter optimization validation loss]{\textbf{Left}: Validation loss from the top 10 HPO runs in Table~\ref{amp_meth_tab:flow-hpo-table}.
     \textbf{Right}: Training/Validation loss for best model from the left panel until early-stopping.}
     \label{amp_meth_fig:flow-hpo-top-runs}
 \end{figure}

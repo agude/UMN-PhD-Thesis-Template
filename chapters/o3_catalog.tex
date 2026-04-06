@@ -4,8 +4,6 @@
 
 \begin{refsection}
 
-\section{Abstract}
-
 Using the Aframe model introduced in Chapter \ref{chap:aframe_methods}, we conduct a search for stellar-mass binary black hole mergers in gravitational-wave data collected by the LIGO detectors during the LIGO-Virgo-KAGRA (LVK) third observing run (O3).
 The O3 observing run has been analyzed by the LVK collaboration, producing GWTC-3, the most recent catalog installment which has been made publicly available in 2021. 
 Various groups outside the LVK have re-analyzed O3 data using both traditional and ML-based approaches. 
@@ -72,7 +70,7 @@ The sampling rate of the strain data is downsampled to 2048\,Hz from their origi
 \begin{figure}[ht]
 \centering
 \includegraphics[width=\columnwidth]{figures/gw190828_063405_response.png}
-\caption[Aframe detection example]{
+\caption[Example of Aframe's neural network output in response to GW190828\_063405]{
 Example of Aframe's neural network output in response to GWTC-3's GW190828\_063405, a merger with $m_1 = 23.7^{+6.8}_{-6.7} M_{\odot}$ and $ m_2 = 10.4^{+3.8}_{-2.2} M_{\odot}$. 
 The event time corresponds to the coalescence time of the binary. 
 As the merger time enters the window of the network, the output increases and remains at a high level while the merger time is within the network window. 
@@ -98,7 +96,7 @@ Still, this analysis illustrates empirically that Aframe maintains sensitivity a
 \begin{figure*}[ht]
 \centering
 \includegraphics[width=\textwidth]{figures/o3-search-sv.png}
-\caption[O3 catalog sensitivity]{
+\caption[Sensitive volume comparison for the O3 catalog model]{
 Sensitive volume vs FAR for four different mass distributions. 
 Masses are specified in the source frame. 
 Each mass is drawn from a log-normal distribution with a mean of the value given above each plot and a width of 0.1. 
@@ -148,7 +146,7 @@ Fig.~\ref{o3cat_fig:missed_found} summarizes Aframe's detections of GWTC-3 event
 \begin{figure}[ht]
 \centering
 \includegraphics[width=0.5\textwidth]{figures/missed_found_pastro.png}
-\caption[O3 catalog missed-found]{
+\caption[O3 catalog missed-found event distributions]{
 \emph{Top}: The SNR vs. the source frame chirp mass of all 70 Hanford/Livingston events reported in GWTC-2.1 and GWTC-3. 
 Mass and SNR information are as reported by the LVK. Points are colored by the $p_{\mathrm{astro}}$ that Aframe reports for each event. 
 Consistent with sensitivity estimates (Fig.~\ref{o3cat_fig:sensitivity}), Aframe more confidently identifies higher mass candidates. 
@@ -283,13 +281,13 @@ Currently, source property information, like component masses, are not incorpora
 So, $p_\mathrm{astro}$ is solely a function of our detection statistic, and thus is a smooth, increasing function of detection statistic, or, equivalently, iFAR.
 
 
-% Then in your document:
 \begin{figure*}[ht]
 
 \centering
 \includegraphics[width=\textwidth]{figures/cum_background_density.pdf}
 
-\caption{\emph{Left}: Cumulative density of detection statistic for background events from 100 years of live time accumulated via the timeslide method. 
+\caption[\emph{Left}: Cumulative density of detection statistic for background events from 100 years of live time accumulated via the timeslide method. 
+\emph{Right}: $p_\mathrm{astro}$ as a function of Aframe's detection statistic.]{\emph{Left}: Cumulative density of detection statistic for background events from 100 years of live time accumulated via the timeslide method. 
 \emph{Right}: $p_\mathrm{astro}$ as a function of Aframe's detection statistic. The top axis of both plots labels the iFAR corresponding to the detection statistic on the bottom axis.}\label{o3cat_fig:pastro_vs_ifar}
 \end{figure*}
 

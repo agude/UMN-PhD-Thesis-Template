@@ -50,7 +50,7 @@ The mean absolute time difference between the estimated coalescence time and the
 \begin{figure}[h]
 \centering
 \includegraphics[width=\columnwidth]{figures/example_output.pdf}
-\caption{Example neural-network prediction and integrated neural-network prediction for a $m_1 = 35 M_\odot, m_2 = 35 M_\odot$ signal injection. The coalescence time is plotted as the vertical dashed black line. The 0.75\,s gap between coalescence time and the full neural-network activation is due to the whitening filter settle-in time and the placement of injections during training; see Sec.~\ref{aframe_meth_sec:noise-sampling}.}\label{aframe_meth_fig:example-output}
+\caption[Example neural-network prediction and integrated neural-network prediction for a $m_1 = 35 M_\odot, m_2 = 35 M_\odot$ signal injection]{Example neural-network prediction and integrated neural-network prediction for a $m_1 = 35 M_\odot, m_2 = 35 M_\odot$ signal injection. The coalescence time is plotted as the vertical dashed black line. The 0.75\,s gap between coalescence time and the full neural-network activation is due to the whitening filter settle-in time and the placement of injections during training; see Sec.~\ref{aframe_meth_sec:noise-sampling}.}\label{aframe_meth_fig:example-output}
 \end{figure}
 
 
@@ -150,7 +150,7 @@ Inclination angle & Sine & $(0, \pi)$ & rad.\\
 \hline
 \hline
 \end{tabular*}
-\caption{Priors on parameters used to generate waveforms for both the training and testing sets. The prior is derived from that used in GWTC-3 to assess search pipelines. The component mass distributions are defined in the source frame. ``Comoving" refers to uniform in comoving volume.}
+\caption[Priors on parameters used to generate waveforms for training and testing Aframe]{Priors on parameters used to generate waveforms for both the training and testing sets. The prior is derived from that used in GWTC-3 to assess search pipelines. The component mass distributions are defined in the source frame. ``Comoving" refers to uniform in comoving volume.}
 \label{table:priors}
 \end{table}
 
@@ -201,7 +201,7 @@ SNR steps & Number of batches over which SNR scheduler decays & Uniform & $(1, 2
 \hline
 \hline
 \end{tabular*}
-\caption{Priors and descriptions of hyperparameters searched over. The best value corresponds to the neural-network from the hyperparameter search that produced the highest validation score across all epochs. A neural-network trained with these hyperparameters was used to evaluate results reported in Fig.~\ref{aframe_meth_fig:sensitivity}. Details on hyperparameters can be found in Sec.~\ref{aframe_meth_sec:hp-search}}
+\caption[Priors and descriptions of Aframe hyperparameters searched over]{Priors and descriptions of hyperparameters searched over. The best value corresponds to the neural-network from the hyperparameter search that produced the highest validation score across all epochs. A neural-network trained with these hyperparameters was used to evaluate results reported in Fig.~\ref{aframe_meth_fig:sensitivity}. Details on hyperparameters can be found in Sec.~\ref{aframe_meth_sec:hp-search}}
 \label{table:hp-priors}
 \end{table*}
 
@@ -229,7 +229,7 @@ Fig.~\ref{aframe_meth_fig:inference-rate-comparison} shows a subset of the resul
 \begin{figure}[h]
 \centering
 \includegraphics[width=\columnwidth]{figures/inference_rate_comparison.pdf}
-\caption{ Sensitivity comparisons for the same neural-network run over the same data at different inference rates. For the purposes of clarity, only a subset of the tested rates are shown here. Except for the 1\,Hz inference, all results are within error of each other for all mass combinations and FARs, including for rates not shown in this plot.}
+\caption[Sensitivity comparisons for the same Aframe model run over the same data at different inference rates]{Sensitivity comparisons for the same neural-network run over the same data at different inference rates. For the purposes of clarity, only a subset of the tested rates are shown here. Except for the 1\,Hz inference, all results are within error of each other for all mass combinations and FARs, including for rates not shown in this plot.}
 \label{aframe_meth_fig:inference-rate-comparison}
 \end{figure}
 
@@ -241,7 +241,7 @@ To test the longevity of our algorithm, we construct several testing datasets at
 \begin{figure*}[ht]
 \centering
 \includegraphics[width=\textwidth]{figures/fractional_detection_over_time.pdf}
-\caption{The fraction of SNR $>$ 8 events detected at different false alarm rates during various weeks across a period of time during O3, beginning May 9th, 2019 and ending March 21st, 2020. Errors on detection fraction estimates are smaller than the plotted points.}\label{aframe_meth_fig:sensitivity_over_time}
+\caption[The fraction of SNR $>$ 8 events detected at different false alarm rates during various weeks across a period of time during O3]{The fraction of SNR $>$ 8 events detected at different false alarm rates during various weeks across a period of time during O3, beginning May 9th, 2019 and ending March 21st, 2020. Errors on detection fraction estimates are smaller than the plotted points.}\label{aframe_meth_fig:sensitivity_over_time}
 \end{figure*}
 
 \section{Latency and Computational Requirements} \label{aframe_meth_sec:compute}
@@ -274,7 +274,7 @@ Total & $3.114^{0.006}_{0.001}$\\
 \hline
 \hline
 \end{tabular*}
-\caption{Sources of latency for an \texttt{Aframe} online analysis. For the items listed in the upper section this table, the latency does not come from performing the computation, but rather from needing to wait for the data to exist before the action can occur. Items in the lower section are computational steps, and we report the median timing of 9191 trials. The upper and lower error bars represent the 95th and 5th percentile, respectively. All measurements were taken on a dedicated NVIDIA A30 GPU.}
+\caption[Sources of latency for an \texttt{Aframe} online analysis]{Sources of latency for an \texttt{Aframe} online analysis. For the items listed in the upper section this table, the latency does not come from performing the computation, but rather from needing to wait for the data to exist before the action can occur. Items in the lower section are computational steps, and we report the median timing of 9191 trials. The upper and lower error bars represent the 95th and 5th percentile, respectively. All measurements were taken on a dedicated NVIDIA A30 GPU.}
 \label{table:latency}
 \end{table}
 
@@ -292,14 +292,14 @@ Previous studies of ML-based gravitational wave detection algorithms tend not to
 \begin{figure*}
 \centering
 \includegraphics[width=\textwidth]{figures/pipeline_far_comparison.pdf}
-\caption{Sensitive volume vs FAR for four different mass distributions. Masses are specified in the source frame. Each mass is drawn from a log-normal distribution with a mean of the value given above each plot and a width of 0.1. \texttt{Aframe} demonstrates state-of-the-art sensitivity at higher masses, but loses performance relative to traditional search pipelines at lower masses. The sensitive volume of the other pipelines was calculated using data from a GWTC-3 data release\cite{ligo_scientific_collaboration_and_virgo_2023_7890437}.}\label{aframe_meth_fig:sensitivity}
+\caption[Sensitive volume vs FAR for four different mass distributions]{Sensitive volume vs FAR for four different mass distributions. Masses are specified in the source frame. Each mass is drawn from a log-normal distribution with a mean of the value given above each plot and a width of 0.1. \texttt{Aframe} demonstrates state-of-the-art sensitivity at higher masses, but loses performance relative to traditional search pipelines at lower masses. The sensitive volume of the other pipelines was calculated using data from a GWTC-3 data release\cite{ligo_scientific_collaboration_and_virgo_2023_7890437}.}\label{aframe_meth_fig:sensitivity}
 \end{figure*}
 
 
 \begin{figure}
 \centering
 \includegraphics[width=\columnwidth]{figures/roc_plot.pdf}
-\caption{ROC curves for waveforms in different SNR bins in our testing dataset, described in Sec.~\ref{aframe_meth_sec:data}. Each bin contains waveforms with SNRs within 0.01 of the given value.}\label{aframe_meth_fig:roc}
+\caption[ROC curves for waveforms in different SNR bins in our testing dataset]{ROC curves for waveforms in different SNR bins in our testing dataset, described in Sec.~\ref{aframe_meth_sec:data}. Each bin contains waveforms with SNRs within 0.01 of the given value.}\label{aframe_meth_fig:roc}
 \end{figure}
 
 
@@ -328,7 +328,7 @@ GW190602\_175927 &$71.8^{+18.1}_{-14.6}$ & $44.8^{+15.5}_{-19.6}$ & $< 0.97$ & $
 \hline
 \hline
 \end{tabular*}
-\caption{Masses in units of $M_{\odot}$, and false alarm rates in units of inverse years from \texttt{Aframe}, cWB, GstLAL, MBTA, and PyCBC-BBH for the known events in our testing set. Masses come from Table VIII of GWTC-2.1\cite{theligoscientificcollaboration2022gwtc21}, and FARs from Table XV of GWTC-3\cite{Abbott_2023}. As our analysis examined only one year of background, our minimum FAR is one per year.}
+\caption[Performance on known GW events in the Aframe testing set]{Masses in units of $M_{\odot}$, and false alarm rates in units of inverse years from \texttt{Aframe}, cWB, GstLAL, MBTA, and PyCBC-BBH for the known events in our testing set. Masses come from Table VIII of GWTC-2.1\cite{theligoscientificcollaboration2022gwtc21}, and FARs from Table XV of GWTC-3\cite{Abbott_2023}. As our analysis examined only one year of background, our minimum FAR is one per year.}
 \label{table:known-events}
 \end{table*}
 
