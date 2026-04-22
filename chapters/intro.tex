@@ -5,4 +5,129 @@
 \label{intro_chapter}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+In 1915, Einstein's theory of general relativity (GR) was published, and in it was a revolutionary understanding of the relationship between energy density and the geometry of spacetime (cite).
+More than a century later, GR has withstood every test that has been made against it.
+One such test of GR was the prediction of gravitational waves (GWs), which are weak perturbations to the spacetime metric that take the form of a wave equation.
+Though they represent a straightforward consequence of the equations of GR, it was not until 1974 that GWs were first indirectly detected by the discovery of the Hulse-Taylor binary pulsar system (cite) and the subsequent analysis of its decaying period due to emission of GWs (cite).
+The first direct measurement of GWs came more than 50 years later, a century after Einstein's publication, when the LIGO Scientific Collaboration detected the merger of a binary black hole (BBH) system in 2015 (cite).
+
+The detection was made by a pair of ground-based interferometric detectors, located in Hanford, Washington and Livingston, Louisiana.
+Since that time, the LIGO detectors have been been joined by the Virgo (cite) and KAGRA (cite) detectors, located in Italy and Japan, respectively.
+There are also plans for future ground-based detectors, Cosmic Explorer (cite) and Einstein Telescope (cite), as well as a space-based detector, LISA (cite).
+All of these detectors operate under the same principle, seeking to detect a change in the relative position of test masses as GWs pass through them.
+
+Over the past decade, as instruments have been upgraded and made more sensitive, the catalog of GW detections has grown.
+The LIGO-Virgo-KAGRA collaboration (LVK) has reported hundreds of signals from compact binary coalescences (CBCs), most of which are BBHs, but a few come from neutron star -- black hole (NSBH) mergers, and one has come from a binary neutron star (BNS) merger (cite).
+The observation of the BNS merger was a landmark event for astrophysics because it was observed not only via GWs, but also across the electromagnetic (EM) spectrum (cite).
+The scarcity of such a scientifically interesting phenomenon has motivated much of the work in this dissertation.
+
+% In the remainder of Chapter~\ref{intro_chapter}, 
+I will give a brief overview of the mathematics of GR and how GWs appear as a solution to its equations in Section~\ref{intro_sec:gr-math}.
+In Section~\ref{intro_sec:gr-source}, I will discuss sources of GWs with a focus on CBCs.
+Finally, in Section~\ref{intro_sec:detectors}, I will discuss the operation of the LIGO interferometers.
+
+% Chapter~\ref{chap:aframe_methods} introduces a machine learning-based method for the detection of gravitational waves from CBCs. 
+% I will outline this method and present a comparison to existing search pipelines used by the LVK.
+
+% Chapter~\ref{chap:o3_catalog} presents the results of applying this method to data from LIGO's third observing run, O3. 
+% Detections are compared to those of other searches, and new candidate events are discussed.
+
+% Chapter~\ref{chap:amplfi_methods} introduces a companion machine learning algorithm for the characterization of detected gravitational waves in a low-latency environment.
+% The 
+
+% Chapter~\ref{chap:amplfi_results}
+
+
+
+% Finally, in Chapter~\ref{conclusion_chapter}, I conclude by discussion prospects for the future
+
+\section{General Relativity and Gravitational Waves}
+\label{intro_sec:gr-math}
+
+In this section, I will give a brief description of how the existence of GWs follows from the equations of general relativity.
+I will follow the standard ``Einstein notation'', where repeated upper and lower indices imply summation over that index; i.e., $a_\mu b^\mu \equiv \Sigma_{\mu=0}^3\ a_\mu b^\mu$.
+In what follows, all summations will range over the full set of spacetime coordinates.
+I will also make use of ``geometerized units'', with $G = c = 1$.
+
+The field equations of GR relate the geometry of spacetime to the density and flux of energy.
+These are a set of ten non-linear differential equations, written compactly as:
+\begin{equation}
+    G_{\mu\nu} = 8\pi T_{\mu\nu}
+\end{equation}
+where the Einstein tensor $G_{\mu\nu}$ describes the spacetime curvature and $T_{\mu\nu}$ is the stress-energy tensor describing the distribution and flow of energy.
+We can look for vacuum solutions to this set of equations, where $T_{\mu\nu}$ (and hence $G_{\mu\nu}$) is equal to 0.
+
+The Einstein tensor is more usefully written in terms of the Ricci tensor, which itself is computed from the metric tensor $g_{\mu\nu}$ that ultimately defines how proper distance is measured in spacetime; two events that are separated by $dx^\mu$ have a spacetime interval:
+\begin{equation}
+    ds^2 = g_{\mu\nu} dx^\mu dx^\nu
+\end{equation}
+
+From the metric tensor, we can define the Christoffel symbols as:
+\begin{equation}
+    \Gamma^\rho_{\ \mu\nu} = \frac{1}{2} g^{\rho\sigma} (g_{\mu\sigma,\nu} + g_{\nu\sigma,\mu} - g_{\mu\nu,\sigma})
+\end{equation}
+where a comma denotes a partial derivative with respect to the coordinate that follows it.
+These symbols are used to define the Riemann curvature tensor:
+\begin{equation}
+    R^\mu_{\ \nu\rho\sigma} = \Gamma^\mu_{\ \nu\sigma,\rho} - \Gamma^\mu_{\ \nu\rho,\sigma} + \Gamma^\mu_{\ \alpha\rho}\Gamma^\alpha_{\ \nu\sigma} - \Gamma^\mu_{\ \alpha\sigma}\Gamma^\alpha_{\ \nu\rho}
+\end{equation}
+which can then be contracted once and twice to form the Ricci tensor and scalar, respectively:
+\begin{align}
+    R_{\mu\nu} & = R^\alpha_{\ \mu\alpha\nu} \\
+    R & = R^{\alpha}_{\ \alpha}
+\end{align}
+Together, these final quantities are used to define the Einstein tensor:
+\begin{equation}
+    G_{\mu\nu} = R_{\mu\nu} - \frac{1}{2}g_{\mu\nu} R
+\end{equation}
+
+In this way, the Einstein tensor encodes information about the metric of spacetime and its derivatives, and can be enormously complicated depending on how nearby matter has caused spacetime to bend.
+However, in a flat spacetime absent any energy density, the metric tensor reduces to the Minkowski metric:
+\begin{equation}
+   \eta_{\mu\nu} =
+   \begin{pmatrix}
+        -1 & 0 & 0 & 0 \\
+        0 & 1 & 0 & 0 \\
+        0 & 0 & 1 & 0 \\
+        0 & 0 & 0 & 1
+    \end{pmatrix}
+\end{equation}
+
+To arrive at the propagation of gravitational waves, we consider a small perturbation to to the Minkowski metric:
+\begin{equation}
+    g_{\mu\nu} = \eta_{\mu\nu} + h_{\mu\nu}
+\end{equation}
+with $| h_{\mu\nu} | \ll 1$.
+Working in the Lorenz gauge with $h_{\mu\nu}^{\ \ \ \ ,\mu} - \frac{1}{2} h^\mu_{\ \mu,\nu} = 0$, we can propagate this metric to the Einstein tensor, keeping terms up to first order in $h$, to arrive at:
+\begin{equation}
+    \Box h_{\mu\nu} = 0
+\end{equation}
+where $\Box$ is the d'Alembertian operator, defined in flat spacetime as $\Box \equiv -\partial^2 / \partial t^2 + \nabla^2$.
+
+We now have a wave equation and can consider plane wave solutions of the form:
+\begin{equation}
+    h_{\mu\nu} = \epsilon_{\mu\nu} e^{i k_\alpha x^\alpha}
+\end{equation}
+where $\epsilon_{\mu\nu}$ is a symmetric, constant polarization tensor, and $k_\alpha$ is the wave four-vector.
+While remaining in the Lorenz gauge, we have further freedom to transform our gauge such that $\epsilon^\mu_{\ \mu} = 0$ and $\epsilon_{0i} = \epsilon_{i0} = 0$.
+This is known as the transverse-traceless gauge, as the trace of the polarization tensor becomes 0 and the wave has components only in directions orthogonal to the direction of travel.
+For example, a GW traveling in the z-direction would have:
+\begin{equation}
+    h_{\mu\nu} (z, t) = 
+    \begin{pmatrix}
+        0 & 0 & 0 & 0 \\
+        0 & h_+ & h_\times & 0 \\
+        0 & h_\times & -h_+ & 0 \\
+        0 & 0 & 0 & 0 \\
+    \end{pmatrix}
+    e^{i(k_3 z - k_0 t)}
+\end{equation}
+where $h_+$ and $h_\times$ are constant, complex wave amplitudes.
+
+\section{Sources of Gravitational Waves}
+\label{intro_sec:gr-source}
+
+\section{LIGO Detectors}
+\label{intro_sec:detectors}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
