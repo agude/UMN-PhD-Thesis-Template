@@ -21,25 +21,24 @@ The LIGO-Virgo-KAGRA collaboration (LVK) has reported hundreds of signals from c
 The observation of the BNS merger was a landmark event for astrophysics because it was observed not only via GWs, but also across the electromagnetic (EM) spectrum (cite).
 The scarcity of such a scientifically interesting phenomenon has motivated much of the work in this dissertation.
 
-% In the remainder of Chapter~\ref{intro_chapter}, 
-I will give a brief overview of the mathematics of GR and how GWs appear as a solution to its equations in Section~\ref{intro_sec:gr-math}.
+In the remainder of Chapter~\ref{intro_chapter}, I will give a brief overview of the mathematics of GR and how GWs appear as a solution to its equations in Section~\ref{intro_sec:gr-math}.
 In Section~\ref{intro_sec:gr-source}, I will discuss sources of GWs with a focus on CBCs.
 Finally, in Section~\ref{intro_sec:detectors}, I will discuss the operation of the LIGO interferometers.
 
-% Chapter~\ref{chap:aframe_methods} introduces a machine learning-based method for the detection of gravitational waves from CBCs. 
-% I will outline this method and present a comparison to existing search pipelines used by the LVK.
+Chapter~\ref{chap:aframe_methods} introduces a machine learning-based method for the detection of gravitational waves from CBCs. 
+I will outline this method and present a comparison to existing search pipelines used by the LVK.
 
-% Chapter~\ref{chap:o3_catalog} presents the results of applying this method to data from LIGO's third observing run, O3. 
-% Detections are compared to those of other searches, and new candidate events are discussed.
+Chapter~\ref{chap:o3_catalog} presents the results of applying this method to data from LIGO's third observing run, O3. 
+Detections are compared to those of other searches, and new candidate events are discussed.
 
-% Chapter~\ref{chap:amplfi_methods} introduces a companion machine learning algorithm for the characterization of detected gravitational waves in a low-latency environment.
-% The 
+Chapter~\ref{chap:amplfi_methods} introduces a companion machine learning algorithm for the characterization of detected gravitational waves in a low-latency environment.
+The 
 
-% Chapter~\ref{chap:amplfi_results}
+Chapter~\ref{chap:amplfi_results}
 
 
 
-% Finally, in Chapter~\ref{conclusion_chapter}, I conclude by discussion prospects for the future
+Finally, in Chapter~\ref{conclusion_chapter}, I conclude by discussion prospects for the future
 
 \section{General Relativity and Gravitational Waves}
 \label{intro_sec:gr-math}
@@ -59,6 +58,7 @@ We can look for vacuum solutions to this set of equations, where $T_{\mu\nu}$ (a
 
 The Einstein tensor is more usefully written in terms of the Ricci tensor, which itself is computed from the metric tensor $g_{\mu\nu}$ that ultimately defines how proper distance is measured in spacetime; two events that are separated by $dx^\mu$ have a spacetime interval:
 \begin{equation}
+    \label{eq:ds}
     ds^2 = g_{\mu\nu} dx^\mu dx^\nu
 \end{equation}
 
@@ -92,7 +92,6 @@ However, in a flat spacetime absent any energy density, the metric tensor reduce
         0 & 0 & 0 & 1
     \end{pmatrix}
 \end{equation}
-
 To arrive at the propagation of gravitational waves, we consider a small perturbation to to the Minkowski metric:
 \begin{equation}
     g_{\mu\nu} = \eta_{\mu\nu} + h_{\mu\nu}
@@ -123,11 +122,70 @@ For example, a GW traveling in the z-direction would have:
     e^{i(k_3 z - k_0 t)}
 \end{equation}
 where $h_+$ and $h_\times$ are constant, complex wave amplitudes.
+Thus the wave can be decomposed into two independent polarizations:
+\begin{equation}
+    \epsilon^+_{\mu\nu} = 
+    \begin{pmatrix}
+        0 & 0 & 0 & 0 \\
+        0 & 1 & 0 & 0 \\
+        0 & 0 & -1 & 0 \\
+        0 & 0 & 0 & 0\\
+    \end{pmatrix},\ 
+    \epsilon^\times_{\mu\nu} =
+    \begin{pmatrix}
+        0 & 0 & 0 & 0 \\
+        0 & 0 & 1 & 0 \\
+        0 & 1 & 0 & 0 \\
+        0 & 0 & 0 & 0\\
+    \end{pmatrix}
+\end{equation}
+so that the amplitude tensor in the transverse-traceless gauge can be written as $h_+\epsilon^+_{\mu\nu} + h_\times\epsilon^\times_{\mu\nu}$.
+
+Consider a free particle at rest with four-velocity $u^\mu = (1, 0, 0, 0)$.
+In the presence of a GW, the motion of the particles is determined by the geodesic equation:
+\begin{equation}
+    \frac{\mathrm{d}u^\mu}{\mathrm{d}\tau} + \Gamma^\mu_{\rho\sigma} u^\rho u^\sigma = 0
+\end{equation}
+Because the particle starts from rest and we work in the transverse-traceless gauge, all components of $\Gamma^\mu_{\rho\sigma} u^\rho u^\sigma$ are zero.
+Thus $\mathrm{d}u^\mu / \mathrm{d}\tau = 0$ and the particle will remain at rest with respect to its coordinate system as the GW passes over it.
+Next, consider a pair of particles spatially separated by a vector $\vec{d}$.
+As shown in the case of the single particle, the coordinate distance between the two particles will remain constant.
+In contrast, the proper distance, given by Equation~\ref{eq:ds}:
+\begin{equation}
+    s^2 = d^2 + h_{\mu\nu} d^\mu d^\nu
+\end{equation}
+grows proportionally to the amplitude of the wave and the coordinate distance between the particles.
+The latter factor is the motivation for the design of the GW detectors discussed in Section~\ref{intro_sec:detectors}.
+The effect of a GW passing into the page on a ring of test masses can be seen in Figure~\ref{}.
+
 
 \section{Sources of Gravitational Waves}
 \label{intro_sec:gr-source}
 
+If we make the approximation that our source of GWs is far away and non-relativistic, it can be shown that the metric perturbation in the transverse-traceless gauge is given by:
+\begin{equation}
+    \label{eq:quad}
+    h_{ij} = \frac{2}{r} \ddot{I}_{ij}(t - r)
+\end{equation}
+where $r$ is the distance to the source and $I_{ij}$ is the quadrupole moment tensor of the source energy density:
+\begin{equation}
+    I_{ij}(t) = \int x^i x^j T^{00}(y, \vec{x}) d^3x
+\end{equation}
+Leaving geometerized units, the constant prefactor in Equation~\ref{eq:quad} is $2G / c^4$, which is $\sim 10^{-44}\ \mathrm{N}^{-1}$.
+This term suppress all but the most energetic sources beneath the level of what is observable with current technology; the most promising sources will high energy densities and large accelerations.
+In this section, I will discuss some of the sources of GWs that are targeted by the detectors discussed in Section~\ref{intro_sec:detectors}.
+
+\subsection{Compact binary systems}
+
+\subsection{Burst sources}
+
+\subsection{Rapidly rotating neutron stars}
+
+\subsection{Stochastic background}
+
 \section{LIGO Detectors}
 \label{intro_sec:detectors}
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
