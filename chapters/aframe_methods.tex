@@ -12,23 +12,23 @@ We demonstrate this pipeline to have a fraction of the latency of traditional ma
 
 \section{Introduction} \label{aframe_meth_sec:intro}
 
-Gravitational-wave astronomy has developed rapidly since the first direct detection of gravitational waves from a binary black hole merger in 2015\cite{AbEA2016a}, with new detections now a common occurrence\cite{Abbott_2023}.
-With the fourth observing run (O4) of the LIGO-Virgo-KAGRA (LVK) collaboration \cite{Aasi_2015, Acernese_2015, kagra} already underway, and with future ground and space based detectors planned for various points in the next decade\cite{PhysRevD.91.082001, Punturo_2010, LISA2000}, ever more frequent discoveries of gravitational waves will enable follow-up observation of events across other cosmic messengers such as electromagnetic radiation and astrophysical neutrinos\cite{Tanvir_2013,Ascenzi_2019,Jin_2020,Rastinejad_2022,Albert_2023,Abbasi_2023}. 
+Gravitational-wave astronomy has developed rapidly since the first direct detection of gravitational waves from a binary black hole merger in 2015~\cite{AbEA2016a}, with new detections now a common occurrence~\cite{Abbott_2023}.
+With the fourth observing run (O4) of the LIGO-Virgo-KAGRA (LVK) collaboration~\cite{Aasi_2015, Acernese_2015, kagra} completed, and with future ground and space based detectors planned for various points in the next decade~\cite{PhysRevD.91.082001, Punturo_2010, LISA2000}, ever more frequent discoveries of gravitational waves will enable follow-up observation of events across other cosmic messengers such as electromagnetic radiation and astrophysical neutrinos~\cite{Tanvir_2013,Ascenzi_2019,Jin_2020,Rastinejad_2022,Albert_2023,Abbasi_2023}. 
 The insights we gain in this era of multi-messenger astrophysics will directly correlate with the volume and diversity of data we are able to collect.
-Already, the first multi-messenger event, which included the gravitational wave event GW170817~\cite{AbEA2017b}, the gamma ray burst GRB170817A~\cite{GoVe2017,SaFe2017,AbEA2017e,Savchenko_2017}, and the kilonova AT2017gfo~\cite{CoFo2017,SmCh2017,AbEA2017f} has led to a gold mine of new science.
+Already, the first multi-messenger event, which included the gravitational wave event GW170817~\cite{AbEA2017b}, the gamma ray burst GRB170817A~\cite{GoVe2017,SaFe2017,AbEA2017e}, and the kilonova AT2017gfo~\cite{CoFo2017,SmCh2017,AbEA2017f} has led to a gold mine of new science.
 
-While machine learning (ML) is ubiquitous in some areas of physics\cite{harris2022physics}, it has only recently approached a stage of maturity in the gravitational-wave community.
-To date, there have been a number of machine learning models proposed for the detection of compact binary coalescences (CBCs); e.g.,\cite{PhysRevD.103.102003, verma2022can, KRASTEV2020135330, PhysRevD.97.044039, nousi2022deep}; but there are none currently running in O4\cite{online_pipelines} (though, ML-based unmodeled gravitational-wave searches have seen production usage\cite{mly}).
-This is both a product of well-known infrastructure hurdles separating the development and deployment of machine learning models\cite{deployment_challenges}, as well as a lack of standardized, astrophysically meaningful probes of the sensitivity of these models in the face of non-stationary and transient background noise.
+While machine learning (ML) is ubiquitous in some areas of physics~\cite{harris2022physics}, it has only recently approached a stage of maturity in the gravitational-wave community.
+To date, there have been a number of machine learning models proposed for the detection of compact binary coalescences (CBCs); e.g.,~\cite{PhysRevD.103.102003, verma2022can, KRASTEV2020135330, PhysRevD.97.044039, nousi2022deep}; but there are none currently running in O4~\cite{online_pipelines} (though, ML-based unmodeled gravitational-wave searches have seen production usage~\cite{mly}).
+This is both a product of well-known infrastructure hurdles separating the development and deployment of machine learning models~\cite{deployment_challenges}, as well as a lack of standardized, astrophysically meaningful probes of the sensitivity of these models in the face of non-stationary and transient background noise.
 
-The most well-modeled and frequently observed gravitational-wave events to date are the mergers of binary black hole (BBH) systems\cite{AbEA2018b,theligoscientificcollaboration2022gwtc21,Abbott_2023}
+The most well-modeled and frequently observed gravitational-wave events to date are the mergers of binary black hole (BBH) systems~\cite{AbEA2018b,theligoscientificcollaboration2022gwtc21,Abbott_2023}
 Their comparatively high number of confirmed detections has given us reasonable models of their population statistics, allowing for astrophysically meaningful measures of search sensitivity. 
-BBH mergers also benefit from a highly localized-in-time signal-to-noise ratio (SNR)\footnote{{In the remainder of this paper, SNR refers to the total SNR of a Hanford and Livingston detector network}} profile relative to binary neutron star (BNS) mergers, which are in the sensitive band of the detectors much longer. 
+BBH mergers also benefit from a highly localized-in-time signal-to-noise ratio (SNR) profile relative to binary neutron star (BNS) mergers, which are in the sensitive band of the detectors much longer. 
 Studying the ability of neural-networks to detect BBH mergers, and in particular what real time use in the LVK detectors looks like in this context, represents an important first step towards developing a more thorough understanding of how, and whether, these algorithms can be applied to more challenging signals such as BNSs, and what tools and infrastructure would be required to do so.
 
 Here, we present \texttt{Aframe}, a flexible pipeline for detection of BBH mergers using deep learning.
 The implementation presented here uses a 1D convolutional neural-network. 
-Convolutional neural-networks have previously been shown to have potential for gravitational wave detection\cite{magicbullet}, and we use this architecture, along with aggressive data augmentation techniques, to achieve a sensitivity competitive with matched filtering CBC search pipelines while requiring a significantly lower latency.
+Convolutional neural-networks have previously been shown to have potential for gravitational wave detection~\cite{magicbullet}, and we use this architecture, along with aggressive data augmentation techniques, to achieve a sensitivity competitive with matched filtering CBC search pipelines while requiring a significantly lower latency.
 More broadly, \texttt{Aframe} encompasses a suite of tools for quickly implementing, testing, and deploying new ideas at scale in order to more confidently realize the potential of machine learning in service to gravitational wave astronomy.
 
 The structure of this chapter is as follows. 
@@ -42,26 +42,26 @@ Finally, we compare our performance to existing pipelines in Sec.~\ref{aframe_me
 
 \section{The \texttt{Aframe} algorithm} \label{aframe_meth_sec:aframe-overview}
 
-Our neural-network architecture modifies a standard ResNet34\cite{resnet}, which maps fixed length time-series of gravitational wave strain from two interferometers (here, the Hanford and Livingston LIGO interferometers) to a scalar detection statistic indicating whether a signal is present in the input. 
+Our neural-network architecture modifies a standard ResNet34~\cite{resnet}, which maps fixed length time-series of gravitational wave strain from two interferometers (here, the Hanford and Livingston LIGO interferometers) to a scalar detection statistic indicating whether a signal is present in the input. 
 The detection statistic is analogous to the SNR output of matched filtering searches; the larger the value, the more likely the neural-network believes there is a signal consistent with the training distribution present in the data. 
 Critically, we replace 2D with 1D convolutions to accommodate time-series input. 
-In addition, we replace standard Batch Normalization layers (BN)\cite{ioffe2015batch}, with Group Normalization (GN) layers\cite{Wu_2018_ECCV}. 
+In addition, we replace standard Batch Normalization layers (BN)~\cite{ioffe2015batch}, with Group Normalization (GN) layers~\cite{Wu_2018_ECCV}. 
 While BN layers fit parameters to statistics calculated along the batch dimension, GN layers are fit to statistics calculated from groups of channels. 
 This choice was motivated by differences in the statistical properties of batches during training and inference. During training, there are significantly more signals in each batch than during inference, where most of the batch consists of noise. 
 Thus, during training, BN layers will learn spurious statistical properties that are not present at inference time. 
 GN layers mitigate this problem by learning statistical properties of individual channels. 
 We found that using GN layers improves the agreement between validation and test time metrics, as well as overall testing performance. 
 Good agreement between validation and test metrics is essential for ensuring the best neural-network is being selected for deployment. 
-The neural-network is trained by minimizing a binary cross entropy loss function with an Adam\cite{AdamOptimizer} optimizer.
-We use a one cycle learning rate scheduler with cosine annealing\cite{onecycleLR}. 
+The neural-network is trained by minimizing a binary cross entropy loss function with an Adam~\cite{AdamOptimizer} optimizer.
+We use a one cycle learning rate scheduler with cosine annealing~\cite{onecycleLR}. 
 
 Analyzing data with \texttt{Aframe} involves loading and preprocessing timeseries data, breaking it up into short time segments, then passing these segments through the neural-network. 
 The throughput associated with each of these steps can vary drastically, as can the hardware and software necessary to accelerate them. 
 In order to optimize the total throughput of this system, we adopt an inference-as-a-service (IaaS) computing model in which neural-network inference is handled by a dedicated service, to which client applications can send inference requests remotely. 
 Each step in our pipeline is then implemented and scaled independently to most efficiently leverage a fixed pool of heterogeneous computing resources. 
-This model has been shown to be effective in optimizing ML inference in GW astronomy\cite{iaas}, provided that ``snapshotting''\cite{hermes} is used to cache overlapping input data on the server side to avoid redundant data transfer. 
-We adopt this paradigm using an off-the-shelf IaaS implementation, Triton Inference Server\cite{NVIDIA_Corporation_Triton_Inference_Server}, and use the ML inference framework TensorRT to accelerate the neural-network inference step. 
-The ability to scale and distribute a workload is an important part of any search pipeline, and the authors are aware of only one other ML-based CBC detection algorithm that has focused on scalability to arbitrary resources\cite{huerta2021}. 
+This model has been shown to be effective in optimizing ML inference in GW astronomy~\cite{iaas}, provided that ``snapshotting''~\cite{hermes} is used to cache overlapping input data on the server side to avoid redundant data transfer. 
+We adopt this paradigm using an off-the-shelf IaaS implementation, Triton Inference Server~\cite{NVIDIA_Corporation_Triton_Inference_Server}, and use the ML inference framework TensorRT to accelerate the neural-network inference step. 
+The ability to scale and distribute a workload is an important part of any search pipeline, and the authors are aware of only one other ML-based CBC detection algorithm that has focused on scalability to arbitrary resources~\cite{huerta2021}. 
 In the sections below, we compare both our sensitivity and our throughput to this work.
 
 Inference is performed at a rate of 4\,Hz (not to be confused with the neural-network throughput, see the discussion of computational requirements below). 
@@ -90,9 +90,9 @@ The sensitive volume as a function of the FAR is defined by
 \begin{equation}
     V(\mathcal{F}) = \int \mathrm{d}\mathbf{x}\ \mathrm{d} \theta\ \epsilon(\mathcal{F}; \mathbf{x}, \theta) \phi(\mathbf{x}, \theta)
 \end{equation}
-where $\phi$ is the distribution of events over spatial coordinates $\mathbf{x}$ and binary system parameters $\theta$, and $\epsilon$ is the detection efficiency of the pipeline at a false alarm rate $\mathcal{F}$\cite{PhysRevD.102.063015}.
+where $\phi$ is the distribution of events over spatial coordinates $\mathbf{x}$ and binary system parameters $\theta$, and $\epsilon$ is the detection efficiency of the pipeline at a false alarm rate $\mathcal{F}$~\cite{PhysRevD.102.063015}.
 Generally, this quantity is estimated using Monte-Carlo integration by drawing waveforms from a population model, injecting them into detector strain data, and counting how many produce triggers below a given false alarm rate threshold.
-If the samples are drawn from within the redshifted volume\cite{Chen_2021} $V_0$, with
+If the samples are drawn from within the redshifted volume~\cite{Chen_2021} $V_0$, with
 \begin{equation}
     V_0 = \int_{z_{\text{min}}}^{z_{\text{max}}} \mathrm{d}z \frac{\mathrm{d}V_c}{\mathrm{d}z} \frac{1}{1+z} 
 \end{equation}
@@ -105,26 +105,26 @@ where $N(\mathcal{F})$ is the number of signals detected at a FAR less than $\ma
 It is often desired to quantify the sensitivity of an algorithm to different populations. 
 For example, an algorithm's sensitivity may vary with different source masses. 
 Through the technique of importance sampling, it is possible to use one injection set from a broad population to calculate the sensitive volume for several populations. 
-Each injection is weighted by the ratio of the probability of having been drawn from the injected distribution to that of the population distribution of interest\cite{Tiwari_2018}:
+Each injection is weighted by the ratio of the probability of having been drawn from the injected distribution to that of the population distribution of interest~\cite{Tiwari_2018}:
 \begin{equation}
     V_{\text{pop}}(\mathcal{F}) \approx \frac{V_0}{N_{\text{inj}}} \sum_{i=1}^{N(\mathcal{F})} \frac{p_{\text{pop}}(\theta_i)}{p_{\text{inj}}(\theta_i)}
 \end{equation}
-The Monte-Carlo uncertainty on this estimation is\cite{Farr_2019}
+The Monte-Carlo uncertainty on this estimation is~\cite{Farr_2019}
 
 \begin{equation}
-    (\delta V_{\text{pop}})^2 = \frac{V_0^2}{N_{\text{inj}}^2} \sum_{i=1}^{N(\mathcal{F})} \left(\frac{p_{\text{pop}}(\theta_i)}{p_{\text{inj}}(\theta_i)} \right)^2 - \frac{V_{\text{pop}}^2}{N_{\text{inj}}}
+    (\delta V_{\text{pop}})^2 = \frac{V_0^2}{N_{\text{draw}}^2} \sum_{i=1}^{N(\mathcal{F})} \left(\frac{p_{\text{pop}}(\theta_i)}{p_{\text{draw}}(\theta_i)} \right)^2 - \frac{V_{\text{pop}}^2}{N_{\text{draw}}}
 \end{equation}
 The SNR-based rejection performed during the generation of test set waveforms is done to improve this uncertainty.
 Waveforms that are sampled but have an SNR less than 4 are not injected; however, they are still counted towards $N_{\text{draw}}$.
 The cut is placed such that any waveforms below the SNR cutoff are not expected to be recovered at any reasonable FAR, and so would not contribute to the sensitive volume: whether injected or not, their weight would be zero.
 This procedure allows us to effectively draw many times more samples than are actually injected, greatly reducing the uncertainty on the sensitive volume.
-For this analysis, we re-weight to the same population distributions used in the sensitive volume analysis conducted in GWTC-3\cite{Abbott_2023}, log-normal distributions about central masses of interest with widths of 0.1. 
+For this analysis, we re-weight to the same population distributions used in the sensitive volume analysis conducted in GWTC-3~\cite{Abbott_2023}, log-normal distributions about central masses of interest with widths of 0.1. 
 In addition, we enforce time difference of no more than 0.25\,s between the recovered and injected coalescence times. 
 This time difference corresponds to the resolution available at an inference sampling rate of 4\,Hz. This time resolution can be reduced by increasing the inference sampling rate.
 
 \section{Data} \label{aframe_meth_sec:data}
 \subsection{Strain}
-We train and validate our neural-network using open data from the Gravitational Wave Open Science Center (GWOSC)\cite{Abbott_2023_open_data} between times 2019-04-29T13:29:25 and 2019-05-09T13:29:25, corresponding to a ten calendar day period at the beginning of the O3 observing run. 
+We train and validate our neural-network using open data from the Gravitational Wave Open Science Center (GWOSC)~\cite{Abbott_2023_open_data} between times 2019-04-29T13:29:25 and 2019-05-09T13:29:25, corresponding to a ten calendar day period at the beginning of the O3 observing run. 
 The strain data is resampled to 2048\,Hz for better computational efficiency. 
 For each interferometer, we query the openly available science mode flag to remove segments with poor data quality. 
 We then select segments for which the science mode flag is active for both the Hanford and Livingston LIGO interferometers. 
@@ -138,10 +138,10 @@ We emphasize that no data used for evaluating the performance of the neural-netw
 In addition, we train the neural-network only with data from before the testing period. This mimics the data availability scenario for real-time application. 
 
 \subsection{Waveforms} 
-We use \texttt{bilby}\cite{Ashton_2019} to simulate 100,000 eight second long BBH waveforms at 2048\,Hz with the IMRPhenomPv2 approximant\cite{PhysRevLett.113.151101}. 
+We use \texttt{bilby}~\cite{Ashton_2019} to simulate 100,000 eight second long BBH waveforms at 2048\,Hz with the IMRPhenomPv2 approximant~\cite{PhysRevLett.113.151101}. 
 Out of these, 75,000 waveforms are used to train the neural-network, and the remaining 25,000 are reserved for validation. 
 To simulate a waveform, a probability distribution is specified on each of the parameters that define a compact binary merger, and random samples are drawn from each.
-The distribution set used in this work is based on one used for GWTC-3\cite{PhysRevX.13.011048} during O3 to assess the sensitivity of CBC search pipelines, and is described in Table~\ref{aframe_meth_tab:priors}. 
+The distribution set used in this work is based on one used for GWTC-3~\cite{PhysRevX.13.011048} during O3 to assess the sensitivity of CBC search pipelines, and is described in Table~\ref{aframe_meth_tab:priors}. 
 The sampled parameters are used to compute the time-domain strain for each polarization, $h_+$ and $h_\times$. 
 The sampled component mass values are defined in the source frame, so conversion to detector frame quantities is performed before generation.
 The interferometer responses of the intrinsic polarizations are calculated during the training process to allow for real-time data augmentations, as described below in Sec.~\ref{aframe_meth_sec:training}.
@@ -151,7 +151,7 @@ Enough waveforms are generated to fill the background timeslides with the wavefo
 As the signals are only 8\,s long, they do not overlap. 
 Because waveforms are distributed uniformly in co-moving volume, the majority of waveforms are placed at high redshifts, and thus the population is dominated by low SNR signals. 
 So, during the signal generation process, we perform rejection sampling and keep only signals that have an SNR greater than 4. 
-This ensures that we can accurately evaluate sensitivity to an astrophysically motivated population without wasting computation on signals we do not expect to detect\cite{ligo_scientific_collaboration_and_virgo_2023_7890437}. 
+This ensures that we can accurately evaluate sensitivity to an astrophysically motivated population without wasting computation on signals we do not expect to detect~\cite{ligo_scientific_collaboration_and_virgo_2023_7890437}. 
 Rejection sampling reduces the uncertainty of a sensitive volume estimate for a fixed amount of analyzed injections (see Sec.~\ref{aframe_meth_sec:sv-calc}). 
 In total, we generate $\sim 45,000,000$ waveforms. 
 Of these, $\sim3\%$ percent are used for testing and $\sim97\%$ are rejected. 
@@ -168,14 +168,15 @@ The first 8\,s is used to estimate the power spectral density (PSD) used for whi
 The remaining 2.5\,s of the window is whitened in the frequency-domain, and transformed back to time-domain. 
 Due to whitening filter settle-in, 0.5\,s of data is corrupted on both ends of the window and removed. 
 Thus, only 1.5\,s of data is actually analyzed by the neural-network. 
-The PSD estimation, filter construction, and whitening are all done with \texttt{PyTorch}\cite{10.5555/3454287.3455008} modules to enable GPU-accelerated computation\cite{nousi2022deep}. 
+The PSD estimation, filter construction, and whitening are all done with \texttt{PyTorch}~\cite{10.5555/3454287.3455008} modules to enable GPU-accelerated computation~\cite{nousi2022deep}.
+A brief overview of the library created to house these utilities, and others, is given in Appendix~\ref{app:ml4gw}.
 We use a training batch size of 384, which was chosen such that we fully utilize the GPU memory available. 
 Our out-of-memory data-loading is sufficiently fast to support these batch sizes without bottle-necking the pre-processing or neural-network modules.
 
 Noise instances are sampled independently in time from each interferometer.
 Thus, a noise instance from one interferometer can be paired with many different instances from the other interferometer.
 This combinatorially increases the amount of unique two-detector noise instances available for optimizing the network. 
-Next, each noise instance has probability $p_{\text{invert}}$ to be inverted ($h(t) \rightarrow -h(t)$) and, independently, probability $p_{\text{reverse}}$ to be reversed ($h(t) \rightarrow h(-t)$)\cite{Bini_2023}.
+Next, each noise instance has probability $p_{\text{invert}}$ to be inverted ($h(t) \rightarrow -h(t)$) and, independently, probability $p_{\text{reverse}}$ to be reversed ($h(t) \rightarrow h(-t)$)~\cite{Bini_2023}.
 Again, the inversion and reversal augmentations increase the amount of unique noise instances in our training data.
 For transient noise, these augmentations increase the variety of morphologies provided during training, allowing for better generalization to unseen testing data. 
 We fix $p_{\text{invert}}$ and $p_{\text{reverse}}$ to 0.5.
@@ -188,10 +189,10 @@ The first three of these are sampled from the priors described in Table~\ref{afr
 Intrinsic polarization time-series are then projected onto the interferometers and re-scaled to the sampled SNR. 
 Randomly sampling extrinsic parameters at training time allows each intrinsic time-series to be injected from a variety of sky localizations and distances throughout the training procedure. 
 We found that standard CPU implementations of projecting intrinsic polarizations onto interferometers created bottlenecks that severely limited utilization of GPU resources. 
-We eliminated this bottleneck by developing a \texttt{PyTorch}\cite{10.5555/3454287.3455008} implementation so that projection can be accelerated using GPUs by a factor of $\sim$\,200.
+We eliminated this bottleneck by developing a \texttt{PyTorch}~\cite{10.5555/3454287.3455008} implementation so that projection can be accelerated using GPUs by a factor of $\sim$\,200.
 Finally, the interferometer responses are added into the noise instances.
-The coalescence time of the merger is randomly placed so that it falls at least 0.25\,s from either edge of the 1.5\,s whitened noise instance.
-We enforce this padding because we found that having the coalescence point too close to the left edge of the window makes it more difficult for the neural-network to learn, since much of the signal SNR would lie outside the window.
+The coalescence time of the merger is randomly placed so that it falls at least 0.25\,s from the left edge of the 1.5\,s whitened noise instance.
+We enforce this padding because we found that having the coalescence point too close to the left edge of the window makes it more difficult for the neural-network to learn, because much of the signal SNR would lie outside the window.
 The random placement of the coalescence time encodes time translational invariance so that the neural-network can identify signals with the coalescence time at different locations throughout the window.
 
 \begin{table}
@@ -226,7 +227,7 @@ Inclination angle & Sine & $(0, \pi)$ & rad.\\
 
 \textbf{Curriculum Learning.}
 Curriculum learning is a technique for training machine learning models in which initially, easy to learn samples are provided as training data, and progressively harder samples are introduced over time.
-One way to apply this in the context of GW detection is to initially provide high SNR signals and gradually introduce lower SNR signals\cite{nousi2022deep}.
+One way to apply this in the context of GW detection is to initially provide high SNR signals and gradually introduce lower SNR signals~\cite{nousi2022deep}.
 This allows the neural-network to quickly arrive at a minima of its parameter space before trying to optimize for the more realistic task.
 We begin with an SNR distribution that follows a power law, $p(\text{SNR}) \sim (\text{SNR})^{-3}$, with a minimum of SNR$_{\text{min}} = 12$ and a maximum of SNR$_{\text{max}} = 100$.
 The form of this distribution was chosen to roughly match the SNR distribution of of our astrophysically motivated prior. 
@@ -248,17 +249,17 @@ Thus, these windows will contain BBH waveforms with different intrinsic paramete
 This motivates the neural-network to learn the concept of coherence: the time-frequency evolution of the signal must be identical in both interferometers.
 
 
-\textbf{Robustness to Training Seed.}
-To illustrate the robustness of our training procedure, we perform an additional end-to-end analysis that differs only in random seed. 
-Randomness enters the training pipeline in two places: the weights used to initialize the neural-network, and the data loading and augmentations that construct training batches. 
-Fig.~\ref{aframe_meth_fig:training_variance} compares the sensitivity curves for both neural-networks, illustrating agreement to within a few percent. 
-As expected, we found that the neural-network with the higher overall validation score during training achieved a larger sensitive volume at low FARs.
+% \textbf{Robustness to Training Seed.}
+% To illustrate the robustness of our training procedure, we perform an additional end-to-end analysis that differs only in random seed. 
+% Randomness enters the training pipeline in two places: the weights used to initialize the neural-network, and the data loading and augmentations that construct training batches. 
+% Fig.~\ref{aframe_meth_fig:training_variance} compares the sensitivity curves for both neural-networks, illustrating agreement to within a few percent. 
+% As expected, we found that the neural-network with the higher overall validation score during training achieved a larger sensitive volume at low FARs.
 
-\begin{figure*}
-\centering
-\includegraphics[width=\textwidth]{figures/reseeding_comparison.pdf}
-\caption{Sensitivity comparisons for two neural-networks that differ only in the seed used to initialize neural-network weights and perform random data augmentations.  }\label{aframe_meth_fig:training_variance}
-\end{figure*}
+% \begin{figure*}
+% \centering
+% \includegraphics[width=\textwidth]{figures/reseeding_comparison.pdf}
+% \caption{Sensitivity comparisons for two neural-networks that differ only in the seed used to initialize neural-network weights and perform random data augmentations.  }\label{aframe_meth_fig:training_variance}
+% \end{figure*}
 
 \begin{table*}
 \centering
@@ -310,7 +311,7 @@ After the neural-network training has converged, the weights corresponding to th
 
 
 \textbf{Hyperparameter Search.} \label{aframe_meth_sec:hp-search}
-The hyperparameters of our algorithm are optimized via a random search\cite{random_search}. 
+The hyperparameters of our algorithm are optimized via a random search~\cite{random_search}. 
 It is infeasible to search over all possible hyperparameters, so we selected those that we a-priori expect to have the greatest impact on the neural-network optimization process.
 These were the neural-network's maximum learning rate ($lr_{\text{max}}$), the number of epochs over which the learning rate ``ramps up" ($N_{\text{ramp}}$) to $lr_{\text{max}}$ , $p_{\text{signal}}$, $p_{\text{mute}}$, $p_{\text{swap}}$, and the number of steps over which SNR curriculum learning was performed. 
 The priors on each of these parameters can be found in Table~\ref{aframe_meth_tab:hp-priors}.
@@ -319,7 +320,7 @@ Of these, the neural-network that reported the highest validation score was sele
 The hyperparameters used to train this neural-network are reported in Table~\ref{aframe_meth_tab:hp-priors}.
 
 \section{Inference} \label{aframe_meth_sec:inference}
-Our inference pipeline is an ensemble of three models: a snapshotter\cite{hermes}, a whitener, and the neural-network itself. 
+Our inference pipeline is an ensemble of three models: a snapshotter~\cite{hermes}, a whitener, and the neural-network itself. 
 Clients send streaming updates of strain data to a snapshotter. 
 The snapshotter sends the latest state to the whitening module. 
 Finally, batches of whitened data are constructed and analyzed by \texttt{Aframe}, producing predictions. 
@@ -359,7 +360,6 @@ To test the longevity of our algorithm, we construct several testing datasets at
 For each interval, we analyze the testing dataset with a neural-network trained using the first 10 days of O3 data. 
 This is the same neural-network used to produce the results in Fig.~\ref{aframe_meth_fig:sensitivity}. 
 To separate the sensitivity of the neural-network from the sensitivity of the detectors, we do not measure sensitive volume, but instead look at the fraction of events with SNR $>$ 8 that are detected at different FARs.
-We choose this SNR threshold as it is a typical value often used in GW literature for detectable sources. 
 This metric takes into account the variation in noise level across different time periods, though it does not account for all aspects of detector performance, such as the rate or morphology of glitches. 
 At a FAR of 1 event per 2 months, a threshold comparable to the 1 event per 5 months used for releasing significant public alerts by the LVK\footnote{\url{https://emfollow.docs.ligo.org/userguide/analysis/}}, we see in Fig~\ref{aframe_meth_fig:sensitivity_over_time} that the fractional detection rate of the original neural-network does not decay with time. 
 We note that the most significant noise event across all weeks is found during week 2, corresponding to the sharp drop in detection fraction at a FAR of 1 per 2 months. 
@@ -374,9 +374,9 @@ Errors on detection fraction estimates are smaller than the plotted points.}\lab
 
 \section{Latency and Computational Requirements} \label{aframe_meth_sec:compute}
 Training the neural-network with a single NVIDIA 16\,GB Tesla V100 GPU takes approximately 43 hours, and once trained, the neural-network can continue to be used for months without retraining; see the discussion of algorithm longevity in Sec.~\ref{aframe_meth_sec:training} for details. 
-For inference, we utilize a Triton inference server\cite{NVIDIA_Corporation_Triton_Inference_Server} that is hosted on a NVIDIA DGX server containing eight 16\,GB Tesla V100 GPUs (See Sec.~\ref{aframe_meth_sec:inference} for details on inference configuration). 
+For inference, we utilize a Triton inference server~\cite{NVIDIA_Corporation_Triton_Inference_Server} that is hosted on a NVIDIA DGX server containing eight 16\,GB Tesla V100 GPUs (See Sec.~\ref{aframe_meth_sec:inference} for details on inference configuration). 
 Altogether, analyzing the one year of background data and one year of injections used in this analysis to create Fig.~\ref{aframe_meth_fig:sensitivity} takes approximately 4 hours, corresponding to a throughput of about 500 seconds of data from a two detector network analyzed per second per GPU. 
-Normalizing by the quantity of GPUs and number of interferometers in the analysis configuration, this corresponds to an order of magnitude improvement in throughput compared with previous work by Huerta et al\cite{huerta2021}, a factor of $\sim2.5$ compared with Chatruvedi et al\cite{Chaturvedi_2022} and a factor of $\sim1.5$ improvement compared with Tian et al\cite{Tian_2024}. 
+Normalizing by the quantity of GPUs and number of interferometers in the analysis configuration, this corresponds to an order of magnitude improvement in throughput compared with previous work by Huerta et al~\cite{huerta2021}, a factor of $\sim2.5$ compared with Chatruvedi et al~\cite{Chaturvedi_2022} and a factor of $\sim1.5$ improvement compared with Tian et al~\cite{Tian_2024}. 
 This improvement is due to the use of a more efficient neural-network architecture, as well as the IaaS model described above. 
 
 With trained neural-network weights in hand, the requirements for online deployment are much smaller. 
@@ -387,9 +387,9 @@ For a detailed accounting of sources of latency within \texttt{Aframe}, see Tabl
 The most significant source of latency in an online analysis comes from waiting for data to exist such that data can be cropped from the edges after resampling and whitening. 
 All other computational steps (data reading/writing, data transfer to/from GPU, whitening, event identification, etc.) take less than 0.4 seconds combined. 
 In production, additional latency is incurred uploading events to the GRAvitational-wave Candidate Event
-DataBase (GraceDB) \footnote{\url{https://gracedb.ligo.org/}}. 
+DataBase (GraceDB)\footnote{\url{https://gracedb.ligo.org/}}. 
 This latency is not included in this 3.1\,s estimate. 
-A recent study\cite{chaudhary2023lowlatency} used a real-time mock data challenge replay of O3 data to benchmark pipeline latencies, including GraceDB processing. 
+A study~\cite{chaudhary2023lowlatency} used a real-time mock data challenge replay of O3 data to benchmark pipeline latencies, including GraceDB processing. 
 Analyzing this data stream, we find a median (90\%) event reporting latency of 3.9\,s (4.3\,s), in good agreement with our latency budget. 
 Matched filtering pipelines report a median (90\%) latency of 12.3\,s (41.4\,s).
 
@@ -435,14 +435,24 @@ In brief, the strain from one detector is shifted in time by an amount greater t
 Therefore, any reported triggers could not have been caused by an astrophysical event. 
 In this analysis, the Hanford strain data is held fixed and the Livingston data is shifted in 1\,s increments until the required background livetime is accumulated. 
 Then, a false alarm rate (FAR) can be assigned to injected events by dividing the number of noise events with detection statistic greater than the event of interest, with livetime analyzed. 
-All GW detections reported in the third Gravitational-Wave Transient Catalog (GWTC-3)\cite{Abbott_2023} were excised from the background. 
+All GW detections reported in the third Gravitational-Wave Transient Catalog (GWTC-3)~\cite{Abbott_2023} were excised from the background. 
+
+\begin{figure*}[h]
+\centering
+\includegraphics[width=\textwidth]{figures/pipeline_far_comparison.pdf}
+\caption[Sensitive volume vs FAR for four different mass distributions]{Sensitive volume vs FAR for four different mass distributions. 
+Masses are specified in the source frame. 
+Each mass is drawn from a log-normal distribution with a mean of the value given above each plot and a width of 0.1. 
+\texttt{Aframe} demonstrates state-of-the-art sensitivity at higher masses, but loses performance relative to traditional search pipelines at lower masses. 
+The sensitive volume of the other pipelines was calculated using data from a GWTC-3 data release~\cite{ligo_scientific_collaboration_and_virgo_2023_7890437}.}\label{aframe_meth_fig:sensitivity}
+\end{figure*}
 
 A useful metric to measure the sensitivity of search algorithms is the \emph{sensitive volume}. 
 Sensitive volume measures the volume over which some astrophysical population of sources distributed uniformly in co-moving volume is detectable at a given false alarm rate (FAR). 
 Sensitive volume was used to measure the sensitivity of search pipelines in GWTC-3. 
 This provides an astrophysically meaningful benchmark to compare the performance of \texttt{Aframe} to the performance of traditional searches. 
 More details on the sensitive volume calculation can be found in Sec.~\ref{aframe_meth_sec:sv-calc}. 
-Fig.~\ref{aframe_meth_fig:sensitivity} compares \texttt{Aframe}'s sensitive volume as a function of FAR with the sensitivity of the MBTA\cite{Aubin_2021}, PyCBC\cite{Dal_Canton_2021}, GstLAL\cite{ewing2023performance, Tsukada_2023} and cWB\cite{DRAGO2021100678} searches as reported in GWTC-3\cite{Abbott_2023}. 
+Fig.~\ref{aframe_meth_fig:sensitivity} compares \texttt{Aframe}'s sensitive volume as a function of FAR with the sensitivity of the MBTA~\cite{Aubin_2021}, PyCBC~\cite{Dal_Canton_2021}, GstLAL~\cite{ewing2023performance, Tsukada_2023} and cWB~\cite{DRAGO2021100678} searches as reported in GWTC-3~\cite{Abbott_2023}. 
 We note that the template banks used by MBTA, GstLAL, and PyCBC-Broad in the GWTC-3 analysis contain waveforms outside of the 5--100 M$_{\odot}$ range searched by \texttt{Aframe}. 
 In principle, these searches could increase their sensitivities in the 5--100 M$_{\odot}$ range by removing these templates. 
 This is evident when comparing the performance of PyCBC-BBH and PyCBC-Broad in Fig.~\ref{aframe_meth_fig:sensitivity}.
@@ -453,27 +463,17 @@ This is in part due to our neural-network architectures inability to model the l
 While the architecture implements global pooling layers, the convolution layers use a kernel length of 3 samples. 
 Improvements to neural-network architecture design, such as utilizing dilated convolutions that can better model these features will help to improve performance at these mass ranges.
 
-Previous studies of ML-based gravitational wave detection algorithms tend not to use sensitive volume as a metric, preferring instead to use traditional ML metrics such as ROC curves (an exception is\cite{ml_mdc}, which uses a non-astrophysical prior and a Euclidean volume distribution). 
+Previous studies of ML-based gravitational wave detection algorithms tend not to use sensitive volume as a metric, preferring instead to use traditional ML metrics such as ROC curves (an exception is~\cite{ml_mdc}, which uses a non-astrophysical prior and a Euclidean volume distribution). 
 This makes direct comparison difficult, as these metrics depend on the parameter distributions of tested events. 
-Still, in Fig.~\ref{aframe_meth_fig:roc} we present our own ROC curve to directly compare to metrics published in previous works \cite{huerta2021, Chaturvedi_2022}. 
+Still, in Fig.~\ref{aframe_meth_fig:roc} we present our own ROC curve to directly compare to metrics published in previous works~\cite{huerta2021, Chaturvedi_2022}. 
 We report a higher true positive rate (TPR) for all SNR thresholds at the lowest false positive rate (FPR) of $\sim10^{-6}$ compared to these previous studies. 
 This is particularly true for the lowest SNR threshold of 6.23, where we achieve two orders of magnitude of improvement (a TPR of 0.053, compared to approximately $5\times10^{-4}$). 
 However, we encourage future studies to use sensitive volume to astrophysically motivated distributions as the measure of performance.
 
-\begin{figure*}
-\centering
-\includegraphics[width=\textwidth]{figures/pipeline_far_comparison.pdf}
-\caption[Sensitive volume vs FAR for four different mass distributions]{Sensitive volume vs FAR for four different mass distributions. 
-Masses are specified in the source frame. 
-Each mass is drawn from a log-normal distribution with a mean of the value given above each plot and a width of 0.1. 
-\texttt{Aframe} demonstrates state-of-the-art sensitivity at higher masses, but loses performance relative to traditional search pipelines at lower masses. 
-The sensitive volume of the other pipelines was calculated using data from a GWTC-3 data release\cite{ligo_scientific_collaboration_and_virgo_2023_7890437}.}\label{aframe_meth_fig:sensitivity}
-\end{figure*}
 
-
-\begin{figure}
+\begin{figure}[h]
 \centering
-\includegraphics[width=\columnwidth]{figures/roc_plot.pdf}
+\includegraphics[width=\textwidth]{figures/roc_plot.pdf}
 \caption[ROC curves for waveforms in different SNR bins in our testing dataset]{ROC curves for waveforms in different SNR bins in our testing dataset, described in Sec.~\ref{aframe_meth_sec:data}. 
 Each bin contains waveforms with SNRs within 0.01 of the given value.}\label{aframe_meth_fig:roc}
 \end{figure}
@@ -490,8 +490,8 @@ Additionally, during this period, we do not report any non-catalog candidates wi
 \begin{table*}
 \setlength{\tabcolsep}{5pt}
 \centering
-\scriptsize
-\begin{tabular*}{\textwidth}{ p{2.5cm} p{1.3cm} p{1.3cm} p{1.25cm} p{1.5cm} p{1.8cm} p{1.5cm} p{1.8cm} p{1.8cm}}
+\tiny
+\begin{tabular*}{\textwidth}{ p{1.9cm} p{1.0cm} p{1.0cm} p{0.8cm} p{1.1cm} p{1.4cm} p{1.1cm} p{1.6cm} p{1.8cm}}
 \hline
 \hline
 Event & $m_{1} (M_\odot)$ & $m_{2} (M_\odot)$  &Aframe & cWB & GstLAL & MBTA & PyCBC-BBH & PyCBC-Broad
@@ -510,7 +510,7 @@ GW190602\_175927 &$71.8^{+18.1}_{-14.6}$ & $44.8^{+15.5}_{-19.6}$ & $< 0.97$ & $
 \hline
 \end{tabular*}
 \caption[Performance on known GW events in the Aframe testing set]{Masses in units of $M_{\odot}$, and false alarm rates in units of inverse years from \texttt{Aframe}, cWB, GstLAL, MBTA, and PyCBC-BBH for the known events in our testing set.
-Masses come from Table VIII of GWTC-2.1\cite{theligoscientificcollaboration2022gwtc21}, and FARs from Table XV of GWTC-3\cite{Abbott_2023}. 
+Masses come from Table VIII of GWTC-2.1~\cite{theligoscientificcollaboration2022gwtc21}, and FARs from Table XV of GWTC-3~\cite{Abbott_2023}. 
 As our analysis examined only one year of background, our minimum FAR is one per year.}
 \label{aframe_meth_tab:known-events}
 \end{table*}
@@ -528,59 +528,13 @@ However, accounting for instances where specific detectors are offline is import
 This could take the form of four-detector, three-detector, pairwise, and single-detector models. 
 Investigating additional detector combinations is left for future work.
 Further, low-latency alerts are less important for BBHs than binary neutron star (BNS) and neutron star-black hole (NSBH) mergers, where electromagnetic counterparts are more likely. 
-Many algorithms have already been published on this front\cite{Lin_2019, Sch_fer_2020, krastev2020realtimedetectiongravitationalwaves, Aveiro_2022, Qiu_2023}. 
+Many algorithms have already been published on this front~\cite{Lin_2019, PhysRevD.102.063015, KRASTEV2020135330, Aveiro_2022, Qiu_2023}. 
 However, appreciable sensitivity compared with state-of-the-art matched filtering approaches has yet to be demonstrated.
 The detection of these mergers with neural-networks is more challenging due to the greater length of time these signals spend in the sensitive band of the detector.
 
-Finally, because \texttt{Aframe} does not provide an SNR timeseries for detections, it cannot be used in conjunction with current low-latency sky localization algorithms like BAYESTAR \cite{Singer_2016}. 
-However, machine-learning based parameter estimation algorithms, like AMPLFI \cite{amplfi}, are being developed as low-latency solutions to sky localization, and can be used to followup \texttt{Aframe} detections.
-
-
-\section{Data and Software Availability} \label{aframe_meth_sec:software}
-All code used to produce results in this work is publicly available. 
-The \texttt{Aframe} project repository can be found at \url{https://github.com/ML4GW/aframe}. 
-
-\section{ml4gw}
-\label{aframe_meth_sec:ml4gw}
-
-\texttt{ml4gw} is a lightweight, PyTorch-based library designed to support the development, scaling, and deployment of machine learning (ML) models for gravitational-wave (GW) data analysis. 
-Built to provide familiar functionality to anyone used to working with standard CPU-based GW libraries, \texttt{ml4gw} lowers the barrier to entry for GW researchers who want to incorporate ML into their work and take advantage of optimized hardware. 
-Its design focuses on bridging the gap between domain-specific GW signal processing and general-purpose ML development, allowing researchers to build the tools needed to accomplish their scientific goals without getting stuck on infrastructure overhead. 
-By simplifying the interface between domain science and model training, \texttt{ml4gw} accelerates the creation of robust, physically-informed ML pipelines for gravitational-wave astrophysics.
-
-Machine-learning algorithms are well-suited for applications in GW astrophysics due to the field's abundance of high-quality data.
-The existence of multiple independent GW detectors allows for effectively unlimited combinations of noise samples via time-shifts, and, for the most common signal morphologies, the high-fidelity simulations provided by General Relativity allow as many signal samples as desired.
-However, the standard GW libraries are not designed for the scale or speed desired for ML development; conversely, standard ML libraries lack the domain-specific preprocessing functions and waveform handling tools required to train models for GW applications.
-
-\texttt{ml4gw} addresses this gap by re-writing common GW processing steps as PyTorch\cite{paszke2019pytorch} modules, taking advantage of the natural parallelization that comes with PyTorch's batch processing, and adding the option to accelerate these steps using GPUs and other coprocessors supported by the PyTorch framework.
-From libraries such as GWpy\cite{2019ascl.soft12016M}, \texttt{ml4gw} re-implements power spectral density estimation, signal-to-noise ratio calculation, whitening filters, and Q-transforms.
-Like bilby\cite{bilby_paper}, \texttt{ml4gw} provides the functionality to sample from astrophysical parameter distributions, which can then be used to simulate waveforms, mimicking the simulation features of lalsuite\cite{lalsuite}.
-\texttt{ml4gw} has available basic compact binary merger waveform families used in online searches and inference (TaylorF2, IMRPhenomD, and IMRPhenomPv2), as well as sine-Gaussian waveforms for capturing unmodeled GW signals, with more complex waveforms planned for the future.
-All of these modules have been designed to work with batches of multi-channel time-series data, run on accelerated hardware, and be composable so that the output of one function can easily become the input of another.
-
-Additionally, \texttt{ml4gw} contains a number of general utility features:
-
-\begin{itemize}
-    \item Efficient out-of-memory dataloading to scale the quantity of data used for training
-    \item Random sampling of windows from batches of multi-channel time-series data
-    \item On-the-fly signal generation for efficient scaling of training data
-    \item Cubic spline interpolation to supplement PyTorch's existing interpolation functions
-    \item Basic out-of-the-box neural network architectures to streamline the startup process for new users
-    \item Stateful modules for handling streaming data
-\end{itemize}
-
-All implementations are fully differentiable, allowing algorithms to employ physically-motivated loss functions.
-These features make it possible to train models on large quantities realistic detector data, perform data augmentation consistent with physical priors, and evaluate results in a way that is directly comparable with existing pipelines.
-
-\texttt{ml4gw} is used to support the development of multiple GW analyses. 
-It has been integrated into DeepClean\cite{deepclean}, a noise-subtraction pipeline; Aframe\cite{aframe-methods}, a search pipeline for gravitational waves from compact binary mergers; GWAK\cite{Raikman:2023ktu}, a gravitational-wave anomaly detection pipeline; and AMPLFI\cite{amplfi}, a gravitational-wave parameter estimation pipelines.
-\texttt{ml4gw} has enabled these algorithms to efficiently train ML models at scale and deploy models on real-time streaming data, while the use of a standardized tool set has allowed for easier communication between developers.
-
-In addition, two open source libraries, \texttt{ml4gw}\footnote{\url{https://github.com/ML4GW/ml4gw}} and \texttt{hermes}\footnote{\url{https://github.com/ML4GW/hermes}} were developed to support this work. 
-The \texttt{ml4gw} library contains PyTorch utilities for efficient on-GPU data-loading, whitening, PSD estimation and other data processing techniques common to GW analysis. 
-The \texttt{hermes} library contains utilities for deploying models in the IaaS paradigm via Triton Inference Servers.
-\\
-\\
+Finally, because \texttt{Aframe} does not provide an SNR timeseries for detections, it cannot be used in conjunction with current low-latency sky localization algorithms like BAYESTAR~\cite{Singer_2016}. 
+However, machine-learning based parameter estimation algorithms, like \texttt{AMPLFI}~\cite{amplfi}, are being developed as low-latency solutions to sky localization, and can be used to followup \texttt{Aframe} detections.
+This approach is discussed further in Chapter~\ref{chap:amplfi_methods}.
 
 \singlespacing
 \printbibliography[title=References, heading=subbibintoc]

@@ -2,13 +2,13 @@
 \label{chap:online}
 \begin{refsection}
 
-We describe the software architecture used to deploy the Aframe and AMPLFI algorithms, an end to end machine-learning based system for real time detection and parameter estimation of gravitational wave data. 
+We describe the software architecture used to deploy the Aframe and AMPLFI algorithms, an end-to-end machine learning-based system for real time detection and parameter estimation of gravitational wave data. 
 We detail the production deployment of Aframe and AMPLFI during the the third part of the LIGO-Virgo-KAGRA collaboration's fourth observing run, and discuss the system's contributions to public alerts. 
 
 \section{Introduction}
 The first discovery of gravitational waves (GWs) from a binary black hole (BBH) merger in 2015 jump-started the era of observational GW science \cite{Abbott_2016}. 
 The LIGO-Virgo-KAGRA (LVK) collaboration's third observing run (O3) was the first which distributed real-time public alerts to the astronomical community. 
-Since then, hundreds of real-time candidate events have been made public\footnote{//gracedb.ligo.org/superevents/public}. 
+Since then, hundreds of real-time candidate events have been made public\footnote{https://gracedb.ligo.org/superevents/public}. 
 In May 2023, the LVK began its fourth observing run (O4) ending in November 2025. Already, the LVK has published GWTC-4.0 consisting of 128 GW candidate events from just the first part of the fourth observing run (O4a). 
 As the Advanced LIGO \cite{buikema2020sensitivity, Aasi_2015}, Advanced Virgo \cite{Acernese_2015}, and KAGRA \cite{KAGRA:2020tym} interferometers sensitivity increase, so does the quantity of detected events. 
 
@@ -17,7 +17,7 @@ The GstLAL, MBTA, PyCBC, and SPIIR pipelines are all matched-filtering based sea
 Also operating were minimally modeled pipelines cWB \cite{PhysRevD.93.042004, PhysRevD.105.083018}, MLy \cite{PhysRevD.110.104034}, and oLIB \cite{Lynch:2015yin} which are designed to be sensitive to a broader range of astrophysical sources. 
 
 
-Over the past decade, machine-learning (ML) research in gravitational-wave (GW) astronomy has emerged as a flourishing  field \cite{Cuoco_2020}. 
+Over the past decade, machine learning (ML) research in gravitational-wave (GW) astronomy has emerged as a flourishing  field \cite{Cuoco_2020}. 
 Non-linear noise sources, availability of robust numerical relativity simulations, and strict requirements of real-time analysis make ML solutions highly compelling candidates for next generation data analysis methods. 
 The ability to operate in real-time on accelerated hardware like GPUs provides reduced alert latencies, and smaller inference compute footprints compared with CPU-based filtering methods. 
 In addition, ML methods provide a pathway to handle the growing computational burdens associated with the growing detection rate \cite{gwtc-4}. 

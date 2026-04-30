@@ -27,25 +27,29 @@ Finally, in Section~\ref{intro_sec:detectors}, I will discuss the operation of t
 
 Chapter~\ref{chap:aframe_methods} introduces a machine learning-based method for the detection of gravitational waves from CBCs. 
 I will outline this method and present a comparison to existing search pipelines used by the LVK.
+This algorithm is shown to have similar sensitivity to BBH mergers, while reporting events at much lower latencies.
 
 Chapter~\ref{chap:o3_catalog} presents the results of applying this method to data from LIGO's third observing run, O3. 
 Detections are compared to those of other searches, and new candidate events are discussed.
 
 Chapter~\ref{chap:amplfi_methods} introduces a companion machine learning algorithm for the characterization of detected gravitational waves in a low-latency environment.
-The 
+The algorithm uses normalizing flows to estimate the posterior distributions of parameters of interest (chirp mass, mass ratio, sky location) in under 2 seconds, significantly faster than traditional methods.
 
-Chapter~\ref{chap:amplfi_results}
+Chapter~\ref{chap:amplfi_results} demonstrates this algorithm's performance on mock data from O3.
+It is shown to have performance equivalent to existing low-latency methods for signal localization, and to have posteriors consistent with those of the full Bayesian parameter estimation done for the third gravitational wave transient catalog, GWTC-3.
 
+In Chapter~\ref{chap:online}, I discuss how the search and parameter estimation algorithms were combined into a real-time search.
+The two were deployed into a production setting at the end of August, 2025, joining the end of the final part of the fourth observing run, O4c.
+Public results from that time period are presented.
 
-
-Finally, in Chapter~\ref{conclusion_chapter}, I conclude by discussion prospects for the future
+Finally, in Chapter~\ref{conclusion_chapter}, I highlight ongoing efforts to improve these tools and conclude with a discussion of prospects for the future.
 
 \section{General Relativity and Gravitational Waves}
 \label{intro_sec:gr-math}
 
 In this section, I will give a brief description of how the existence of GWs follows from the equations of general relativity.
 I will follow the standard ``Einstein notation'', where repeated upper and lower indices imply summation over that index; i.e., $a_\mu b^\mu \equiv \Sigma_{\mu=0}^3\ a_\mu b^\mu$.
-In what follows, all summations will range over the full set of spacetime coordinates.
+In what follows, Greek indices ($\mu$, $\nu$, etc.) run from 0 to 3 and indicate full spacetime coordinates, while Latin indices ($i$, $j$, etc.) run from 1 to 3 and indicate spatial coordinates.
 I will also make use of ``geometerized units'', with $G = c = 1$.
 
 The field equations of GR relate the geometry of spacetime to the density and flux of energy.
@@ -71,7 +75,7 @@ These symbols are used to define the Riemann curvature tensor:
 \begin{equation}
     R^\mu_{\ \nu\rho\sigma} = \Gamma^\mu_{\ \nu\sigma,\rho} - \Gamma^\mu_{\ \nu\rho,\sigma} + \Gamma^\mu_{\ \alpha\rho}\Gamma^\alpha_{\ \nu\sigma} - \Gamma^\mu_{\ \alpha\sigma}\Gamma^\alpha_{\ \nu\rho}
 \end{equation}
-which can then be contracted once and twice to form the Ricci tensor and scalar, respectively:
+whose indices can then be contracted once and twice to form the Ricci tensor and scalar, respectively:
 \begin{align}
     R_{\mu\nu} & = R^\alpha_{\ \mu\alpha\nu} \\
     R & = R^{\alpha}_{\ \alpha}
@@ -97,7 +101,7 @@ To arrive at the propagation of gravitational waves, we consider a small perturb
     g_{\mu\nu} = \eta_{\mu\nu} + h_{\mu\nu}
 \end{equation}
 with $| h_{\mu\nu} | \ll 1$.
-Working in the Lorenz gauge with $h_{\mu\nu}^{\ \ \ \ ,\mu} - \frac{1}{2} h^\mu_{\ \mu,\nu} = 0$, we can propagate this metric to the Einstein tensor, keeping terms up to first order in $h$, to arrive at:
+Working in the Lorenz gauge with $h_{\mu\nu}^{\ \ \ ,\mu} - \frac{1}{2} h^\mu_{\ \mu,\nu} = 0$, we can propagate this metric to the Einstein tensor, keeping terms up to first order in $h$, to arrive at:
 \begin{equation}
     \Box h_{\mu\nu} = 0
 \end{equation}
@@ -142,17 +146,17 @@ Thus the wave can be decomposed into two independent polarizations:
 so that the amplitude tensor in the transverse-traceless gauge can be written as $h_+\epsilon^+_{\mu\nu} + h_\times\epsilon^\times_{\mu\nu}$.
 
 Consider a free particle at rest with four-velocity $u^\mu = (1, 0, 0, 0)$.
-In the presence of a GW, the motion of the particles is determined by the geodesic equation:
+Its motion in the presence of a GW is determined by the geodesic equation:
 \begin{equation}
     \frac{\mathrm{d}u^\mu}{\mathrm{d}\tau} + \Gamma^\mu_{\rho\sigma} u^\rho u^\sigma = 0
 \end{equation}
 Because the particle starts from rest and we work in the transverse-traceless gauge, all components of $\Gamma^\mu_{\rho\sigma} u^\rho u^\sigma$ are zero.
 Thus $\mathrm{d}u^\mu / \mathrm{d}\tau = 0$ and the particle will remain at rest with respect to its coordinate system as the GW passes over it.
 Next, consider a pair of particles spatially separated by a vector $\vec{d}$.
-As shown in the case of the single particle, the coordinate distance between the two particles will remain constant.
+The coordinate distance between the two particles will remain constant as each remains at rest with respect to its coordinate system.
 In contrast, the proper distance, given by Equation~\ref{eq:ds}:
 \begin{equation}
-    s^2 = d^2 + h_{\mu\nu} d^\mu d^\nu
+    s^2 = d^2 + h_{ij} d^i d^j
 \end{equation}
 grows proportionally to the amplitude of the wave and the coordinate distance between the particles.
 The latter factor is the motivation for the design of the GW detectors discussed in Section~\ref{intro_sec:detectors}.
