@@ -101,7 +101,7 @@ We also make some optimizations compared to previous efforts in light of an onli
 \end{figure}
 
 We use the \phenomd~phenomenological waveform model for our simulations~\cite{Khan:2015jqa}. 
-This waveform model contains the full inspiral-merger-ringdown physics, starting with the inspiral phase up to 3.5 post-newtonian order in GW phase (known as TaylorF2; see~\cite{Buonanno_2009} for a review), and using an ansatz for the merger and ringdown, fitting them to numerical relativity results. 
+This waveform model contains the full inspiral-merger-ringdown physics, starting with the inspiral phase up to 3.5 post-newtonian order in GW phase (known as TaylorF2; see~\cite{Buonanno_2009} for a review), and using an ansatz for the merger and ringdown, fitting this ansatz to numerical relativity results. 
 One limitation of this waveform model is the restriction to aligned spins i.e. BH spin components perpendicular to the orbital plane and therefore no precession. 
 Current online PE using stochastic sampling techniques use the {\phenomp} waveform approximant, which contains precessing effects. 
 Furthermore, high mass BBH systems use the {\phenomxphm} approximant, which also includes higher modes of radiation. 
@@ -112,7 +112,7 @@ In the future, however, we plan to implement and integrate the {\phenomp} wavefo
 In Figure~\ref{amp_meth_fig:waveform}, we show the time-domain strain of a representative BBH system based on our \phenomd~ implementation and compare it with that implemented in \lalsim. 
 The latter is a part of the LIGO Algorithm Library~\cite{lalsuite}, and provides the core components of GW data analysis with LVK data. 
 We find consistency between our implementation and that in ~\lalsim, with the residual errors below the signal by three orders of magnitude through most of the evolution.
-Such residuals are unlikely to impact the results since the statistical errors of posterior is greater than systematic error due to such differences. 
+Such residuals are unlikely to impact the results since the statistical errors of the posterior are greater than systematic errors due to such differences. 
 We present some comparison results in section~\ref{amp_meth_sec:results}.
 Though we show comparison with a single representative system in Figure~\ref{amp_meth_fig:waveform}, several other combination of parameters are tested for consistency with {\lalsim} as a part of unit-tests of the {\mlgw} codebase.\footnote{\scriptsize{Located at \url{https://github.com/ML4GW/ml4gw/blob/v0.5.0/tests/waveforms/test_cbc_waveforms.py}}}
 
@@ -136,14 +136,14 @@ This is especially important in the context of LFI since efficient training reli
 We therefore take a different approach by performing the data generation on the GPU, which allows generation of batches of data directly on the device, which is faster and avoids the data transfer overheads. 
 Additionally, all data pre-processing, such as Fourier transforms, power spectra estimation, and data whitening, are carried out on the GPU. 
 This ensures consistent high GPU utilization. 
-Further, we take advantage of the fact that GPU architecture today provide large memory to generate large batches of data. 
+Further, we take advantage of the fact that GPU architectures today provide large memory to generate large batches of data. 
 Our workflow involves:
 \begin{itemize}
     \item Transferring a chunk of two detector (Hanford and Livingston, subsequently HL) time-domain strain data, typically quarter of a day, sampled at 2048 Hz to the GPU before commencing training. 
     The power spectra is fit to this background chunk.
     During training, $N$ small background chunks, each of 4-second duration, are loaded from the total training chunk, where $N$ is the training batch size.
     \item We generate $N$ points from our parameter prior and generate the \phenomd~waveforms directly on the GPU, as mentioned in section~\ref{amp_meth_sec:phenomd}. 
-    This step is fast; for example, generating $N=1000$ waveforms $\sim 0.15$ seconds on a NVIDIA A40 GPU. 
+    This step is fast; for example, generating $N=1000$ waveforms takes $\sim 0.15$ seconds on a NVIDIA A40 GPU. 
     \item We then inject the signals into the background chunks, obtaining the data batch. 
     We whiten the batch using the estimated power spectra and pass it along with the parameters for training/validation/testing. 
     Examples of the whitened data with the injected waveform overlaid is shown in the panels of Figure~\ref{amp_meth_fig:data-view}.
@@ -171,14 +171,14 @@ A final fully-connected layer projects to a representation dimension, $D_{\gamma
 
 \subsection{\label{amp_meth_sec:ssl}Self-supervised learning of nuisance parameters}
 We pre-train the embedding network to marginalize over uncertainties in arrival time up to 1 second.
-This is done because the \emph{peak} of the detection statistic reported by {\aframe} may differ from the true arrival time up to tens of milliseconds. 
+This is done because the \emph{peak} of the detection statistic reported by {\aframe} may differ from the true arrival time by up to tens of milliseconds. 
 The pre-training is done via self-supervised learning (SSL) by identifying two ``views'' of the data as being similar, and training the embedding network to minimize VICReg. 
 Examples of two different views, $d$ and $d^\prime$, are shown in Figure~\ref{amp_meth_fig:data-view}, where the upper panel shows a signal that
-is injected at a fixed reference time, while the lower panel shows a time-shifted signal; i.e., all signal parameters are the same except the time of arrival, which is chosen randomly up within a 1-second window.
+is injected at a fixed reference time, while the lower panel shows a time-shifted signal; i.e., all signal parameters are the same except the time of arrival, which is chosen randomly within a 1-second window.
 We emphasize that the views shown in Figure~\ref{amp_meth_fig:data-view} do not affect the relative times of arrival between the detectors, which is crucial for sky-localization, but instead are a shift in the geo-center time of arrival by up to 1 second.
 Two batches of views are then forward-modeled through the embedding network and projected down to the resulting space. 
 This projection, $\boldgamma$, is performed in two different steps. 
-First, the ResNet $f$, mentioned above, projects the inputs in to $\smallgamma\in\mathbb{R}^{D_{\gamma}}$. 
+First, the ResNet $f$, mentioned above, projects the inputs into $\smallgamma\in\mathbb{R}^{D_{\gamma}}$. 
 Following this, another fully-connected expander network, $h$, takes $\gamma$ to a ($N\times D_{\gamma}$)-dimensional space $x\in\mathbb{R}^{N\times D_{\gamma}}$. 
 The resulting composition is given by  $\boldgamma \equiv h\circ f$,
 \begin{equation}
@@ -322,7 +322,7 @@ The loss function used is,
     - \ln \mathcal{L}(\varphi) = - \frac{1}{N_{\mathrm{sims.}}}\sum_{i \in \mathrm{sims.}} \ln q_{\varphi}(\boldtheta_i \vert \data_i),
     \label{eq:log_likelihood}
 \end{equation}
-where the simulations are forward-modeled to calculate their likelihood, which is then miniimized during training.
+where the simulations are forward-modeled to calculate their likelihood, which is then minimized during training.
 The density evaluations are done by learning a set of variable transforms that take the original variables $\boldtheta$ to variables of a simpler base distribution, like a standard normal, which we use here. 
 Several techniques are used to build flexible transforms and preserve the probability density at each stage. 
 We refer the reader to a review article on normalizing flows and the different implementations~\cite{papamakarios2021normalizing}.
@@ -336,7 +336,7 @@ The prior distributions used for generating the simulations are listed in Table~
 Note that the time of coalescence is not a part of parameter set because it is marginalized over.
 Although \phenomd~supports BH spins, we have ignored it for the current work. 
 This will be relaxed in subsequent versions of the code and reported in a future work. The data, \data, consists of 4 seconds of whitened time-domain strain sampled at 2048 Hz containing a BBH signal, as illustrated in Figure~\ref{amp_meth_fig:data-view}. 
-When training the normalizing flow, we condition the parameters on the data representation, \smallgamma, as shown Eq.~(\ref{eq:representation}). 
+When training the normalizing flow, we condition the parameters on the data representation, \smallgamma, as shown in Eq.~(\ref{eq:representation}). 
 This uses only the ResNet, $f$. 
 The expander, $h$, is not required subsequently. 
 Also, we leave the weights of $f$ to change further as a part of training the normalizing flow. 
@@ -354,7 +354,7 @@ Our normalizing flow implementation uses inverse auto-regressive transforms~\cit
 This kind of auto-regressive transforms can be sampled in one forward pass. 
 However, evaluating the density requires $D$-forward passes, where $D$ is the dimensionality of the parameter space.
 For this case, $D=8$ from Eq.~(\ref{eq:parameters}). 
-Masked auto-regressive transforms~\cite{papamakarios2018masked} on the other hand use similar masked linear layers~\cite{pmlr-v37-germain15}, but on the contrary the density evaluation takes a single forward pass and sampling is $D$-times as expensive. 
+Masked auto-regressive transforms~\cite{papamakarios2018masked} use similar masked linear layers~\cite{pmlr-v37-germain15}, but the density evaluation takes a single forward pass and sampling is $D$-times as expensive. 
 Although auto-regressive flows are \emph{universal approximators}~\cite{papamakarios2021normalizing}, our choice of using inverse auto-regressive flow (IAF) is because our inference requires fast sampling, which is achieved in a single pass with the IAF. 
 In addition to IAF, coupling transforms were also considered. 
 However, in our experiments, we found such transforms to perform less optimally when constrained to the same number of trainable parameters.
@@ -362,7 +362,7 @@ However, in our experiments, we found such transforms to perform less optimally 
 Our transforms are implemented using the open source library {\pyro}~\cite{JMLR:v20:18-403}. 
 The complete transform is composed of 60 individual affine-autoregressive transforms. 
 Each transform has 6 masked linear layers; each layer having 100 hidden units. 
-More complex transform functions like monotonic splines and neural-network with positive weight exist in the literature. 
+More complex transform functions like monotonic splines and neural networks with positive weights exist in the literature. 
 However, we use the affine transforms for simplicity and lower number of trainable parameters. 
 We train the network with a batch size of 800, with 200 batches per epoch using the AdamW optimizer~\cite{loshchilov2019decoupledweightdecayregularization} with initial learning rate of $1\mathrm{e}{-3}$ and weight decay of $2\mathrm{e}{-3}$. 
 The learning rate is scheduled to reduce by a factor of 10 upon the plateauing of the validation loss with a patience of 10 epochs. 
@@ -379,7 +379,7 @@ This implies that unlike most ``large'' neural-networks in the literature today,
 For inference, the average sampling time for drawing 20,000 posterior samples, conditioned on new data, takes $\sim 0.05$ seconds on NVIDIA A40 GPU. 
 The same on a Intel Core i7 with 16 cores, takes $\sim 1-2$ seconds. 
 However, it should be noted to create a sky-localization map in the HEALPix format~\cite{GoHi2005}, used in GW data analysis, the density needs to be evaluated across all pixel coordinates. 
-We find the average time to drawn 20,000 samples, and then evaluate the density across all pixels on the sky for a HEALPix resolution of $\nside=32$ is $\sim 0.6$ seconds. 
+We find the average time to draw 20,000 samples, and then evaluate the density across all pixels on the sky for a HEALPix resolution of $\nside=32$ is $\sim 0.6$ seconds. 
 This is due to the choice of the inverse auto-regressive flow: sampling is possible via one forward pass, but evaluating the density is done sequentially across each component. 
 Doubling the resolution, i.e. using $\nside = 64$ takes $\sim 1.2$ seconds and $\nside = 128$ takes $\sim 2.4$ seconds.
 
@@ -393,16 +393,16 @@ This is shown in the red colormap.
 We see that there is consistency amongst the {\amplfi} posteriors; i.e., distributions in the blue colormap fall on top of each other.
 For higher masses, like the $\mc = 45\;\msun$, shown in Figure~\ref{amp_meth_fig:high-mass-compare}, we find the recovery accuracy of the chirp mass to be comparable to nested sampling. 
 Also, considering all nested sampling runs, the mass-ratio accuracy from {\amplfi} is comparable. 
-However, extrinsic parameters like the inclination, or the sky location are not recovered with the same accuracy as nested sampling, although broad features like the ``ring'' pattern in the skymap are evident. 
+However, extrinsic parameters like the inclination and sky location are not recovered with the same accuracy as nested sampling, although broad features like the ``ring'' pattern in the skymap are evident. 
 The same is also true for the inclination posterior, where the inference is degenerate between the true inclination angle, and its supplementary angle. 
 In case of the nested sampling runs, though this degeneracy is broken, the inference does not always select the right ``peak'' for the inclination which can be expected for two-detection observations (see section IV of~\cite{CuFl1994}, or~\cite{Nissanke:2009kt}).
 Thus, overall, we find consistency of the {\amplfi} results with the true parameters of the injection and with nested sampling results, though with less precision for some parameters.
 
-We find that the inference for the lower mass, $\mc=15\;\msun$ BBH system, shown in Figure~\ref{amp_meth_fig:low-mass-compare}, is worse compared to the higher mass. 
+We find that the inference for the lower mass, $\mc=15\;\msun$ BBH system, shown in Figure~\ref{amp_meth_fig:low-mass-compare}, is worse compared to the higher-mass system. 
 For example, we see that the $\mc$ posterior recovered by {\amplfi} is broader compared to that recovered from nested sampling. 
 The extrinsic parameter recovery follows similar pattern as the high-mass example. 
 Though broad features of the sky location like the ``ring'' pattern for two detector is evident, the recovery is not at the level of nested sampling results. 
-The greater consistency of the intrinsic parameters compared to the extrinsic parameters suggests one potential avenue of improvement being to further augment our dataloader in the extrinsic parameters $(\alpha, \delta, \psi)$ which are used to project the signal onto the GW antennae. 
+The greater consistency of the intrinsic parameters compared to the extrinsic parameters suggests that one avenue of improvement is to further augment our dataloader in the extrinsic parameters $(\alpha, \delta, \psi)$ which are used to project the signal onto the GW antennae. 
 Signal projection as implemented in {\mlgw} performs this operation on-the-fly on the GPU, hence oversampling the corresponding priors and creating a larger batch is feasible without compromising data generation time, and will be considered in a future implementation.
 
 We also compare the two representative systems at similar SNR in Figure~\ref{amp_meth_fig:low-mass-compare-same-snr}, where the $\mc=15\;\msun$ system is simulated at $\dl=400\;\mpc$ keeping other injection parameters the same as for Figure~\ref{amp_meth_fig:low-mass-compare}. 
@@ -410,7 +410,7 @@ We repeat the analysis done in Figures~\ref{amp_meth_fig:high-mass-compare} and 
 We find that the widths of the $\mc$ and $q$ posteriors do not change significantly when compared to the $\dl=1000\;\mpc$ injections. 
 This is contrary to the general expectation that the posterior widths scale as $1/\mathrm{SNR}$. 
 However, we find that inference on $\dl$ does show that behavior and is more consistent with nested sampling runs. 
-Overall, we find consistency among the different {\amplfi} draws, demonstrating the algorithm's sanity on small changes to background.
+Overall, we find consistency among the different {\amplfi} draws, demonstrating the algorithm's robustness to small changes in background.
 
 In Figure~\ref{amp_meth_fig:pp-plot}, we show parameter recovery consistency with true values via a percentile-percentile (PP) plot for 500 simulated BBHs. 
 The parameters of these are sampled from the same prior as that used during training.
@@ -534,7 +534,7 @@ The suitable re-training cadence is yet to be determined and will be reported in
     \\
     \includegraphics[width=0.48\textwidth, trim=0cm 3cm 0cm 3cm, clip]{figures/gw150914_skymaps.Sept12.pdf}
     \includegraphics[width=0.48\textwidth, trim=0cm 3cm 0cm 3cm, clip]{figures/gw150914_skymaps.Sept15.pdf}
-    \caption[\textbf{Left panels}: The posteriors for \{\mc, $q$, \dl \} and sky-localization of GW150914 using an {\amplfi} model trained on O1 background. \textbf{Right panels}: Same as left, except with a model which is retrained with background data from Sept 15, 2015 starting with the model state from the left panel after training.]{\textbf{Left panels}: The posteriors for \{ \mc, $q$, \dl \} and sky-localization of GW15019 using an {\amplfi} model trained on O1 background. 
+    \caption[\textbf{Left panels}: The posteriors for \{\mc, $q$, \dl \} and sky-localization of GW150914 using an {\amplfi} model trained on O1 background. \textbf{Right panels}: Same as left, except with a model which is retrained with background data from Sept 15, 2015 starting with the model state from the left panel after training.]{\textbf{Left panels}: The posteriors for \{ \mc, $q$, \dl \} and sky-localization of GW150914 using an {\amplfi} model trained on O1 background. 
     The different colors represents ``jitter'' in the data segments chosen for inference around the $t_0 = 1126259462.4$ for GW150914.
     The solid black curve corresponds to the posteriors reported in GWOSC.
     We find that the results are consistent although with wider confidence intervals, a trend reported in Figures~\ref{amp_meth_fig:high-mass-compare},~\ref{amp_meth_fig:low-mass-compare},~\ref{amp_meth_fig:low-mass-compare-same-snr}.
@@ -560,7 +560,7 @@ We find that all the dotted curves are generally consistent with each other, sho
 
 For the right panels of Figure~\ref{amp_meth_fig:gw150914}, we consider a background segment from Sept 15, 2015 and re-train the model starting with the model checkpoint from the above model.
 We use the identical training configuration except starting with an initial learning rate lower by a factor of 10.
-While the original model early-stopped in $\gtrsim 200$ epochs, the latter model achieves the lowest validation loss in in $\sim 40$ epochs. 
+While the original model early-stopped in $\gtrsim 200$ epochs, the latter model achieves the lowest validation loss in $\sim 40$ epochs. 
 We do the inference of GW150914 data in the same way as in the previous case, and find the result mostly consistent, with the sky localization showing some differences but broadly consistent between the two models. 
 We did not use the data from Sept 14, 2015, since the duration of two-detector data in science mode was minimal due to the poor duty cycle of L1 detector (see analysis ready segments available in GWOSC).
 
@@ -591,6 +591,7 @@ However, the main focus of MMA is binary neutron star (BNS) and neutron star bla
 This makes the input arrays larger by an order of magnitude compared to the ones considered here, and therefore expensive in terms of memory and compute.
 However, low mass systems \emph{inspiral} for most of that duration and the frequency evolution is described analytically, primarily at newtonian order. 
 Thus, feature extraction of the inspiral from the time-series data, or alternative data representations like q-transforms can be a possible approach toward search and parameter estimation.
+Ongoing work is exploring heterodyning-based data compression on both the detection and parameter estimation sides as a path toward handling BNS signal durations; this remains an active area of development.
 
 Finally, the framework for {\amplfi} is not limited to CBC signals, and can be extended to burst signal morphologies like sine-Gaussians. 
 This is relevant for running parameter estimation on candidates picked up by pipelines like
