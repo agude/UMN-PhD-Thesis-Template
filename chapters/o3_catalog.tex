@@ -211,7 +211,7 @@ Four matched-filtering pipelines, GstLAL~\cite{ewing2023performance, Tsukada_202
 The criterion for inclusion in GWTC-3 was that \textit{any} of the five search pipelines reported a $p_{\mathrm{astro}} > 0.5$. 
 Therefore, it is expected that Aframe identifies fewer events with $p_{\mathrm{astro}} > 0.5$ than the union of all search pipelines, which is what we find. 
 Table~\ref{o3cat_tab:significant} contains 39 of the 70 Hanford/Livingston events reported in GWTC-3 that were also identified by Aframe as significant. 
-However, one of these candidates, $\mathrm{GW200129\_065458}$, was detected with $p_\mathrm{astro} > 0.99$ but was coincident with a CAT2 data quality veto; \texttt{Aframe} does not apply such vetoes and would have reported this event independently, though other pipelines exclude candidates coincident with CAT2 flags.
+However, one of these candidates, $\mathrm{GW200129\_065458}$, was detected with $p_\mathrm{astro} > 0.99$ but was coincident with a CAT2 data quality veto, and so would have been missed by \texttt{Aframe} without the analysis of other searches.
 For comparison, GstLAL, MBTA, PyCBC-Broad, PyCBC-BBH, and cWB  detect 47, 48, 41, 61, and 25 events at this threshold respectively~\cite{gwtc-2.1, Abbott_2023}. 
 So, Aframe identifies a comparable quantity of candidates. 
 Of the 38 significant Aframe candidates, 27 were detected with FAR more significant than all events in the 100 years of analyzed background, corresponding to $p_{\mathrm{astro}} > 0.99$. 
