@@ -3,7 +3,7 @@
 \begin{refsection}
 
 In this chapter, we describe the software architecture used to deploy the \texttt{Aframe} and \texttt{AMPLFI} algorithms, which together form an end-to-end machine learning-based system for real time detection and parameter estimation of gravitational waves. 
-We detail the production deployment of \texttt{Aframe} and \texttt{AMPLFI} during the the third part of the LIGO-Virgo-KAGRA collaboration's fourth observing run, and discuss the system's contributions to public alerts. 
+We detail the production deployment of \texttt{Aframe} and \texttt{AMPLFI} during the third part of the LIGO-Virgo-KAGRA collaboration's fourth observing run, and discuss the system's contributions to public alerts. 
 
 \section{Introduction}
 The first discovery of gravitational waves (GWs) from a binary black hole (BBH) merger in 2015 jump-started the era of observational GW science~\cite{Abbott_2016}. 
@@ -170,13 +170,13 @@ To perform inference \texttt{Aframe} requires at least 64 continuous seconds of 
 This ensures there is sufficient data to estimate the PSD for whitening. 
 When a frame is not analysis ready, the input strain data and neural network output buffers are reset. 
 Inference will restart once 64 seconds of continuous analysis ready data is accumulated.
-This PSD ``burn-in" period makes $\sim 1$ minute of data at the beginning of each coincident HL science-quality segment not analyzeable. 
+This PSD ``burn-in" period makes $\sim 1$ minute of data at the beginning of each coincident HL science-quality segment unable to be analyzed. 
 In the future, using a PSD estimate from a previous segment, or using a smaller amount of data to estimate the PSD will increase the quantity of analyzable data. 
 
 \subsection{Resampling}
 Delivered frames are sampled at 16\,kHz, while \texttt{Aframe} and \texttt{AMPLFI} are trained using data sampled at 2048\,Hz, well above the Nyquist frequency for even the lowest mass BBH mergers in the prior ranges (see Tables \ref{online_tab:amplfi-priors} and \ref{online_tab:aframe-priors}). 
 So, the frames must be resampled at 2048\,Hz in real time. 
-Resampling methods that utilize finite impulse response filters corrupt portions of the beginning and end of the time-series due to filter settle in. 
+Resampling methods that utilize finite impulse response filters corrupt portions of the beginning and end of the time-series due to filter settle-in. 
 To mitigate these edge effects, the \texttt{Aframe} data loader maintains a 2 second buffer of the most recent frames in memory. 
 When a new frame arrives, it is appended to the buffer. The now 3 second frame buffer is resampled to the desired sample rate. 
 The uncorrupted middle second of data is appended to a separate buffer which maintains 64 seconds of resampled data for analysis by \texttt{Aframe}. 
@@ -241,7 +241,7 @@ See Fig.~\ref{online_fig:ramp-up} for an illustration.
 \begin{figure}
     \centering
     \includegraphics[page=5,width=0.95\columnwidth]{figures/aframe_diagrams.pdf}
-    \caption{If an events integrated NN output has yet to reach a peak, wait for the next frame.}
+    \caption{If an event's integrated NN output has yet to reach a peak, wait for the next frame.}
     \label{online_fig:ramp-up}
 \end{figure}
 
@@ -255,7 +255,8 @@ Otherwise, the HL \texttt{AMPLFI} model will be used.
 Using the event time estimated by \texttt{Aframe}, \texttt{AMPLFI} slices a 4 second window of strain data from the input buffer, placing the estimated coalescence time 0.35\,s from the right edge of the window. 
 The \texttt{AMPLFI} models are trained with the coalescence time randomly jittered by 0.1\,s around this point. 
 The previous 64 seconds of data are used to estimate the PSD for whitening, and also to pass to \texttt{AMPLFI} as context for conditioning the normalizing flow. 
-For each event, \texttt{AMPLFI} FILL IN HERE
+For each event, \texttt{AMPLFI} generates 20,000 posterior samples over the source parameters in approximately 1.3 seconds on the GPU.
+The posterior samples are placed in a shared memory buffer and passed to the parameter estimation sub-process for sky map construction and corner plot creation (see Sec.~\ref{online_sec:data-products}).
 
 \section{Data Products} \label{online_sec:data-products}
 Several data products are required to be uploaded to the Gravitational-Wave Candidate Event Database (GraceDB) for a pipeline to contribute to public alerts. 
@@ -268,7 +269,7 @@ The statistical significance of an event is one of the most important factors fo
 One measure used in GW data analysis is the false alarm rate (FAR) of an event, which indicates how often a random coincidence will produce an event of equal or greater significance. 
 Events with FARs less than one per seven months ($< 5.51 \times 10^{-8}$\,Hz ) qualify as significant, are made publicly available, and are followed up with PE and additional human vetting\footnote{See \url{https://emfollow.docs.ligo.org/userguide/analysis} for more information on alert thresholds}. 
 \texttt{Aframe}, like many other detection methods, estimates FAR using the time-slide technique~\cite{Aubin_2021, Dal_Canton_2021}. 
-For an event with detection statistic $x$, the FAR of an event can be estimated by counting the number of background events with a equal or greater detection statistic, $N_b(x)$ and dividing by the analyzed background live time $T_b$
+For an event with detection statistic $x$, the FAR of an event can be estimated by counting the number of background events with an equal or greater detection statistic, $N_b(x)$ and dividing by the analyzed background live time $T_b$
 
 \begin{equation}
     \mathrm{FAR}(x) = \frac{N_b(x)}{T_b}
@@ -282,7 +283,7 @@ In the future, analyzing additional time-slides as data is accumulated during th
 \subsection{Source Classification}
 \label{online_sec:source_class}
 An event FAR does not include prior knowledge about the astrophysical population of sources. 
-For example, population analyses indicate that low mass ratio mergers are more rare than equal mass ratio mergers, so at a fixed FAR, a 30\,$\mathrm{M}_{\odot}$ + 30\,$\mathrm{M}_{\odot}$ merger is less likely to be astrophysical than a 10\,$\mathrm{M}_{\odot}$ + 100\,$\mathrm{M}_{\odot}$ merger. 
+For example, population analyses indicate that low mass ratio mergers are rarer than equal mass ratio mergers, so at a fixed FAR, a 30\,$\mathrm{M}_{\odot}$ + 30\,$\mathrm{M}_{\odot}$ merger is less likely to be astrophysical than a 10\,$\mathrm{M}_{\odot}$ + 100\,$\mathrm{M}_{\odot}$ merger. 
 The probability of astrophysical origin ($p_{\mathrm{astro}}$) is a detection statistic that accounts for prior knowledge on the rates of events across the parameter space. 
 For a detailed treatment of \texttt{Aframe}'s method for estimating $p_{astro}$, see Sec.~\ref{o3cat_sec:pastro} or Appendix A in Ref.~\cite{aframe-methods}. 
 Briefly, \texttt{Aframe} constructs a distribution of detection statistics by analyzing $\sim$ 500,000 simulated signal injections from an astrophysical population motivated by observations from previous observing runs. 
@@ -291,7 +292,7 @@ Then, assuming some astrophysical merger rate, a probability of astrophysical or
 
 Currently, \texttt{Aframe}'s $p_{\mathrm{astro}}$ model does not incorporate source property information beyond the events significance. 
 So, events with the same FAR will have the same $p_{\mathrm{astro}}$ estimate regardless of their source properties, which is undesirable. 
-Matched-filtering based searches can incorporate source property information from the best fit template into their $p_{astro}$ models. 
+Matched-filtering based searches can incorporate source property information from the best-fit template into their $p_{astro}$ models. 
 While \texttt{Aframe} does not produce source parameter estimates from templates, \texttt{AMPLFI} provides full posteriors on source properties for use in significance estimation and source classification. 
 So, the probability $p_{\alpha}$ of a source belonging to category $\alpha \in \{\mathrm{BBH}, \mathrm{BNS}, \mathrm{NSBH}\}$ can be calculated by integrating the \texttt{AMPLFI} posterior over the appropriate region $R_{\alpha}$
 
@@ -351,12 +352,12 @@ However, the adaptive histogram estimator performs significantly worse as measur
 \section{Software Design} \label{online_sec:software-arch}
 The \texttt{Aframe} and \texttt{AMPLFI} deployment software is designed to minimize the latency to produce and upload each of the required data products described in Sec.~\ref{online_sec:data-products}. 
 To enable this goal, software deployment consists of a main Python process, and several Python sub-processes that enable parallel execution of tasks. 
-This allows tasks that are dependents of the same upstream data products to begin immediately. 
+This allows tasks that depend on the same upstream data products to begin immediately. 
 The main process is responsible for initial setup, data loading and processing, and model inference. 
 After events are identified, a chain of sub-processes are triggered to produce derived data products. 
 Processes are designed to begin work immediately once their data dependencies are available. 
 In practice, this is implemented via a message passing system using Python \texttt{multiprocessing.Queue} objects.
-Processes communicate data dependencies to others via a shared \texttt{multiprocessing.Queue}, and are then free to continue their own execution threads\footnote{We note the existence of several Python based frameworks for distributed task orchestration, like Ray or Celery. We leave investigation of their utility to our problems to future work}. 
+Processes communicate data dependencies to others via a shared \texttt{multiprocessing.Queue}, and are then free to continue their own execution threads\footnote{We note the existence of several Python-based frameworks for distributed task orchestration, like Ray or Celery. We leave investigation of their utility to our problems to future work}. 
 In Sec~\ref{online_sec:main-process} we outline the responsibilities of the main process, and in Sec~\ref{online_sec:sub-process} we describe each of the sub-processes.
 
 \subsection{Main Process} \label{online_sec:main-process}
@@ -423,7 +424,7 @@ The pipeline is deployed and managed by a cronjob which launches the main proces
 The main process is executed inside an apptainer container environment. 
 A shell-based monitoring script initializes the main process and restarts it upon exit for any reason. 
 In some cases, sub-processes can fail  while the main process continues operating. 
-When this occurs, the failed sub-process propagates its error to the main process via a Python \texttt{\texttt{multiprocessing.Queue}} object. 
+When this occurs, the failed sub-process propagates its error to the main process via a Python \texttt{multiprocessing.Queue} object. 
 Upon receiving the error, the main process will  exit, killing each sub-process, and triggering a restart of the entire pipeline. 
 Unfortunately, restarts cause incoming data to be skipped as the pipeline takes time to re-initialize and re-accumulate data buffers (see Sec.~\ref{online_sec:event-identification}). 
 However, restarts are rare, typically occurring due to transient errors communicating with GraceDB, or issues with frame file delivery.
@@ -463,8 +464,8 @@ During this period, 29 high significance public alerts were distributed via the 
 Of these, S251112cm was from a sub-solar mass (SSM) search, S250910b was from an early warning (EW) search, and S250908y, S250912f, S250917aq did not include either Hanford or Livingston as a trigger. 
 This leaves 24 superevents to which \texttt{Aframe} and \texttt{AMPLFI} could have contributed. 
 These events are listed in Table~\ref{online_tab:o4c_events}. 
-Of these 24 events, \texttt{Aframe} detected 23 of them, though 4 were above the FAR threshold for public alerts.
-The one non-detection, S250906ca, occurred during a power outage at the CIT cluster where \texttt{Aframe} is deployed, which prevented data delivery. 
+Of these 24 events, \texttt{Aframe} produced a trigger for 23, though 4 of those triggers (S251031cq, S250911ac, S250927ck, and S250927cy) did not meet the FAR threshold required for a public alert (see Table~\ref{online_tab:o4c_events}).
+The one non-detection, S250906ca, occurred during an approximately 36-hour computing infrastructure outage at the CIT cluster, which prevented data from being delivered to the pipeline; no detections were possible during this window.
 
 Each superevent is an aggregate of multiple G-events from potentially different pipelines which have estimated coalescence times that occur within some specified time interval. 
 Each superevent has an associated preferred G-event, which for CBC detections is determined by the G-event which reports the largest SNR. 
@@ -474,7 +475,10 @@ When a G-event contains all of the data products necessary to distribute the pre
 The sky map corresponding to the preferred event is distributed with the alert. 
 During O4c, there were 9 alerts where \texttt{Aframe} was the preferred at the time of the preliminary alert, meaning the \texttt{AMPLFI} sky map was distributed. 
 For all of these alerts, a matched filtering pipeline was made the preferred event after the preliminary alert was sent. 
-Localization comparisons between \texttt{AMPLFI} and BAYESTAR for these 9 events where \texttt{AMPLFI} are shown in~\Cref{online_fig:S251103f,online_fig:S250830bp,online_fig:S251018bi,online_fig:S250830m,online_fig:S250901cb,online_fig:S250904br,online_fig:S251021u,online_fig:S251116en,online_fig:S251117dq}.
+Localization comparisons between \texttt{AMPLFI} and BAYESTAR for these 9 events are shown in~\Cref{online_fig:S251103f,online_fig:S250830bp,online_fig:S251018bi,online_fig:S250830m,online_fig:S250901cb,online_fig:S250904br,online_fig:S251021u,online_fig:S251116en,online_fig:S251117dq}.
+
+Across all detected events, \texttt{Aframe} achieved a median coalescence-to-detection latency of approximately 11--12 seconds, dominated by the approximately 7--10-second frame write latency imposed by LIGO's data acquisition and calibration pipeline before data becomes available for online processing.
+\texttt{AMPLFI} sampling added approximately 1.3 seconds, and sample post-processing and upload took approximately 2 seconds, yielding a median coalescence-to-posterior-upload latency of approximately 15 seconds.
 
 \begin{table*}[ht]
 \centering
@@ -518,7 +522,7 @@ A dash (--) indicates the pipeline did not contribute to the alert.}
 }
 \end{table*}
 
-\begin{figure} 
+\begin{figure}
     \includegraphics[width=0.95\columnwidth]{figures/skymaps/S251103f.pdf}
     \caption{Skymap comparison between \texttt{AMPLFI} and BAYESTAR for S251103f}
     \label{online_fig:S251103f}
@@ -579,7 +583,7 @@ A dash (--) indicates the pipeline did not contribute to the alert.}
 
 
 Several avenues exist for improving the quality of this low latency deployment. 
-Currently, if one sub-tasks fails, (e.g. due to an issue communicating with GraceDB), the whole system needs to restart, causing some data to not be analyzed. 
+Currently, if one sub-task fails (e.g. due to an issue communicating with GraceDB), the whole system needs to restart, leaving some data unanalyzed. 
 Integrating a distributed task orchestration framework like Ray or Celery will enable a scalable, fault-tolerant system. 
 Failed sub-tasks can easily be retried without affecting other components of the system. 
 Several contributors to latency can also be removed. 
