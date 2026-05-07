@@ -38,7 +38,7 @@ Finally, in Sec.~\ref{online_sec:o4c} we analyze results from the real time anal
 
 \section{\texttt{Aframe} and \texttt{AMPLFI}}  \label{online_sec:models}
 Here we briefly describe the \texttt{Aframe} detection and \texttt{AMPLFI} parameter estimation models for CBC sources. 
-For full details, we refer readers to Refs.~~\cite{aframe-methods, Marx:2025ioo}. 
+For full details, we refer readers to Refs.~\cite{aframe-methods, Marx:2025ioo}. 
 We also describe the datasets used to train the models deployed during O4c. 
 
 \subsection{\texttt{Aframe}}
@@ -140,9 +140,10 @@ This current system for delivering GW frames introduces a fundamental latency du
 Delivery of frames as discrete 1 second chunks means pipelines must wait for the whole frame to be complete before analysis. 
 In the worst case, a GW event occurs at the beginning of a frame, and downstream tasks must wait for the remaining full second of data before proceeding. 
 For 1 second frames, this \emph{discrete frame latency} adds an additional 0.5 seconds on average. See Figure \ref{online_fig:discrete-frame-latency} for an illustration. 
-Next generation data delivery (NGDD) systems are being developed for use in future observing runs that will deliver data in 1/16 s increments, significantly reducing these incurred latencies. 
-In addition, the \texttt{Aframe}/\texttt{AMPLFI} pipeline deployed at the LIGO Caltech computing cluster must wait for the data to be transferred from the interferometer sites to Caltech before analysis. 
-This transfer latency typically takes $\sim 1$ s.
+Next generation data delivery (NGDD) systems are being developed for use in future observing runs that will deliver data in 1/16-second chunks rather than 1-second frames, reducing the average discrete packet latency from 0.5 seconds to approximately 0.03 seconds.
+In addition, the \texttt{Aframe}/\texttt{AMPLFI} pipeline deployed at the LIGO Caltech computing cluster must wait for the data to be transferred from the interferometer sites to Caltech before analysis.
+Transfer latency includes the time required to calibrate the strain data and package all auxiliary channels into each frame file; for LIGO, this typically takes 7--8 seconds, with Virgo taking an additional 1--2 seconds.
+NGDD will also reduce transfer latency by delivering each chunk immediately as it is produced, rather than waiting for all auxiliary channels to be ready.
 
 \begin{figure}
     \centering
@@ -181,8 +182,8 @@ To mitigate these edge effects, the \texttt{Aframe} data loader maintains a 2 se
 When a new frame arrives, it is appended to the buffer. The now 3 second frame buffer is resampled to the desired sample rate. 
 The uncorrupted middle second of data is appended to a separate buffer which maintains 64 seconds of resampled data for analysis by \texttt{Aframe}. 
 An illustration of this process is shown in Figure \ref{online_fig:resampling}. 
-Because resampling the frame at time T requires the frame at time T + 1, this procedure incurs a 1 second latency. 
-When NGDD systems begin to deliver frames in smaller chunks, this inherent latency from waiting for the next frame will be reduced. 
+Because resampling the frame at time T requires the frame at time T + 1, this procedure incurs a 1 second latency.
+Tightening the post-resampling crop to match the filter's transient length (rather than a conservative 1-second buffer) substantially reduces this penalty without requiring changes to the underlying filter or data delivery system. 
 
 \begin{figure}
     \centering
@@ -221,7 +222,8 @@ The whitened batch is passed to \texttt{Aframe} for inference. This procedure is
 After a batch of windows is whitened, they are analyzed by \texttt{Aframe} producing a time-series of detection statistics. 
 The time-series of detection statistics is then appended to an output buffer which contains the most recent 8 seconds of detection statistics. 
 This time-series is then integrated using a top-hat filter to produce a time-series of integrated detection statistics. 
-Events are identified by finding peaks in the integrated time-series. 
+Events are identified by finding peaks in the integrated time-series.
+Because the background model is constructed from time-slides run at an inference sampling rate of 4\,Hz, both a 4\,Hz and the full 512\,Hz detection statistic time-series are tracked in parallel: the 4\,Hz output is used for FAR estimation, while the 512\,Hz output is used to precisely locate the coalescence time.
 An overview of this procedure is shown in Figure \ref{online_fig:inference}. 
 
 Accurately estimating the significance of an event requires identifying the peak in the integrated network output. 
@@ -309,7 +311,10 @@ The regions are defined as:
     R_{\mathrm{NSBH}} = \{ \theta: m_1 > 3, m_2 < 3\}
 \end{align}
 
-where $m_1 > m_2$ by definition. 
+where $m_1 > m_2$ by definition.
+
+During O4c, \texttt{Aframe}'s $p_{\mathrm{astro}}$ model assigned all astrophysical probability to the BBH class, which is appropriate given that \texttt{Aframe} was trained exclusively on BBH signals.
+The AMPLFI-based source classification described above has been implemented and will be used in future observing runs.
 
 \subsection{EM-Bright}
 The LVK does not currently release full posterior distributions for events in low- or medium-latency. 
@@ -346,8 +351,9 @@ ML detection methods do not naturally produce SNR time-series, and so require an
 Two different estimators are used in real time to estimate sky localizations. 
 First, an adaptive histogram estimator produces a rapid ($\lesssim 1$s) localization. 
 Meanwhile, a slower ($\sim 20$s) but more robust kernel density estimator using the \texttt{ligo.skymap}\footnote{\url{https://git.ligo.org/lscsoft/ligo.skymap}} package is run in parallel. 
-In Ref.~~\cite{Marx:2025ioo}, we perform a detailed comparison of the two density estimation methods and find equal sky localization performance measured by searched area. 
-However, the adaptive histogram estimator performs significantly worse as measured by searched volume (a three dimensional statistic) for low SNR events.  
+In Ref.~\cite{Marx:2025ioo}, we perform a detailed comparison of the two density estimation methods and find equal sky localization performance measured by searched area. 
+However, the adaptive histogram estimator performs significantly worse as measured by searched volume (a three dimensional statistic) for low SNR events.
+As low-SNR events are unlikely candidates for electromagnetic follow-up regardless of localization quality, this performance gap does not represent a practical limitation.
 
 \section{Software Design} \label{online_sec:software-arch}
 The \texttt{Aframe} and \texttt{AMPLFI} deployment software is designed to minimize the latency to produce and upload each of the required data products described in Sec.~\ref{online_sec:data-products}. 
@@ -477,7 +483,7 @@ During O4c, there were 9 alerts where \texttt{Aframe} was the preferred at the t
 For all of these alerts, a matched filtering pipeline was made the preferred event after the preliminary alert was sent. 
 Localization comparisons between \texttt{AMPLFI} and BAYESTAR for these 9 events are shown in~\Cref{online_fig:S251103f,online_fig:S250830bp,online_fig:S251018bi,online_fig:S250830m,online_fig:S250901cb,online_fig:S250904br,online_fig:S251021u,online_fig:S251116en,online_fig:S251117dq}.
 
-Across all detected events, \texttt{Aframe} achieved a median coalescence-to-detection latency of approximately 11--12 seconds, dominated by the approximately 7--10-second frame write latency imposed by LIGO's data acquisition and calibration pipeline before data becomes available for online processing.
+During operation, \texttt{Aframe} achieved a median coalescence-to-detection latency of approximately 11--12 seconds, dominated by the 7--8 second data preparation and transfer latency incurred while LIGO calibrates the strain data and packages auxiliary channels before each frame becomes available for online processing.
 \texttt{AMPLFI} sampling added approximately 1.3 seconds, and sample post-processing and upload took approximately 2 seconds, yielding a median coalescence-to-posterior-upload latency of approximately 15 seconds.
 
 \begin{table*}[ht]
@@ -586,9 +592,20 @@ Several avenues exist for improving the quality of this low latency deployment.
 Currently, if one sub-task fails (e.g. due to an issue communicating with GraceDB), the whole system needs to restart, leaving some data unanalyzed. 
 Integrating a distributed task orchestration framework like Ray or Celery will enable a scalable, fault-tolerant system. 
 Failed sub-tasks can easily be retried without affecting other components of the system. 
-Several contributors to latency can also be removed. 
-Currently, to resample a frame at time T, we wait for the frame at time T + 1 so edge effects can be removed (see Fig.~\ref{online_fig:resampling}). 
-In practice, the frame at time T can be 
+Additionally, the 64-second PSD burn-in period that follows each data gap currently renders $\sim 1$ minute of data unanalyzable at the start of each coincident science segment.
+Using a PSD estimate carried over from the previous segment, or reducing the minimum buffer length required before inference begins, would recover a fraction of this lost time.
+
+There are also several areas in which latency can be reduced.
+During O4c, resampling a frame at time $T$ required waiting for the frame at time $T+1$ so that anti-aliasing filter edge effects could be removed (see Fig.~\ref{online_fig:resampling}), with a conservative 1-second crop discarded at each end.
+This has since been addressed by tightening the crop to match the filter's transient length (half the number of filter taps divided by the sample rate), which for the filter used here is approximately 2 milliseconds, meaning that nearly all of the resampling latency is recovered.
+Whitening is currently applied using a symmetric (zero-phase) FIR kernel that requires data from both sides of the current sample, introducing latency equal to half the filter length, with the filter length used during O4c being 1 second.
+Replacing this with a causal (minimum-phase) FIR whitening filter, which achieves the same frequency-domain noise normalization using only past data, would eliminate this contribution at no cost to whitening quality~\cite{kennington2026gaugetheoreticsignalprocessing}.
+Similarly, \texttt{Aframe} currently estimates the candidate coalescence time by finding the peak of a top-hat integration filter applied to the output detection statistic time series, which incurs a delay equal to the length of the filter, 1.5 seconds.
+Training \texttt{Aframe} with an auxiliary regression head to directly output a merger time estimate alongside the detection statistic would eliminate this integration step entirely.
+
+The O4c deployment demonstrated that an end-to-end machine learning pipeline can operate reliably in a live observing run alongside established matched-filter searches.
+\texttt{Aframe} detected 23 of 24 detectable events (96\%), and \texttt{AMPLFI} sky maps were distributed in the preliminary alerts for 9 of those events.
+The infrastructure developed for O4c provides a foundation for continued improvements ahead of the fifth observing run (O5), when increased detector sensitivity and a higher event rate will place greater demands on real-time analysis systems.
 
 \singlespacing
 \printbibliography[title=References,heading=subbibintoc]

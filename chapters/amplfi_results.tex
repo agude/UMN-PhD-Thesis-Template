@@ -7,7 +7,7 @@ Rapid and reliable detection and dissemination of source parameter estimation da
 Machine learning-based detection and parameter estimation algorithms are emerging as production-ready alternatives to traditional approaches. 
 Here, we report validation studies of \texttt{AMPLFI}, a likelihood-free inference solution to low-latency parameter estimation of binary black holes. 
 We use simulated signals added into data from the LIGO-Virgo-KAGRA's (LVK's) third observing run (O3) to compare sky localization performance with BAYESTAR, the algorithm currently in production for rapid sky localization of candidates from matched-filter pipelines. 
-We demonstrate sky localization performance, measured by searched area and volume, to be equivalent with BAYESTAR. 
+We demonstrate sky localization area performance comparable to BAYESTAR, and find that \texttt{AMPLFI} provides tighter searched volume constraints. 
 We show accurate reconstruction of source parameters with uncertainties for use in distributing low-latency coarse-grained chirp mass information. In addition, we analyze several candidate events reported by the LVK in the third gravitational-wave transient catalog (GWTC-3) and show consistency with the LVK's analysis. 
 Altogether, we demonstrate \texttt{AMPLFI}'s ability to produce data products for low-latency public alerts.
 
@@ -27,13 +27,13 @@ For example, the production sky localization algorithm for events from matched-f
 In addition, coarse-grained chirp mass information (a recent addition to LVK alerts\footnote{\url{https://emfollow.docs.ligo.org/userguide/}}) and other source property classifiers utilize point estimates from the best fit matched-filtering template~\cite{Chatterjee:2019avs}. 
 ML-based search algorithms do not naturally provide SNR time series or template parameters required by these downstream tasks. 
 
-In the previous chapter, we introduced \texttt{AMPLFI}, a parameter estimation (PE) algorithm based on likelihood-free inference (LFI), as a tool for providing low-latency PE data products. 
-We motivated \texttt{AMPLFI} as a real-time followup to ML-based detection algorithms, specifically, \texttt{Aframe}~\cite{aframe-methods}. 
+In Chapter~\ref{chap:amplfi_methods}, we introduced \texttt{AMPLFI}, a parameter estimation (PE) algorithm based on likelihood-free inference (LFI), as a tool for providing low-latency PE data products.
+We motivated \texttt{AMPLFI} as a real-time followup to ML-based detection algorithms, specifically, \texttt{Aframe}~\cite{aframe-methods}.
 In this paper, we describe recent improvements to \texttt{AMPLFI}, and demonstrate its ability to produce robust low-latency source PE data products. 
 
 This paper is organized as follows. 
-In Sec.~\ref{amp_res_sec:lfi} we provide a summary of LFI in GW astronomy. 
-In Sec.~\ref{amp_res_sec:review} we discuss the \texttt{AMPLFI} algorithm previously presented in Ref.~\cite{Chatterjee:2024pbj} including improvements made since. 
+In Sec.~\ref{amp_res_sec:lfi} we briefly summarize likelihood-free inference.
+In Sec.~\ref{amp_res_sec:review} we describe \texttt{AMPLFI} and the improvements incorporated for this work. 
 In Sec.~\ref{amp_res_sec:testing-data} we present the dataset used to evaluate \texttt{AMPLFI}'s performance. 
 In Sec.~\ref{amp_res_sec:sky-localization}, we discuss and benchmark our method for producing sky localizations from \texttt{AMPLFI} posterior samples. 
 In Sec.~\ref{amp_res_sec:results-skyloc} we compare \texttt{AMPLFI}'s sky localization performance with BAYESTAR~\cite{Singer_2016}. 
@@ -181,7 +181,7 @@ Training this larger model takes $\sim 10$ days using 2 NVIDIA A100 GPUs.
 
 \section{Testing Dataset} \label{amp_res_sec:testing-data}
 In preparation for O4, Ref.~\cite{Chaudhary:2023vec} performed a study which added simulated CBC signals (known colloquially as \emph{injections}) into a real-time data replay. 
-The injections were added across a one month period during O3b, between 2020-01-05T:23:59:42 and 2020-02-14T23:59:42. 
+The injections were added across a one month period during O3b, between 2020-01-05T23:59:42 and 2020-02-14T23:59:42. 
 Search pipelines analyzed the data replay using their online configurations. GWCelery\footnote{\url{https://rtd.igwn.org/projects/gwcelery/en/latest/}} processed pipeline triggers, mimicking the end-to-end real-time alert infrastructure. 
 This study provided matched-filter pipeline SNR time series for injections across a broad parameter space. 
 
@@ -292,7 +292,7 @@ For larger searched volumes, the KDE method performs better.
 This behavior is due to the large number of samples required for the histogram estimator to properly converge for low SNR events, where the sky localization probability is spread across a larger number of pixels. 
 In practice, these low SNR events are not as likely to be pursued for EM followup. 
 For example, the Rubin target of opportunity observing strategy plans to pursue EM followup for events with sky localizations less than $\sim 100\;\text{deg}^2$~\cite{andreoni2024rubin2024envisioningvera}.
-In this regime, the histogram methods searched volume is comparable with the KDE. 
+In this regime, the histogram method's searched volume is comparable with the KDE. 
 
 
 \begin{figure} 
@@ -300,7 +300,7 @@ In this regime, the histogram methods searched volume is comparable with the KDE
     \includegraphics[width=0.95\columnwidth]{figures/amplfi_kde_vs_hist_searched_vol.pdf}
     \caption[Comparison between searched areas and volumes for the histogram and KDE estimators]{Top Left: Scatter plot of searched areas comparing the histogram and KDE estimators for the HL (blue) and HLV (orange) injections. 
     Top Right: Cumulative histogram of searched areas for the same events. 
-    Error bars correspond to 1$\sigma$ confidence intervals calculated by bootstrapping are shown. 
+    Error bars correspond to 1$\sigma$ confidence intervals calculated by bootstrapping. 
     Searched areas from the two density estimation methods are in statistical agreement. 
     Bottom: Same as top, but for searched volumes. 
     Searched volumes for the two methods broadly agree up until $\sim10^{9}$ $\mathrm{Mpc}^3$ for HLV and $\sim 10^{8}$ $\mathrm{Mpc}^3$ for HL network, where the KDE method begins to outperform the histogram estimator.}
@@ -337,8 +337,8 @@ We compare \texttt{AMPLFI}'s sky localization performance with BAYESTAR using th
 In Figure~\ref{amp_res_fig:amplfi-vs-bayestar} we compare searched areas (top) and searched volumes (bottom) between \texttt{AMPLFI} and BAYESTAR sky maps for both HLV and HL datasets. 
 Bootstrapped confidence intervals show the searched area cumulative histograms agree within 2$\sigma$. 
 The searched volume cumulative histogram shows that \texttt{AMPLFI} provides smaller searched volumes than BAYESTAR. 
-One drawback of searched area and volume as performance metrics is they do not capture sky map multi-modality (see Ref.~\cite{Essick:2014wwa} for a discussion).
-In Figure~\ref{amp_res_fig:dtheta} we compare the angular offset between the sky maps maximum a posterior pixel and the true pixel of the injection. 
+One drawback of searched area and volume as performance metrics is that they do not capture sky map multi-modality (see Ref.~\cite{Essick:2014wwa} for a discussion).
+In Figure~\ref{amp_res_fig:dtheta} we compare the angular offset between the sky map's maximum a posteriori pixel and the true pixel of the injection. 
 We plot $\cos \delta \theta$ which highlights groupings at the true and antipodal location. 
 We see agreement between the BAYESTAR and \texttt{AMPLFI} distributions.
 
@@ -439,7 +439,7 @@ These periods spanned from immediately after, to 11 weeks after the training per
 Each period consisted of $\sim 1$ day of live time. 
 We analyze each of these datasets using the HLV \texttt{AMPLFI} network. 
 In Fig~\ref{amp_res_fig:robustness}, we show sky localization consistency and searched area performance. 
-We see that \texttt{AMPLFI}'s sky localizations remain well calibrated and accurate 11 weeks beyond \texttt{AMPLFI}'s initial training period. 
+We see that \texttt{AMPLFI}'s sky localizations remain well calibrated and accurate 11 weeks beyond its initial training period. 
 This demonstrates that a single \texttt{AMPLFI} model maintains utility well beyond its initial training period. 
 
 \begin{figure*}
@@ -472,7 +472,7 @@ Effectively, this adjusts the distance prior depending on the chirp mass of the 
 Exploring this is left to future work.
 
 There exist several differences between the GWTC-3 and \texttt{AMPLFI} analyses. 
-First, \texttt{AMPLFI} trains using a distance prior that is uniform in Euclidean volume, while the GWTC-3 analyses utilize a uniform in co-moving volume distribution. 
+First, \texttt{AMPLFI} trains using a distance prior that is uniform in luminosity distance, while the GWTC-3 analyses utilize a uniform in co-moving volume distribution. 
 To account for this, we use importance sampling to re-weight \texttt{AMPLFI}'s samples to the uniform in co-moving volume distance distribution reported by the GWTC-3 analysis. 
 Second, \texttt{AMPLFI} was trained using the IMRPhenomPV2 waveform, while the LVK posteriors were produced using IMRPhenomXPHM. 
 So, effects of higher order modes are not captured in \texttt{AMPLFI}'s results. 
@@ -485,7 +485,7 @@ However, there are some instances with noticeable differences.
 For example, \texttt{AMPLFI} does not show multi-modality in masses exhibited by the GWTC-3 result in GW200129\_065458 (see Figure~\ref{amp_res_fig:GW200129_065458-hlv}). 
 For this same event, \texttt{AMPLFI}'s distance and inclination estimates disagree with the GWTC-3 result. 
 With an SNR of $\sim$ 27, waveform systematics become more important and could explain this discrepancy. 
-For GW191215\_223052 and GW200220\_124850, \texttt{AMPLFI} does not show multi-modality in inclination exhibited by the GWTC-3 result (see~\Cref{amp_res_fig:GW191215_223052-hlv,amp_res_fig:GW200220_124850-dist-railing}). 
+For GW191215\_223052 and GW200220\_124850, \texttt{AMPLFI} does not show the multi-modality in inclination shown by the GWTC-3 result (see~\Cref{amp_res_fig:GW191215_223052-hlv,amp_res_fig:GW200220_124850-dist-railing}). 
 Differences between the \texttt{AMPLFI} and GWTC-3 results may stem from two qualitatively distinct sources. 
 First, there are differences in the underlying physical assumptions of the likelihood, such as the choice of waveform physics (for example, the inclusion of higher-order modes in GWTC-3) and the treatment of noise statistics (Gaussian noise in GWTC-3 versus real detector noise in \texttt{AMPLFI}). 
 Second, deviations may arise from limitations in neural network performance, including suboptimal model convergence or restricted expressivity. 
@@ -499,10 +499,13 @@ We have shown that a single \texttt{AMPLFI} algorithm trained using $\sim 2$ mon
 Finally, we analyzed real gravitational wave candidates within \texttt{AMPLFI}'s training prior and have shown posterior results in rough agreement with the GWTC-3 analyses. 
 
 Still, there remains several avenues for improving the utility of \texttt{AMPLFI}.
-Broadening the parameter space to include neutron star black hole and and binary neutron star (BNS) mergers will be critical for analyzing more likely candidates of EM emission. 
+Broadening the parameter space to include neutron star black hole and binary neutron star (BNS) mergers will be critical for analyzing more likely candidates of EM emission. 
 For BNS signals that can last for minutes in the detectors' sensitive band, utilizing data compression methods will be important. 
 In addition, exploring parameterizations of the CBC signal parameter space that eliminate known degeneracies could help the learning process~\cite{Roulet_2022}. 
-For example, training \texttt{AMPLFI} to infer chirp distance~\cite{Brady_2008} instead of luminosity distance could help alleviate the distance prior railing exhibited in \texttt{AMPLFI}'s analysis of several real candidates. 
+For example, training \texttt{AMPLFI} to infer chirp distance~\cite{Brady_2008} instead of luminosity distance could help alleviate the distance prior railing exhibited in \texttt{AMPLFI}'s analysis of several real candidates.
+
+With \texttt{AMPLFI}'s performance validated on O3 data, the \texttt{Aframe} and \texttt{AMPLFI} algorithms could be combined into a single production pipeline.
+Chapter~\ref{chap:online} describes the software architecture used to deploy this system in real time during O4c.
 
 
 
