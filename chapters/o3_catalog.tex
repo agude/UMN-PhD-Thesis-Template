@@ -23,7 +23,7 @@ These detections have enabled a broad range of studies, from measuring propertie
 A fourth observing run (O4) of the LVK commenced in May 2023 and completed in the fall of 2025~\cite{o4_plans}.
 Currently, LVK data from the first three observing runs, as well as the first part of O4, are in the public domain through the gravitational-wave open science center~\cite{Abbott_2023_open_data}.
 
-In this chapter, we perform an end-to-end analysis of the LVK's O3 observing run with Aframe~\cite{aframe_methods}, a machine learning algorithm for detecting binary black hole mergers. 
+In this chapter, we perform an end-to-end analysis of the LVK's O3 observing run with Aframe~\cite{aframe-methods}, a machine learning algorithm for detecting binary black hole mergers. 
 We accumulate 100 years of background data by analyzing timeslides across the entire observing run to assign false alarm rates (FARs) to candidates, and perform the same sensitive volume analysis used to assess search pipeline sensitivity in the LVK's GWTC-3. 
 We conduct an injection campaign across O3 to both estimate search sensitivity, and construct a foreground model to estimate candidates' probability of astrophysical origin ($p_\mathrm{astro}$). 
 Using $p_\mathrm{astro} > 0.5$ as a threshold for significant candidates, we compare candidates identified by Aframe with the GWTC-3, IAS, OGC, and AresGW catalogs. 
@@ -41,7 +41,7 @@ We conclude with a discussion and outlook for ML searches in Sec.~\ref{o3cat_sec
 \label{o3cat_sec:model}
 
 Aframe~\cite{Marx_aframe} is a supervised ML framework for training neural networks to detect gravitational-wave signals directly from interferometer strain data. 
-In this work, we use the Aframe configuration described extensively in Ref.~\cite{aframe_methods} to search for gravitational-wave signals from binary black hole (BBH) mergers in O3. 
+In this work, we use the Aframe configuration described extensively in Ref.~\cite{aframe-methods} to search for gravitational-wave signals from binary black hole (BBH) mergers in O3. 
 
 In brief (see Chapter~\ref{chap:aframe_methods} for a full description), the neural network used by Aframe is a ResNet34~\cite{resnet}-based architecture that processes overlapping, 1.5 second windows of coincident LIGO Hanford and Livingston strain data to produce a scalar-valued detection statistic. 
 Higher values of this statistic signify the neural network is more confident there is a signal consistent with the training distribution present in the data. 
@@ -52,14 +52,14 @@ See Fig.~\ref{o3cat_fig:output_example} for an illustration of how Aframe's neur
 The neural-network model used in this work has been trained and optimized to search for BBH mergers in the component mass range $[5, 100]~ M_\odot$. 
 The astrophysical priors used to generate the signals used to train the neural-network are reported in Table~\ref{o3cat_tab:priors} and were based on the distributions used to estimate search pipeline sensitivity in the LVK's third observing run (O3)~\cite{ligo_scientific_collaboration_and_virgo_2023_7890437}. 
 For this analysis, we train and validate Aframe using coincident strain data between times 2019-04-01T:15:00:00 and 2019-04-17T:19:53:20 corresponding to a 17-day calendar period from the start of O3. 
-The training procedure is the same as described in~\cite{aframe_methods}. 
+The training procedure is the same as described in~\cite{aframe-methods}. 
 To summarize this procedure, the problem is framed as a supervised learning task where neural-network parameters are optimized by minimizing a binary cross entropy loss between labeled signals and noise. 
 Training batches are constructed by randomly sampling 1.5 second windows of real strain data with a sample rate of 2048\,Hz, and simulated signals are added into a fraction of the batch. 
 We utilize the ml4gw\footnote{https://github.com/ML4GW/ml4gw/} library for GPU accelerated power spectral density (PSD) estimation, data whitening, and projection of waveform polarizations onto the interferometers, enabling real time data augmentations. 
 In this work, training is distributed across 8 NVIDIA A100 GPUs on the Nautilus HyperCluster\footnote{https://nrp.ai/}. 
-The learning rate used in~\cite{aframe_methods} is scaled linearly by the number of GPUs to account for the effective increase in batch size from using multiple GPUs~\cite{lr_scaling}.
+The learning rate used in~\cite{aframe-methods} is scaled linearly by the number of GPUs to account for the effective increase in batch size from using multiple GPUs~\cite{lr_scaling}.
 
-The search is performed using public data across the entirety of O3~\cite{Buikema_2020, Acernese_2023} provided by the Gravitational Wave Open Science Center (GWOSC)~\cite{gwosc}.
+The search is performed using public data across the entirety of O3~\cite{PhysRevD.102.062003, Acernese_2023} provided by the Gravitational Wave Open Science Center (GWOSC)~\cite{Abbott_2023_open_data}.
 Currently, Aframe requires coincident Hanford and Livingston data for analysis. 
 For each interferometer, the openly available science mode flag is queried to remove segments with poor data quality. 
 Segments for which the science-mode flag is active for both the Hanford and Livingston LIGO interferometers are selected. 
@@ -76,7 +76,7 @@ The sampling rate of the strain data is downsampled to 2048\,Hz from their origi
 Example of Aframe's neural network output in response to GWTC-3's GW190828\_063405, a merger with $m_1 = 23.7^{+6.8}_{-6.7} M_{\odot}$ and $ m_2 = 10.4^{+3.8}_{-2.2} M_{\odot}$. 
 The event time corresponds to the coalescence time of the binary. 
 As the merger time enters the window of the network, the output increases and remains at a high level while the merger time is within the network window. 
-The integrated response rises as the merger passes through the window, and traditional peak-finding methods can be used to identify events and estimate merger times; see~\cite{aframe_methods} for details.
+The integrated response rises as the merger passes through the window, and traditional peak-finding methods can be used to identify events and estimate merger times; see~\cite{aframe-methods} for details.
 }\label{o3cat_fig:output_example}
 \end{figure}
 
@@ -159,14 +159,14 @@ So, $p_\mathrm{astro}$ is solely a function of our detection statistic, and thus
 \section{Sensitivity}
 \label{o3cat_sec:sens}
 
-In Ref.~\cite{aframe_methods}, Aframe's sensitive volume was measured using injections drawn from an astrophysically motivated population, and added into over $\sim$ 1 month of data at the beginning of O3. 
+In Ref.~\cite{aframe-methods}, Aframe's sensitive volume was measured using injections drawn from an astrophysically motivated population, and added into over $\sim$ 1 month of data at the beginning of O3. 
 One year of background was accumulated through timeslides and analyzed to assign FARs to injections. 
-We refer the reader to Ref.~\cite{aframe_methods} for additional details of that analysis. 
+We refer the reader to Ref.~\cite{aframe-methods} for additional details of that analysis. 
 In this work, sensitive volume is estimated by performing signal injections across O3, excluding the 17-day training period. 
 Using the same data, one-hundred years of timeslides are analyzed to produce a background distribution from which we can assign FARs. 
 Figure~\ref{o3cat_fig:sensitivity} shows Aframe's sensitive volume for four different mass regions as a function of FAR. 
 Importance sampling is used to estimate sensitive volume for four different mass distributions ~\cite{Tiwari_2018}.
-After scaling up the quantity of background analyzed, we see similar trends as reported in ~\cite{aframe_methods}. 
+After scaling up the quantity of background analyzed, we see similar trends as reported in ~\cite{aframe-methods}. 
 Aframe achieves similar sensitivity with matched filtering approaches in the 35-35 $M_{\odot}$ bin, and a relative decrease in sensitivity as the chirp mass decreases. 
 Still, this analysis illustrates empirically that Aframe maintains sensitivity at high significances (low FARs). 
 
@@ -212,7 +212,7 @@ The criterion for inclusion in GWTC-3 was that \textit{any} of the five search p
 Therefore, it is expected that Aframe identifies fewer events with $p_{\mathrm{astro}} > 0.5$ than the union of all search pipelines, which is what we find. 
 Table~\ref{o3cat_tab:significant} contains 39 of the 70 Hanford/Livingston events reported in GWTC-3 that were also identified by Aframe as significant. 
 However, one of these candidates, $\mathrm{GW200129\_065458}$, was detected with $p_\mathrm{astro} > 0.99$ but was coincident with a CAT2 data quality veto, and so would have been missed by \texttt{Aframe} without the analysis of other searches.
-For comparison, GstLAL, MBTA, PyCBC-Broad, PyCBC-BBH, and cWB  detect 47, 48, 41, 61, and 25 events at this threshold respectively~\cite{gwtc-2.1, Abbott_2023}. 
+For comparison, GstLAL, MBTA, PyCBC-Broad, PyCBC-BBH, and cWB  detect 47, 48, 41, 61, and 25 events at this threshold respectively~\cite{theligoscientificcollaboration2022gwtc21, Abbott_2023}. 
 So, Aframe identifies a comparable quantity of candidates. 
 Of the 38 significant Aframe candidates, 27 were detected with FAR more significant than all events in the 100 years of analyzed background, corresponding to $p_{\mathrm{astro}} > 0.99$. 
 In addition, in Table~\ref{o3cat_tab:non_significant} we report 16 GWTC-3 candidates which were found by Aframe with low significance\footnote{GW190916\_200658 and GW190926\_050336 are present in GWTC-3, but were first reported in OGC }. 
@@ -254,7 +254,7 @@ GW200106\_134123 is found by Aframe just above threshold with $p_\mathrm{astro} 
 However, Aframe detects the event at a more significant FAR of $1.16$ per year compared with the FAR of $16.67$ per year reported by the OGC. 
 We perform parameter estimation for this candidate, finding a primary mass of $44^{+8.63}_{-7.27} M_{\odot}$, secondary mass of $27.6^{+6.88}_{-6.39} M_{\odot}$ and $\chi_{\mathrm{eff}}$ consistent with zero.
 
-\textbf{\emph{AresGW}} AresGW is another machine learning-based detection pipeline~\cite{aresgw}, that performed a search over O3~\cite{ares_gw_o3}. 
+\textbf{\emph{AresGW}} AresGW is another machine learning-based detection pipeline~\cite{nousi2022deep}, that performed a search over O3~\cite{ares_gw_o3}. 
 For calculating $p_\mathrm{astro}$, AresGW employs three variants of their analysis, and assigns the largest $p_\mathrm{astro}$ to each candidate. 
 Therefore, like GWTC-3, their inclusion criteria is less restrictive than ours. 
 AresGW identified a total of 52 significant candidates, 8 of which were reported for the first time by AresGW. 

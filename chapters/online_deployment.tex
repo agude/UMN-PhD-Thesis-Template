@@ -6,15 +6,15 @@ In this chapter, we describe the software architecture used to deploy the \textt
 We detail the production deployment of \texttt{Aframe} and \texttt{AMPLFI} during the third part of the LIGO-Virgo-KAGRA collaboration's fourth observing run, and discuss the system's contributions to public alerts. 
 
 \section{Introduction}
-The first discovery of gravitational waves (GWs) from a binary black hole (BBH) merger in 2015 jump-started the era of observational GW science~\cite{Abbott_2016}. 
+The first discovery of gravitational waves (GWs) from a binary black hole (BBH) merger in 2015 jump-started the era of observational GW science~\cite{AbEA2016a}. 
 The LIGO-Virgo-KAGRA (LVK) collaboration's third observing run (O3) was the first that distributed real-time public alerts to the astronomical community. 
 Since then, hundreds of real-time candidate events have been made public\footnote{https://gracedb.ligo.org/superevents/public}. 
 In May 2023, the LVK began its fourth observing run (O4), which ended in November 2025. 
 Already, the LVK has published GWTC-4.0~\cite{gwtc-4} consisting of 128 GW candidate events from just the first part of the fourth observing run (O4a). 
-As the Advanced LIGO~\cite{buikema2020sensitivity, Aasi_2015}, Advanced Virgo~\cite{Acernese_2015}, and KAGRA~\cite{KAGRA:2020tym} interferometers sensitivity increase, so does the quantity of detected events. 
+As the Advanced LIGO~\cite{buikema2020sensitivity, Aasi_2015}, Advanced Virgo~\cite{Acernese_2015}, and KAGRA~\cite{kagra} interferometers sensitivity increase, so does the quantity of detected events. 
 
 Several pipelines operated real-time searches during O4. 
-The GstLAL, MBTA, PyCBC, and SPIIR pipelines are all matched-filtering based searches targeting compact binary coalescences (CBCs)~\cite{PhysRevD.108.043004, Allene_2025, Dal_Canton_2021, PhysRevD.105.024023}. 
+The GstLAL, MBTA, PyCBC, and SPIIR pipelines are all matched-filtering based searches targeting compact binary coalescences (CBCs)~\cite{Tsukada_2023, Allene_2025, Dal_Canton_2021, PhysRevD.105.024023}. 
 Also in operation were minimally modeled pipelines cWB~\cite{PhysRevD.93.042004, PhysRevD.105.083018}, MLy~\cite{PhysRevD.110.104034}, and oLIB~\cite{Lynch:2015yin} which are designed to be sensitive to a broader range of astrophysical sources. 
 
 
@@ -262,7 +262,7 @@ The posterior samples are placed in a shared memory buffer and passed to the par
 
 \section{Data Products} \label{online_sec:data-products}
 Several data products are required to be uploaded to the Gravitational-Wave Candidate Event Database (GraceDB) for a pipeline to contribute to public alerts. 
-These data products provide critical information for effective EM followup~\cite{Chaudhary:2023vec}. 
+These data products provide critical information for effective EM followup~\cite{Chaudhary_2024}. 
 In this section, we provide an overview of the pipeline's methodology for producing these data products from the outputs of \texttt{Aframe} and \texttt{AMPLFI}.
 Later, in Sec.~\ref{online_sec:software-arch} we discuss how data product computation is distributed among several sub-processes to minimize time-to-alert. 
 
@@ -342,11 +342,11 @@ Each quantity can be estimated by integrating the posterior over the appropriate
     R_{\mathrm{HasMassGap}} &= \{ \theta \mid \exists \, m_i \in [3M_{\odot}, 5M_{\odot}] \} \\
     R_{\mathrm{HasRemnant}} &= \{ \theta \mid \text{Masses and spins allow tidal disruption} \}
 \end{align}
-In practice, the pipeline uploads the posterior samples to GraceDB, and gwcelery, the LVK's real-time alerts task system, performs and manages the actual EM-Bright calculation~\cite{Chaudhary:2023vec, Magee:2021xdx}.
+In practice, the pipeline uploads the posterior samples to GraceDB, and gwcelery, the LVK's real-time alerts task system, performs and manages the actual EM-Bright calculation~\cite{Chaudhary_2024, Magee_2021}.
 
 \subsection{Sky Localization}
 GW sky localizations are represented as probability density distributions on the sky constructed in the HEALPix format~\cite{Fernique}. 
-Matched-filtering pipelines produce signal-to-noise ratio (SNR) time-series, which are processed by the BAYESTAR algorithm to produce fast sky localizations~\cite{bayestar}.
+Matched-filtering pipelines produce signal-to-noise ratio (SNR) time-series, which are processed by the BAYESTAR algorithm to produce fast sky localizations~\cite{Singer_2016}.
 ML detection methods do not naturally produce SNR time-series, and so require an alternative. 
 Two different estimators are used in real time to estimate sky localizations. 
 First, an adaptive histogram estimator produces a rapid ($\lesssim 1$s) localization. 

@@ -11,7 +11,7 @@ Based on online deployment on a mock data stream of LIGO-Virgo data, {\aframe~+ 
 
 \section{Introduction}
 It has been almost a decade since the discovery of gravitational waves (GWs) from compact binary mergers~\cite{AbEA2016a}, with the last few years seeing a steady increase in the number of discovered GW events.
-While the first observing run of the Laser Interferometer Gravitational-wave Observatory (LIGO) reported only three events~\cite{AbEA2016a,AbEA2016g},\footnote{GW151012, initially labeled as low-significance, was later confirmed as a third event in O1.} the number count stood at 90 within a span of five years~\cite{LSC2021djp}.
+While the first observing run of the Laser Interferometer Gravitational-wave Observatory (LIGO) reported only three events~\cite{AbEA2016a, AbEA2016g},\footnote{GW151012, initially labeled as low-significance, was later confirmed as a third event in O1.} the number count stood at 90 within a span of five years~\cite{LSC2021djp}.
 Furthermore, the recently-completed fourth observing run (O4) of ground-based observatories LIGO/Virgo/KAGRA (LVK) has already reported hundreds of events discovered online.\footnote{See \url{https://gracedb.ligo.org/superevents/public/O4/} for the most updated list.} 
 The trend is expected to continue with the instrument getting closer to design sensitivity in fifth observing run.\footnote{See \url{https://observing.docs.ligo.org/plan/} for observing plans.}
 
@@ -21,21 +21,21 @@ The alert distribution mechanisms, like NASA GCN\footnote{\url{https://gcn.nasa.
 Publicly available services like TreasureMap~\cite{2019GCN.26244....1W} have seen a steady adoption from observatories to share observed and scheduled fields to orchestrate observations. 
 Tools like SkyPortal~\cite{skyportal2019} and TOM-Toolkit~\cite{tom_toolkit} have been developed to aid target-of-opportunity followup. 
 
-All this development comes at a time when the number of GW discoveries have significantly increased corresponding to the improvement in sensitivity of Advanced LIGO~\cite{PhysRevD.102.062003,aLIGO}, Advanced Virgo~\cite{VIRGO:2014yos}, and KAGRA~\cite{10.1093/ptep/ptaa125} instruments, and the sensitivity of time-domain telescope facilities allow for unprecedented discovery rates. 
+All this development comes at a time when the number of GW discoveries have significantly increased corresponding to the improvement in sensitivity of Advanced LIGO~\cite{PhysRevD.102.062003, Aasi_2015}, Advanced Virgo~\cite{Acernese_2015}, and KAGRA~\cite{kagra} instruments, and the sensitivity of time-domain telescope facilities allow for unprecedented discovery rates. 
 However, identifying GW counterparts jointly has been extremely challenging. 
-The discovery of GWs and multi-wavelength EM emission from the merger of the binary neutron star (BNS), GW170817,~\cite{gw170817,gw170817_mma} remains the first and only success story, albeit a rarity, with most subsequent candidates likely to be at much farther distances~\cite{2020NatAs...4..550C}. 
+The discovery of GWs and multi-wavelength EM emission from the merger of the binary neutron star (BNS), GW170817,~\cite{AbEA2017b, AbEA2017f} remains the first and only success story, albeit a rarity, with most subsequent candidates likely to be at much farther distances~\cite{2020NatAs...4..550C}. 
 
 One primary step toward improving follow-up campaigns is the availability of fast, real-time Bayesian parameter estimation (PE) of compact binary coalescence (CBCs) to provide accurate data products for GW follow-up. 
 The computationally expensive part of stochastic sampling techniques, like nested sampling currently in use, involve the repeated computation of the likelihood. 
-Techniques like reduced-order-quadrature (ROQ)~\cite{Canizares:2014fya,morisaki2023rapidlocalizationinferencecompact} and focused-ROQ~\cite{Morisaki:2020oqk} have been developed in view of making real-time PE as fast as possible. 
+Techniques like reduced-order-quadrature (ROQ)~\cite{Canizares:2014fya, morisaki2023rapidlocalizationinferencecompact} and focused-ROQ~\cite{Morisaki:2020oqk} have been developed in view of making real-time PE as fast as possible. 
 This is currently used in LVK to deliver update alerts from Bayesian parameter estimation on the timescale of several minutes to hours. 
-Other techniques like the use of accelerated hardware for stochastic sampling has been reported in~\cite{Talbot:2019okv, wong2023fastgravitationalwaveparameter}, and mesh-free approximation for sky-localization, reported in~\cite{PhysRevD.108.064055,PhysRevD.109.024053}.
+Other techniques like the use of accelerated hardware for stochastic sampling has been reported in~\cite{Talbot:2019okv, wong2023fastgravitationalwaveparameter}, and mesh-free approximation for sky-localization, reported in~\cite{PhysRevD.108.064055, PhysRevD.109.024053}.
 
 More recently, likelihood-free inference (LFI) using variational methods, have emerged as a different paradigm with flexible neural network approximators being used to learn the posterior or the likelihood. 
-Their use has been demonstrated on GW data~\cite{Gabbard_2021,PhysRevD.108.042004}, in particular with posterior estimation using normalizing flows~\cite{Dax_2021}, such as in the DINGO algorithm. 
+Their use has been demonstrated on GW data~\cite{Gabbard_2021, PhysRevD.108.042004}, in particular with posterior estimation using normalizing flows~\cite{Dax_2021}, such as in the DINGO algorithm. 
 However, in order to relay discovery alerts for prompt followup, the combination of \emph{search and inference} needs to be considered together.\footnote{This is done in case of stochastic signals offline, for example, see~\cite{Smith_2018}.}
 Also considering a live, real-time system design, several overhead costs like data transfer, file input/output operations, communicating data to a remote server, and so on are often overlooked in isolated analyses, but show up in the overall time-to-alert.
-It is also worth highlighting that traditionally in GW data analysis, the search and PE components have been treated separately -- matched-filtering searches pick up the candidates from the data stream using a suitable detection statistic, and also provide important context like the best matching template and the signal-to-noise ratio (SNR) time series, which are then used to compute sky-localization maps~\cite{Singer_2016} and EM-bright source properties~\cite{Chatterjee_2020} that are sent out in the sub-minute alerts by the LVK~\cite{Chaudhary_2024}.
+It is also worth highlighting that traditionally in GW data analysis, the search and PE components have been treated separately -- matched-filtering searches pick up the candidates from the data stream using a suitable detection statistic, and also provide important context like the best matching template and the signal-to-noise ratio (SNR) time series, which are then used to compute sky-localization maps~\cite{Singer_2016} and EM-bright source properties~\cite{Chatterjee:2019avs} that are sent out in the sub-minute alerts by the LVK~\cite{Chaudhary_2024}.
 The results are then updated based on Bayesian PE results, in the timescale of a few hours.
 
 Although machine-learning techniques like LFI bring promise, large model size and/or long training times can be a barrier for operations.
@@ -61,7 +61,7 @@ In order to build as fast of a system as we can, we have made a number of design
 \begin{itemize}
     \item A modular design to perform search and PE. The search for GW signals in this case is done by {\aframe}.
           Candidates from {\aframe} provide an estimate of the time of arrival and the significance via a false-alarm-rate (FAR).
-          This is unlike traditional matched-filtering searches that provide, in addition, the best matching template, and the corresponding SNR time series that is used by other annotation algorithms to provide skymaps~\cite{Singer_2016} and source properties~\cite{Chatterjee_2020} of binary systems.
+          This is unlike traditional matched-filtering searches that provide, in addition, the best matching template, and the corresponding SNR time series that is used by other annotation algorithms to provide skymaps~\cite{Singer_2016} and source properties~\cite{Chatterjee:2019avs} of binary systems.
           In the proposed framework, once a segment of data is found to be of high-significance i.e., containing a GW signal,the parameters are inferred using {\amplfi}. 
           Hence, Bayesian parameter estimation results are available
           along with the discovery of the candidate.
@@ -81,7 +81,7 @@ In order to build as fast of a system as we can, we have made a number of design
 We also make some optimizations compared to previous efforts in light of an online inference algorithm:
 \begin{itemize}
     \item We use real detector data from the LIGO GW instruments during training. 
-    Most previous efforts in LFI use simulated, colored Gaussian noise (see, for example,~\cite{Dax_2021,Gabbard_2021}).
+    Most previous efforts in LFI use simulated, colored Gaussian noise (see, for example,~\cite{Dax_2021, Gabbard_2021}).
     \item We use efficient data loading and whitening tools to minimize the data transfers back and forth between CPU and GPUs (or other accelerators).
     We elaborate this below in section~\ref{amp_meth_sec:simulations}.
     \item We re-implement CBC waveform generation on the GPU memory to directly generate waveforms on-the-fly during training.
@@ -388,7 +388,7 @@ We show example posteriors in Figures~\ref{amp_meth_fig:high-mass-compare}, \ref
 In all cases, the signal injection is performed in a background different from that used during training. 
 The same signal is injected 20 times at different background segments and posterior samples are drawn. 
 The posteriors are shown in the blue colormap. 
-We also perform inference on the same systems via nested sampling using \texttt{Bilby}~\cite{Ashton:2018jfp,Romero_Shaw_2020} and \texttt{Dynesty}~\cite{Speagle:2019ivv} with 1500 live points and identical priors as when training {\amplfi}, repeating 5-times on different background segments.
+We also perform inference on the same systems via nested sampling using \texttt{Bilby}~\cite{Ashton_2019, Romero_Shaw_2020} and \texttt{Dynesty}~\cite{Speagle:2019ivv} with 1500 live points and identical priors as when training {\amplfi}, repeating 5-times on different background segments.
 This is shown in the red colormap. 
 We see that there is consistency amongst the {\amplfi} posteriors; i.e., distributions in the blue colormap fall on top of each other.
 For higher masses, like the $\mc = 45\;\msun$, shown in Figure~\ref{amp_meth_fig:high-mass-compare}, we find the recovery accuracy of the chirp mass to be comparable to nested sampling. 
@@ -549,7 +549,7 @@ We re-train a model using the same architecture and training strategies as in th
 available in GWOSC. 
 In left panels of Figure~\ref{amp_meth_fig:gw150914} we show the posterior distributions of
 \{\mc, $q$, \dl \} and the sky-localization when a 4-second data window around the coalescence of
-GW150914~\cite{LIGOScientific:2016aoc} is processed using our model. 
+GW150914~\cite{AbEA2016a} is processed using our model. 
 The solid curve in the corner plot shows the results as reported in GWOSC. The colormap in the Mollweide plot shows the sky-localization reported by BAYESTAR for GW150914; the dashed curves in the same plot are the $90\%$ contours from our algorithm.
 We also ``jitter'' the data by a small amount and perform inference, represented by the different colored curves in both the corner plot and the mollweide projection. 
 Specifically, the data used for inference is between $[t_0 - 3\mathrm{\;s}, t_0 + 1\mathrm{\;s}]$ with the reported coalescence time of GW150914 being $t_0 = 1126259462.4$. 

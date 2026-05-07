@@ -13,14 +13,14 @@ Altogether, we demonstrate \texttt{AMPLFI}'s ability to produce data products fo
 
 
 \section{Introduction}  \label{amp_res_sec:intro}
-A decade has passed since the first direct detection of gravitational waves (GWs)~\cite{PhysRevLett.116.061102}. 
+A decade has passed since the first direct detection of gravitational waves (GWs)~\cite{AbEA2016a}. 
 Now, observing GWs from compact binary coalescences (CBCs) is commonplace. 
-The number of GW candidates has increased by two orders of magnitude in this decade, rising from three candidates in the first observing run, to over three-hundred cumulative after the fourth observing run (O4)~\cite{AbEA2018b, theligoscientificcollaboration2022gwtc21, Abbott_2023,LIGOScientific:2025slb}. 
-The discovery rate is expected to continue to rise as the Advanced LIGO~\cite{Aasi_2015}, Advanced Virgo~\cite{VIRGO:2014yos} and KAGRA~\cite{kagra} interferometers approach the design sensitivity era of the fifth observing run~\cite{ observing_scenarios}. 
+The number of GW candidates has increased by two orders of magnitude in this decade, rising from three candidates in the first observing run, to over three-hundred cumulative after the fourth observing run (O4)~\cite{AbEA2018b, theligoscientificcollaboration2022gwtc21, Abbott_2023, LIGOScientific:2025slb}. 
+The discovery rate is expected to continue to rise as the Advanced LIGO~\cite{Aasi_2015}, Advanced Virgo~\cite{Acernese_2015} and KAGRA~\cite{kagra} interferometers approach the design sensitivity era of the fifth observing run~\cite{observing_scenarios}. 
 Accompanying this rapid growth has been excitement to transmit real-time public alerts to the broader astrophysical community, with the goal of finding coincident electromagnetic (EM) signals. 
 
 Machine learning (ML) methods for detecting and characterizing CBCs are emerging as production ready solutions to real-time GW data analysis. 
-For detection, many methods are being developed, showing promise in achieving the sensitivity of traditional matched-filter pipelines at a reduced latency and computational cost~\cite{aframe-methods, sage, Nousi_2023}. 
+For detection, many methods are being developed, showing promise in achieving the sensitivity of traditional matched-filter pipelines at a reduced latency and computational cost~\cite{aframe-methods, sage, nousi2022deep}. 
 However, these methods do not provide a solution for producing the suite of low-latency data products necessary for informing effective EM followup after an initial detection. 
 Currently, the LVK's low-latency alert infrastructure relies on data products expected from matched-filter pipelines. 
 For example, the production sky localization algorithm for events from matched-filter pipelines, BAYESTAR, requires signal to noise ratio (SNR) time series~\cite{Singer_2016}. 
@@ -45,11 +45,11 @@ Finally, in Sec.~\ref{amp_res_sec:results-gwtc3} we analyze real GW candidates f
 
 \section{Likelihood Free Inference} \label{amp_res_sec:lfi}
 In GW astronomy, estimating the parameters $\theta$ of a source given strain data $d$ is typically done using Bayesian inference. 
-Traditional Bayesian PE algorithms rely on repeated evaluations of an explicit likelihood function, utilizing stochastic sampling techniques such as Markov Chain Monte Carlo (MCMC) or nested sampling to explore the signal parameter space~\cite{bilby_paper, lalinference_paper}. 
+Traditional Bayesian PE algorithms rely on repeated evaluations of an explicit likelihood function, utilizing stochastic sampling techniques such as Markov Chain Monte Carlo (MCMC) or nested sampling to explore the signal parameter space~\cite{Ashton_2019, lalinference_paper}. 
 For GW PE, this process can be arduous. 
 Each likelihood evaluation requires simulating a waveform, which can be expensive. 
 In addition, the full 15 dimensional signal parameter space must be fully explored. 
-Low-latency PE methods typically make approximations, to either the likelihood function or waveform physics, to simplify the exploration of the posterior~\cite{Canizares:2014fya,Morisaki:2023kuq,Morisaki:2020oqk,Singer_2016}.
+Low-latency PE methods typically make approximations, to either the likelihood function or waveform physics, to simplify the exploration of the posterior~\cite{Canizares:2014fya, Morisaki:2023kuq, Morisaki:2020oqk, Singer_2016}.
 
 Posterior estimation using LFI involves training a probabilistic neural network with tuneable parameters $\phi$, $q_\phi(\theta | d)$, to approximate the true posterior $p(\theta | d)$. 
 A type of probabilistic neural network known as a conditional normalizing flow~\cite{papamakarios2021normalizing} is a popular choice for constructing the approximation $q_\phi(\theta | d)$. 
@@ -64,7 +64,7 @@ Drawing thousands of samples takes seconds when done on accelerated hardware lik
 In addition, LFI also provides density estimation, or scoring, of samples i.e. $p(\theta \vert d)\approx q_\phi(\theta \vert d)$.
 
 \section{\texttt{AMPLFI}} \label{amp_res_sec:review}
-\texttt{AMPLFI} is a PE algorithm based on LFI and was presented in detail in Ref.~\cite{Chatterjee:2024pbj}. 
+\texttt{AMPLFI} is a PE algorithm based on LFI and was presented in detail in Chapter~\ref{chap:amplfi_methods}. 
 In Sec.~\ref{amp_res_sec:amplfi-summary} we summarize the algorithm and in Sec.~\ref{amp_res_sec:improvements} we discuss in more detail improvements that have been made regarding training data usage and neural network architecture.
 
 \subsection{Summary} \label{amp_res_sec:amplfi-summary}
@@ -119,7 +119,7 @@ This amount of data cannot fit into memory at once.
 We take advantage of an efficient out-of-memory data loader implemented in \texttt{ml4gw} so that data loading does not bottleneck the training process. 
 This is the same data loader implementation is used to train the \texttt{Aframe} detection algorithm~\cite{aframe-methods}.
 
-Lastly, in Ref.~\cite{Chatterjee:2024pbj}, \texttt{AMPLFI} was trained with a GPU-accelerated IMRPhenomD approximant~\cite{phenomD}. 
+Lastly, in Ref.~\cite{Chatterjee:2024pbj}, \texttt{AMPLFI} was trained with a GPU-accelerated IMRPhenomD approximant~\cite{Khan:2015jqa}. 
 Since then, we have implemented the IMRPhenomPv2 waveform approximant, allowing \texttt{AMPLFI} to be trained with a waveform that includes spin precession physics.
 
 \subsubsection{Neural Network}
@@ -140,7 +140,7 @@ The dimensions of $\gamma_t$ and $\gamma_f$ are hyperparameters that can be opti
 Providing redundant data in the form of the Fourier transform can be interpreted as an inductive bias. 
 Intuitively, different data representations provide easier pathways for the neural network to learn certain parameters. 
 As an example, the coalescence time might be easier to identify in the time domain, whereas the chirp mass, a quantity determined by a power law in frequency, might be easier in the frequency-domain. 
-Multi-modal learning approaches have been explored in other GW data analysis contexts~\cite{Bhardwaj:2023xph, Sun:2023vlq}.
+Multi-modal learning approaches have been explored in other GW data analysis contexts~\cite{PhysRevD.108.042004, Sun:2023vlq}.
 
 In addition, we also increase the number of trainable parameters of the normalizing flow. 
 In Ref.~\cite{Chatterjee:2024pbj}, affine flow transforms were used~\cite{realnvp}. 
@@ -180,7 +180,7 @@ Training this larger model takes $\sim 10$ days using 2 NVIDIA A100 GPUs.
 
 
 \section{Testing Dataset} \label{amp_res_sec:testing-data}
-In preparation for O4, Ref.~\cite{Chaudhary:2023vec} performed a study which added simulated CBC signals (known colloquially as \emph{injections}) into a real-time data replay. 
+In preparation for O4, Ref.~\cite{Chaudhary_2024} performed a study which added simulated CBC signals (known colloquially as \emph{injections}) into a real-time data replay. 
 The injections were added across a one month period during O3b, between 2020-01-05T23:59:42 and 2020-02-14T23:59:42. 
 Search pipelines analyzed the data replay using their online configurations. GWCelery\footnote{\url{https://rtd.igwn.org/projects/gwcelery/en/latest/}} processed pipeline triggers, mimicking the end-to-end real-time alert infrastructure. 
 This study provided matched-filter pipeline SNR time series for injections across a broad parameter space. 
@@ -348,7 +348,7 @@ Sky map calibration can be evaluated by performing probability-probability (P-P)
 For well-calibrated sky maps, reported confidence intervals should correspond to the probability of finding the true location of the GW source in that area or volume region. 
 This probability can be estimated empirically by analyzing injections. 
 
-For BAYESTAR, this calibration is achieved by rescaling the SNR timeseries by a correction factor which is tuned to injections~\cite{bayestar}. 
+For BAYESTAR, this calibration is achieved by rescaling the SNR timeseries by a correction factor which is tuned to injections~\cite{Singer_2016}. 
 Notably, this correction factor is dependent on algorithmic details of the matched-filter pipeline that provides the SNR timeseries. 
 The default value of 0.83 is tuned to injections analyzed by the GstLAL pipeline. 
 Using this default correction factor, BAYESTAR sky maps produced from the SNR timeseries provided by the PyCBC live analysis have been shown to be biased (see Figure 5 in Ref.~\cite{Nitz_2018}). 
