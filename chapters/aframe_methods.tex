@@ -21,7 +21,7 @@ While machine learning (ML) is ubiquitous in some areas of physics~\cite{harris2
 To date, there have been a number of machine learning models proposed for the detection of compact binary coalescences (CBCs); e.g.,~\cite{PhysRevD.103.102003, verma2022can, KRASTEV2020135330, PhysRevD.97.044039, nousi2022deep}; but there are none currently running in O4~\cite{online_pipelines} (though, ML-based unmodeled gravitational-wave searches have seen production usage~\cite{mly}).
 This is both a product of well-known infrastructure hurdles separating the development and deployment of machine learning models~\cite{deployment_challenges}, as well as a lack of standardized, astrophysically meaningful probes of the sensitivity of these models in the face of non-stationary and transient background noise.
 
-The most well-modeled and frequently observed gravitational-wave events to date are the mergers of binary black hole (BBH) systems~\cite{AbEA2018b,theligoscientificcollaboration2022gwtc21,Abbott_2023}
+The most well-modeled and frequently observed gravitational-wave events to date are the mergers of binary black hole (BBH) systems~\cite{AbEA2018b,theligoscientificcollaboration2022gwtc21,Abbott_2023}.
 Their comparatively high number of confirmed detections has given us reasonable models of their population statistics, allowing for astrophysically meaningful measures of search sensitivity. 
 BBH mergers also benefit from a highly localized-in-time signal-to-noise ratio (SNR) profile relative to binary neutron star (BNS) mergers, which are in the sensitive band of the detectors much longer. 
 Studying the ability of neural-networks to detect BBH mergers, and in particular what real time use in the LVK detectors looks like in this context, represents an important first step towards developing a more thorough understanding of how, and whether, these algorithms can be applied to more challenging signals such as BNSs, and what tools and infrastructure would be required to do so.
@@ -33,10 +33,10 @@ More broadly, \texttt{Aframe} encompasses a suite of tools for quickly implement
 
 The structure of this chapter is as follows. 
 Sec.~\ref{aframe_meth_sec:aframe-overview} gives a high-level overview of the \texttt{Aframe} algorithm. 
-In Sec.~\ref{aframe_meth_sec:sv-calc}, we describe the metric we use to measure  performance. 
+In Sec.~\ref{aframe_meth_sec:sv-calc}, we describe the metric we use to measure performance. 
 Sec.~\ref{aframe_meth_sec:data} describes the datasets used to train and evaluate our network, and the means by which training and evaluation is performed is given in Secs.~\ref{aframe_meth_sec:training} and \ref{aframe_meth_sec:inference}, respectively. 
 We discuss the longevity of our model in Sec.~\ref{aframe_meth_sec:longevity} and the latency and computational requirements in Sec.~\ref{aframe_meth_sec:compute}. 
-Finally, we compare our performance to existing pipelines in Sec.~\ref{aframe_meth_sec:comparison} and examine subset of GWTC-3 catalog events in Sec.~\ref{aframe_meth_sec:catalog-events}
+Finally, we compare our performance to existing pipelines in Sec.~\ref{aframe_meth_sec:comparison} and examine a subset of GWTC-3 catalog events in Sec.~\ref{aframe_meth_sec:catalog-events}.
 
 
 
@@ -72,7 +72,7 @@ Because the neural-network is trained to encode time translation invariance (see
 Thus, integration provides a mechanism to promote consistently high outputs while rejecting short transients that may correspond to non-astrophysical sources.
 Finally, the integrated time-series of neural-network predictions is clustered to avoid yielding multiple triggers for the same event. 
 The maximum integrated value over an 8\,s window is taken as the detection statistic  corresponding to a candidate event.
-The coalescence time can then be estimated by accounting for the integration window length, whitening filter settle-in, and the placement of the coalescence time relative to the right edge of the kernel during training (see \ref{aframe_meth_fig:example-output}).
+The coalescence time can then be estimated by accounting for the integration window length, whitening filter settle-in, and the placement of the coalescence time relative to the right edge of the kernel during training (see Fig.~\ref{aframe_meth_fig:example-output}).
 The mean absolute time difference between the estimated coalescence time and the injected time for recovered signals in the testing set was 0.123\,s with a standard deviation of 0.125\,s, which is in line with the inference sampling rate of 4\,Hz.
 
 \begin{figure}[h]
@@ -119,7 +119,7 @@ Waveforms that are sampled but have an SNR less than 4 are not injected; however
 The cut is placed such that any waveforms below the SNR cutoff are not expected to be recovered at any reasonable FAR, and so would not contribute to the sensitive volume: whether injected or not, their weight would be zero.
 This procedure allows us to effectively draw many times more samples than are actually injected, greatly reducing the uncertainty on the sensitive volume.
 For this analysis, we re-weight to the same population distributions used in the sensitive volume analysis conducted in GWTC-3~\cite{Abbott_2023}, log-normal distributions about central masses of interest with widths of 0.1. 
-In addition, we enforce time difference of no more than 0.25\,s between the recovered and injected coalescence times. 
+In addition, we enforce a time difference of no more than 0.25\,s between the recovered and injected coalescence times. 
 This time difference corresponds to the resolution available at an inference sampling rate of 4\,Hz. This time resolution can be reduced by increasing the inference sampling rate.
 
 \section{Data} \label{aframe_meth_sec:data}
@@ -244,7 +244,7 @@ The values of the parameters controlling these augmentations were determined by 
 \emph{Muting}: For a fraction $p_{\text{mute}} = 0.055$ of the training batch, we inject a BBH signal into only one of the interferometers and label these samples as noise. 
 This teaches the neural-network that it is not enough for a BBH-like signal to be present in just one interferometer: coincidence between interferometers is a requirement for true astrophysical signals. 
 
-\emph{Swapping}: For an independent fraction of the training batch, $p_{\text{swap}} = 0.014$, we swap one of the interferometer responses with an interferometer response from different signal, and label these samples as noise. 
+\emph{Swapping}: For an independent fraction of the training batch, $p_{\text{swap}} = 0.014$, we swap one of the interferometer responses with an interferometer response from a different signal, and label these samples as noise. 
 Thus, these windows will contain BBH waveforms with different intrinsic parameters in each interferometer. 
 This motivates the neural-network to learn the concept of coherence: the time-frequency evolution of the signal must be identical in both interferometers.
 
@@ -334,7 +334,7 @@ Lastly, neural-network predictions are aggregated client-side and post-processed
 
 A critical parameter is the inference sampling rate. 
 The inference sampling rate controls the stride between consecutive windows seen by the neural-network. 
-Too small of an inference sampling rate, and astrophysical events may be skipped over. 
+Too small an inference sampling rate, and astrophysical events may be skipped over. 
 Too large, and computing resources are wasted on redundant inferences. 
 We examined the impact of the inference sampling rate on our sensitivity by repeating trials of our inference procedure at inference sampling rates of 1, 2, 4, 8, 16 and 64\,Hz. 
 For this analysis, we accumulated two months worth of timeslide data for each trial.
@@ -359,9 +359,10 @@ Determining this timescale helps inform the cadence at which retraining is neede
 To test the longevity of our algorithm, we construct several testing datasets at various intervals across O3. 
 For each interval, we analyze the testing dataset with a neural-network trained using the first 10 days of O3 data. 
 This is the same neural-network used to produce the results in Fig.~\ref{aframe_meth_fig:sensitivity}. 
-To separate the sensitivity of the neural-network from the sensitivity of the detectors, we do not measure sensitive volume, but instead look at the fraction of events with SNR $>$ 8 that are detected at different FARs.
+To separate the sensitivity of the neural-network from the sensitivity of the detectors, we do not measure sensitive volume; because detector noise is non-stationary, sensitive volume measured across different weeks conflates changes in neural-network performance with changes in detector noise conditions.
+Instead, we look at the fraction of events with SNR $>$ 8 that are detected at different FARs.
 This metric takes into account the variation in noise level across different time periods, though it does not account for all aspects of detector performance, such as the rate or morphology of glitches. 
-At a FAR of 1 event per 2 months, a threshold comparable to the 1 event per 5 months used for releasing significant public alerts by the LVK\footnote{\url{https://emfollow.docs.ligo.org/userguide/analysis/}}, we see in Fig~\ref{aframe_meth_fig:sensitivity_over_time} that the fractional detection rate of the original neural-network does not decay with time. 
+At a FAR of 1 event per 2 months, a threshold comparable to the 1 event per 5 months used for releasing significant public alerts by the LVK\footnote{\url{https://emfollow.docs.ligo.org/userguide/analysis/}}, we see in Fig.~\ref{aframe_meth_fig:sensitivity_over_time} that the fractional detection rate of the original neural-network does not decay with time. 
 We note that the most significant noise event across all weeks is found during week 2, corresponding to the sharp drop in detection fraction at a FAR of 1 per 2 months. 
 Though there is some fluctuation from week to week, a single neural-network trained on a week's worth of data at the beginning of the observing run maintains sensitivity over the duration of the run. 
 
@@ -459,7 +460,7 @@ This is evident when comparing the performance of PyCBC-BBH and PyCBC-Broad in F
 
 In the 35-35 M$_{\odot}$ mass distribution, \texttt{Aframe} has a larger sensitive volume than the GWTC-3 configurations of all searches, and is comparable in the 35-20 M$_{\odot}$ mass bin, for the FARs considered in this analysis. 
 As source masses decrease further, so does \texttt{Aframe}'s performance relative to existing pipelines. 
-This is in part due to our neural-network architectures inability to model the longer duration features of these low mass signals. 
+This is in part due to our neural-network architecture's inability to model the longer duration features of these low mass signals. 
 While the architecture implements global pooling layers, the convolution layers use a kernel length of 3 samples. 
 Improvements to neural-network architecture design, such as utilizing dilated convolutions that can better model these features will help to improve performance at these mass ranges.
 
@@ -518,7 +519,7 @@ As our analysis examined only one year of background, our minimum FAR is one per
 
 \section{Conclusion}
 We have implemented a machine-learning based CBC search pipeline that is capable of low-latency use in a production setting. 
-Through robust data augmentation techniques and extensive work in developing software infrastructure (Sec.~\ref{aframe_meth_sec:software}), our algorithm achieves a sensitivity that is superior to or competitive with established search pipelines for higher mass BBHs. 
+Through robust data augmentation techniques and extensive work in developing software infrastructure (Appendix~\ref{app:ml4gw}), our algorithm achieves a sensitivity that is superior to or competitive with established search pipelines for higher mass BBHs. 
 Work remains to improve the algorithm's performance on lower mass BBH systems. 
 We leave these investigations to future work.
 
