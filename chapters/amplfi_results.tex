@@ -157,7 +157,7 @@ We train the models using the low-latency calibrated strain data.
 The embedding network and normalizing flow for the HLV (HL) model have a total of 70 (30) million parameters, a factor of $\sim 10$ increase from Ref.~\cite{Chatterjee:2024pbj}. 
 Training this larger model takes $\sim 10$ days using 2 NVIDIA A100 GPUs.
 
-\begin{table}[h]
+\begin{table}[ht]
     \centering
     \begin{tabular}{lcc} 
     \hline
@@ -203,7 +203,7 @@ The dataset consists of a broad parameter space of signals, nearly uniform in ch
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.95\columnwidth]{figures/distributions.pdf}
+    \includegraphics[width=0.88\columnwidth]{figures/distributions.pdf}
     \caption[Histograms of chirp mass, SNR, and mass ratio for the 1233 HL injections used in this study compared with BAYESTAR]{Histograms of chirp mass (top), SNR (middle) and mass ratio (bottom) for the 1233 HL injections used in this study to compare with BAYESTAR. The HLV injections are a strict subset of the HL injections.}
     \label{amp_res_fig:mdc_dist}
 \end{figure}

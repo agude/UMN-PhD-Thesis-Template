@@ -75,7 +75,7 @@ The maximum integrated value over an 8\,s window is taken as the detection stati
 The coalescence time can then be estimated by accounting for the integration window length, whitening filter settle-in, and the placement of the coalescence time relative to the right edge of the kernel during training (see Fig.~\ref{aframe_meth_fig:example-output}).
 The mean absolute time difference between the estimated coalescence time and the injected time for recovered signals in the testing set was 0.123\,s with a standard deviation of 0.125\,s, which is in line with the inference sampling rate of 4\,Hz.
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \centering
 \includegraphics[width=\columnwidth]{figures/example_output.pdf}
 \caption[Example neural-network prediction and integrated neural-network prediction for a $m_1 = 35 M_\odot, m_2 = 35 M_\odot$ signal injection]{Example neural-network prediction and integrated neural-network prediction for a $m_1 = 35 M_\odot, m_2 = 35 M_\odot$ signal injection. 
@@ -342,7 +342,7 @@ Fig.~\ref{aframe_meth_fig:inference-rate-comparison} shows a subset of the resul
 However, at low FARs the 1\,Hz analysis has a small performance dip in the 35-35 mass bin. 
 Because analyses performed at 4\,Hz require 16 times fewer inference requests than 64\,Hz without sacrificing performance, we use an inference sampling rate of 4\,Hz for the analyses in this paper.
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \centering
 \includegraphics[width=\columnwidth]{figures/inference_rate_comparison.pdf}
 \caption[Sensitivity comparisons for the same \aframe model run over the same data at different inference rates]{Sensitivity comparisons for the same neural-network run over the same data at different inference rates. 
@@ -438,7 +438,7 @@ In this analysis, the Hanford strain data is held fixed and the Livingston data 
 Then, a false alarm rate (FAR) can be assigned to injected events by dividing the number of noise events with detection statistic greater than the event of interest, with livetime analyzed. 
 All GW detections reported in the third Gravitational-Wave Transient Catalog (GWTC-3)~\cite{Abbott_2023} were excised from the background. 
 
-\begin{figure*}[h]
+\begin{figure*}[ht]
 \centering
 \includegraphics[width=\textwidth]{figures/pipeline_far_comparison.pdf}
 \caption[Sensitive volume vs FAR for four different mass distributions]{Sensitive volume vs FAR for four different mass distributions. 
@@ -472,7 +472,7 @@ This is particularly true for the lowest SNR threshold of 6.23, where we achieve
 However, we encourage future studies to use sensitive volume to astrophysically motivated distributions as the measure of performance.
 
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \centering
 \includegraphics[width=\textwidth]{figures/roc_plot.pdf}
 \caption[ROC curves for waveforms in different SNR bins in our testing dataset]{ROC curves for waveforms in different SNR bins in our testing dataset, described in Sec.~\ref{aframe_meth_sec:data}. 

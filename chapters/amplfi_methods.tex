@@ -117,7 +117,7 @@ We present some comparison results in section~\ref{amp_meth_sec:results}.
 Though we show comparison with a single representative system in Fig.~\ref{amp_meth_fig:waveform}, several other combination of parameters are tested for consistency with {\lalsim} as a part of unit-tests of the {\mlgw} codebase.\footnote{\scriptsize{Located at \url{https://github.com/ML4GW/ml4gw/blob/v0.5.0/tests/waveforms/test_cbc_waveforms.py}}}
 
 \subsection{Data generation on the GPU}
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \includegraphics[width=0.85\textwidth]{figures/dataviews-v3.pdf}
     \caption[Demonstration of time-shifted waveform injection in HL strain]{The figure shows the whitened time-domain background strain from Hanford and Livingston (HL) in two different colors. 
@@ -232,7 +232,7 @@ ResNet conf. & kernel size & $\lambda_1$ & $\lambda_2$ & $\lambda_3$ & $D_{\gamm
 \end{tabular}}
 \label{amp_meth_tab:embedding-hpo-table}
 \end{table}
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \includegraphics[width=0.7\textwidth]{figures/embedding-hpo.pdf}
     \includegraphics[width=0.28\textwidth]{figures/sim-training.pdf}
@@ -274,7 +274,7 @@ The right panel of the figure shows the training/validation of the best model co
     \end{tabular}}
     \label{amp_meth_tab:flow-hpo-table}
 \end{table}
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \includegraphics[width=0.7\textwidth]{figures/flow-hpo.pdf}
     \includegraphics[width=0.28\textwidth]{figures/flow-training.pdf}
@@ -492,11 +492,11 @@ However, the searched area is several $\mathcal{O}(1000)$ degrees for the two-de
 \begin{figure}
     \centering
     \scriptsize{$\mathrm{S190512at}$} \\
-    \includegraphics[width=0.485\textwidth]{figures/amplfi-S190512at.pdf} \includegraphics[width=0.485\textwidth]{figures/bayestar-S190512at.pdf}\\
+    \includegraphics[width=0.47\textwidth]{figures/amplfi-S190512at.pdf} \includegraphics[width=0.47\textwidth]{figures/bayestar-S190512at.pdf}\\
     \scriptsize{$\mathrm{S190513bm}$} \\
-    \includegraphics[width=0.485\textwidth]{figures/amplfi-S190513bm.pdf} \includegraphics[width=0.485\textwidth]{figures/bayestar-S190513bm.pdf}\\
+    \includegraphics[width=0.47\textwidth]{figures/amplfi-S190513bm.pdf} \includegraphics[width=0.47\textwidth]{figures/bayestar-S190513bm.pdf}\\
     \scriptsize{$\mathrm{S190701ah}$} \\
-    \includegraphics[width=0.485\textwidth]{figures/amplfi-S190701ah.pdf} \includegraphics[width=0.485\textwidth]{figures/bayestar-S190701ah.pdf}\\
+    \includegraphics[width=0.47\textwidth]{figures/amplfi-S190701ah.pdf} \includegraphics[width=0.47\textwidth]{figures/bayestar-S190701ah.pdf}\\
     \caption[\textbf{Left}: {\amplfi} skymaps \textbf{Right} Bayestar maps from events, using HL data, spanning different months of the third observing run, O3]{\textbf{Left}: {\amplfi} skymaps \textbf{Right} Bayestar maps from events, using HL data, spanning different months of the third observing run, O3. 
     We find that the skymaps are broadly consistent, although there is no clear trend of one being more constraining. 
     However, it demonstrates model validity to differing backgrounds up to several months from that used in training.}
