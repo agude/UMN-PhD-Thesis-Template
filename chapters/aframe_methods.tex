@@ -1,4 +1,4 @@
-\chapter{\texttt{Aframe} Methods}
+\chapter{\aframe Methods}
 \label{chap:aframe_methods}
 
 \begin{refsection}
@@ -26,13 +26,13 @@ Their comparatively high number of confirmed detections has given us reasonable 
 BBH mergers also benefit from a highly localized-in-time signal-to-noise ratio (SNR) profile relative to binary neutron star (BNS) mergers, which are in the sensitive band of the detectors much longer. 
 Studying the ability of neural-networks to detect BBH mergers, and in particular what real time use in the LVK detectors looks like in this context, represents an important first step towards developing a more thorough understanding of how, and whether, these algorithms can be applied to more challenging signals such as BNSs, and what tools and infrastructure would be required to do so.
 
-Here, we present \texttt{Aframe}, a flexible pipeline for detection of BBH mergers using deep learning.
+Here, we present \aframe, a flexible pipeline for detection of BBH mergers using deep learning.
 The implementation presented here uses a 1D convolutional neural-network. 
 Convolutional neural-networks have previously been shown to have potential for gravitational wave detection~\cite{magicbullet}, and we use this architecture, along with aggressive data augmentation techniques, to achieve a sensitivity competitive with matched filtering CBC search pipelines while requiring a significantly lower latency.
-More broadly, \texttt{Aframe} encompasses a suite of tools for quickly implementing, testing, and deploying new ideas at scale in order to more confidently realize the potential of machine learning in service to gravitational wave astronomy.
+More broadly, \aframe encompasses a suite of tools for quickly implementing, testing, and deploying new ideas at scale in order to more confidently realize the potential of machine learning in service to gravitational wave astronomy.
 
 The structure of this chapter is as follows. 
-Sec.~\ref{aframe_meth_sec:aframe-overview} gives a high-level overview of the \texttt{Aframe} algorithm. 
+Sec.~\ref{aframe_meth_sec:aframe-overview} gives a high-level overview of the \aframe algorithm. 
 In Sec.~\ref{aframe_meth_sec:sv-calc}, we describe the metric we use to measure performance. 
 Sec.~\ref{aframe_meth_sec:data} describes the datasets used to train and evaluate our network, and the means by which training and evaluation is performed is given in Secs.~\ref{aframe_meth_sec:training} and \ref{aframe_meth_sec:inference}, respectively. 
 We discuss the longevity of our model in Sec.~\ref{aframe_meth_sec:longevity} and the latency and computational requirements in Sec.~\ref{aframe_meth_sec:compute}. 
@@ -40,7 +40,7 @@ Finally, we compare our performance to existing pipelines in Sec.~\ref{aframe_me
 
 
 
-\section{The \texttt{Aframe} algorithm} \label{aframe_meth_sec:aframe-overview}
+\section{The \aframe algorithm} \label{aframe_meth_sec:aframe-overview}
 
 Our neural-network architecture modifies a standard ResNet34~\cite{resnet}, which maps fixed length time-series of gravitational wave strain from two interferometers (here, the Hanford and Livingston LIGO interferometers) to a scalar detection statistic indicating whether a signal is present in the input. 
 The detection statistic is analogous to the SNR output of matched filtering searches; the larger the value, the more likely the neural-network believes there is a signal consistent with the training distribution present in the data. 
@@ -55,7 +55,7 @@ Good agreement between validation and test metrics is essential for ensuring the
 The neural-network is trained by minimizing a binary cross entropy loss function with an Adam~\cite{AdamOptimizer} optimizer.
 We use a one cycle learning rate scheduler with cosine annealing~\cite{onecycleLR}. 
 
-Analyzing data with \texttt{Aframe} involves loading and preprocessing timeseries data, breaking it up into short time segments, then passing these segments through the neural-network. 
+Analyzing data with \aframe involves loading and preprocessing timeseries data, breaking it up into short time segments, then passing these segments through the neural-network. 
 The throughput associated with each of these steps can vary drastically, as can the hardware and software necessary to accelerate them. 
 In order to optimize the total throughput of this system, we adopt an inference-as-a-service (IaaS) computing model in which neural-network inference is handled by a dedicated service, to which client applications can send inference requests remotely. 
 Each step in our pipeline is then implemented and scaled independently to most efficiently leverage a fixed pool of heterogeneous computing resources. 
@@ -218,7 +218,7 @@ Inclination angle & Sine & $(0, \pi)$ & rad.\\
 \hline
 \hline
 \end{tabular*}
-\caption[Priors on parameters used to generate waveforms for training and testing \texttt{Aframe}]{Priors on parameters used to generate waveforms for both the training and testing sets. The prior is derived from that used in GWTC-3 to assess search pipelines. The component mass distributions are defined in the source frame. ``Comoving" refers to uniform in comoving volume.}
+\caption[Priors on parameters used to generate waveforms for training and testing \aframe]{Priors on parameters used to generate waveforms for both the training and testing sets. The prior is derived from that used in GWTC-3 to assess search pipelines. The component mass distributions are defined in the source frame. ``Comoving" refers to uniform in comoving volume.}
 \label{aframe_meth_tab:priors}
 \end{table}
 
@@ -278,7 +278,7 @@ SNR steps & Number of batches over which SNR scheduler decays & Uniform & $(1, 2
 \hline
 \hline
 \end{tabular*}
-\caption[Priors and descriptions of \texttt{Aframe} hyperparameters searched over]{Priors and descriptions of hyperparameters searched over. 
+\caption[Priors and descriptions of \aframe hyperparameters searched over]{Priors and descriptions of hyperparameters searched over. 
 The best value corresponds to the neural-network from the hyperparameter search that produced the highest validation score across all epochs. 
 A neural-network trained with these hyperparameters was used to evaluate results reported in Fig.~\ref{aframe_meth_fig:sensitivity}. 
 Details on hyperparameters can be found in Sec.~\ref{aframe_meth_sec:hp-search}}
@@ -323,7 +323,7 @@ The hyperparameters used to train this neural-network are reported in Table~\ref
 Our inference pipeline is an ensemble of three models: a snapshotter~\cite{hermes}, a whitener, and the neural-network itself. 
 Clients send streaming updates of strain data to a snapshotter. 
 The snapshotter sends the latest state to the whitening module. 
-Finally, batches of whitened data are constructed and analyzed by \texttt{Aframe}, producing predictions. 
+Finally, batches of whitened data are constructed and analyzed by \aframe, producing predictions. 
 The length of the state maintained by the snapshotter is determined by the length of the timeseries used to estimate the PSD, the batch size, and the inference sampling rate. 
 For our analysis, the whitening module uses the first 64 seconds of the snapshotter state to estimate the PSD and build a whitening filter. 
 The remaining data is whitened, and half a second is cropped from both edges to remove the effects of filter settle-in. 
@@ -345,7 +345,7 @@ Because analyses performed at 4\,Hz require 16 times fewer inference requests th
 \begin{figure}[h]
 \centering
 \includegraphics[width=\columnwidth]{figures/inference_rate_comparison.pdf}
-\caption[Sensitivity comparisons for the same \texttt{Aframe} model run over the same data at different inference rates]{Sensitivity comparisons for the same neural-network run over the same data at different inference rates. 
+\caption[Sensitivity comparisons for the same \aframe model run over the same data at different inference rates]{Sensitivity comparisons for the same neural-network run over the same data at different inference rates. 
 For the purposes of clarity, only a subset of the tested rates are shown here. 
 Except for the 1\,Hz inference, all results are within error of each other for all mass combinations and FARs, including for rates not shown in this plot.}
 \label{aframe_meth_fig:inference-rate-comparison}
@@ -384,7 +384,7 @@ With trained neural-network weights in hand, the requirements for online deploym
 A single NVIDIA 24\,GB A30 GPU is sufficient for real-time inference at an inference sampling rate of 2048 Hz, which provides sufficient resolution for coalescence time estimation. 
 The total memory required to hold both the neural-network and data is 4.6\,GB. The computational latency of the neural-network is less than 10 milliseconds. 
 In practice, the latency of our algorithm is dominated by pre- and post-processing steps that bring the total latency to approximately 3.1\,s. 
-For a detailed accounting of sources of latency within \texttt{Aframe}, see Table~\ref{aframe_meth_tab:latency}. 
+For a detailed accounting of sources of latency within \aframe, see Table~\ref{aframe_meth_tab:latency}. 
 The most significant source of latency in an online analysis comes from waiting for data to exist such that data can be cropped from the edges after resampling and whitening. 
 All other computational steps (data reading/writing, data transfer to/from GPU, whitening, event identification, etc.) take less than 0.4 seconds combined. 
 In production, additional latency is incurred uploading events to the GRAvitational-wave Candidate Event
@@ -418,7 +418,7 @@ Total & $3.114^{0.006}_{0.001}$\\
 \hline
 \hline
 \end{tabular*}
-\caption[Sources of latency for an \texttt{Aframe} online analysis]{Sources of latency for an \texttt{Aframe} online analysis. 
+\caption[Sources of latency for an \aframe online analysis]{Sources of latency for an \aframe online analysis. 
 For the items listed in the upper section this table, the latency does not come from performing the computation, but rather from needing to wait for the data to exist before the action can occur. 
 Items in the lower section are computational steps, and we report the median timing of 9191 trials. 
 The upper and lower error bars represent the 95th and 5th percentile, respectively. 
@@ -428,7 +428,7 @@ All measurements were taken on a dedicated NVIDIA A30 GPU.}
 
 
 \section{Comparison with Existing Searches}\label{aframe_meth_sec:comparison}
-To demonstrate \texttt{Aframe}'s readiness for real-time deployment, we compare its sensitivity to search pipelines used in production by the 
+To demonstrate \aframe's readiness for real-time deployment, we compare its sensitivity to search pipelines used in production by the 
 LVK. 
 For our pipeline, estimating sensitive volume requires analyzing simulated GW events ``injected'' into strain data, and analyzing background livetime produced by ``timeslides.''
 Performing timeslides is a standard way of empirically estimating the background (i.e. the distribution of noise events) for a search pipeline which analyzes a network of detectors. 
@@ -444,22 +444,22 @@ All GW detections reported in the third Gravitational-Wave Transient Catalog (GW
 \caption[Sensitive volume vs FAR for four different mass distributions]{Sensitive volume vs FAR for four different mass distributions. 
 Masses are specified in the source frame. 
 Each mass is drawn from a log-normal distribution with a mean of the value given above each plot and a width of 0.1. 
-\texttt{Aframe} demonstrates state-of-the-art sensitivity at higher masses, but loses performance relative to traditional search pipelines at lower masses. 
+\aframe demonstrates state-of-the-art sensitivity at higher masses, but loses performance relative to traditional search pipelines at lower masses. 
 The sensitive volume of the other pipelines was calculated using data from a GWTC-3 data release~\cite{ligo_scientific_collaboration_and_virgo_2023_7890437}.}\label{aframe_meth_fig:sensitivity}
 \end{figure*}
 
 A useful metric to measure the sensitivity of search algorithms is the \emph{sensitive volume}. 
 Sensitive volume measures the volume over which some astrophysical population of sources distributed uniformly in co-moving volume is detectable at a given false alarm rate (FAR). 
 Sensitive volume was used to measure the sensitivity of search pipelines in GWTC-3. 
-This provides an astrophysically meaningful benchmark to compare the performance of \texttt{Aframe} to the performance of traditional searches. 
+This provides an astrophysically meaningful benchmark to compare the performance of \aframe to the performance of traditional searches. 
 More details on the sensitive volume calculation can be found in Sec.~\ref{aframe_meth_sec:sv-calc}. 
-Fig.~\ref{aframe_meth_fig:sensitivity} compares \texttt{Aframe}'s sensitive volume as a function of FAR with the sensitivity of the MBTA~\cite{Aubin_2021}, PyCBC~\cite{Dal_Canton_2021}, GstLAL~\cite{ewing2023performance, Tsukada_2023} and cWB~\cite{DRAGO2021100678} searches as reported in GWTC-3~\cite{Abbott_2023}. 
-We note that the template banks used by MBTA, GstLAL, and PyCBC-Broad in the GWTC-3 analysis contain waveforms outside of the 5--100 M$_{\odot}$ range searched by \texttt{Aframe}. 
+Fig.~\ref{aframe_meth_fig:sensitivity} compares \aframe's sensitive volume as a function of FAR with the sensitivity of the MBTA~\cite{Aubin_2021}, PyCBC~\cite{Dal_Canton_2021}, GstLAL~\cite{ewing2023performance, Tsukada_2023} and cWB~\cite{DRAGO2021100678} searches as reported in GWTC-3~\cite{Abbott_2023}. 
+We note that the template banks used by MBTA, GstLAL, and PyCBC-Broad in the GWTC-3 analysis contain waveforms outside of the 5--100 M$_{\odot}$ range searched by \aframe. 
 In principle, these searches could increase their sensitivities in the 5--100 M$_{\odot}$ range by removing these templates. 
 This is evident when comparing the performance of PyCBC-BBH and PyCBC-Broad in Fig.~\ref{aframe_meth_fig:sensitivity}.
 
-In the 35-35 M$_{\odot}$ mass distribution, \texttt{Aframe} has a larger sensitive volume than the GWTC-3 configurations of all searches, and is comparable in the 35-20 M$_{\odot}$ mass bin, for the FARs considered in this analysis. 
-As source masses decrease further, so does \texttt{Aframe}'s performance relative to existing pipelines. 
+In the 35-35 M$_{\odot}$ mass distribution, \aframe has a larger sensitive volume than the GWTC-3 configurations of all searches, and is comparable in the 35-20 M$_{\odot}$ mass bin, for the FARs considered in this analysis. 
+As source masses decrease further, so does \aframe's performance relative to existing pipelines. 
 This is in part due to our neural-network architecture's inability to model the longer duration features of these low mass signals. 
 While the architecture implements global pooling layers, the convolution layers use a kernel length of 3 samples. 
 Improvements to neural-network architecture design, such as utilizing dilated convolutions that can better model these features will help to improve performance at these mass ranges.
@@ -495,7 +495,7 @@ Additionally, during this period, we do not report any non-catalog candidates wi
 \begin{tabular*}{\textwidth}{ p{1.9cm} p{1.0cm} p{1.0cm} p{0.8cm} p{1.1cm} p{1.4cm} p{1.1cm} p{1.6cm} p{1.8cm}}
 \hline
 \hline
-Event & $m_{1} (M_\odot)$ & $m_{2} (M_\odot)$  &Aframe & cWB & GstLAL & MBTA & PyCBC-BBH & PyCBC-Broad
+Event & $m_{1} (M_\odot)$ & $m_{2} (M_\odot)$  &\aframe & cWB & GstLAL & MBTA & PyCBC-BBH & PyCBC-Broad
 \\
 \hline
 GW190512\_180714 & $23.2^{+5.6}_{-5.6}$ & $12.5^{+3.5}_{-2.6}$ & $< 0.97$ & $0.88$ & $< 1.0 \times 10^{-5}$ & $0.038$ & $< 1.1 \times 10^{-4}$ &$1.1 \times 10^{-4}$ \\
@@ -510,7 +510,7 @@ GW190602\_175927 &$71.8^{+18.1}_{-14.6}$ & $44.8^{+15.5}_{-19.6}$ & $< 0.97$ & $
 \hline
 \hline
 \end{tabular*}
-\caption[Performance on known GW events in the \texttt{Aframe} testing set]{Masses in units of $M_{\odot}$, and false alarm rates in units of inverse years from \texttt{Aframe}, cWB, GstLAL, MBTA, and PyCBC-BBH for the known events in our testing set.
+\caption[Performance on known GW events in the \aframe testing set]{Masses in units of $M_{\odot}$, and false alarm rates in units of inverse years from \aframe, cWB, GstLAL, MBTA, and PyCBC-BBH for the known events in our testing set.
 Masses come from Table VIII of GWTC-2.1~\cite{theligoscientificcollaboration2022gwtc21}, and FARs from Table XV of GWTC-3~\cite{Abbott_2023}. 
 As our analysis examined only one year of background, our minimum FAR is one per year.}
 \label{aframe_meth_tab:known-events}
@@ -533,8 +533,8 @@ Many algorithms have already been published on this front~\cite{Lin_2019, PhysRe
 However, appreciable sensitivity compared with state-of-the-art matched filtering approaches has yet to be demonstrated.
 The detection of these mergers with neural-networks is more challenging due to the greater length of time these signals spend in the sensitive band of the detector.
 
-Finally, because \texttt{Aframe} does not provide an SNR timeseries for detections, it cannot be used in conjunction with current low-latency sky localization algorithms like BAYESTAR~\cite{Singer_2016}. 
-However, machine-learning based parameter estimation algorithms, like \texttt{AMPLFI}~\cite{amplfi}, are being developed as low-latency solutions to sky localization, and can be used to followup \texttt{Aframe} detections.
+Finally, because \aframe does not provide an SNR timeseries for detections, it cannot be used in conjunction with current low-latency sky localization algorithms like BAYESTAR~\cite{Singer_2016}. 
+However, machine-learning based parameter estimation algorithms, like \amplfi~\cite{amplfi}, are being developed as low-latency solutions to sky localization, and can be used to followup \aframe detections.
 This approach is discussed further in Chapter~\ref{chap:amplfi_methods}.
 
 \singlespacing
