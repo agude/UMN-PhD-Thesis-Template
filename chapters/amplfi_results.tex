@@ -276,7 +276,7 @@ For both, posterior samples are clustered using a k-means algorithm into $k$ clu
 A brute-force search over $k$ is performed in order to maximize the Bayesian information criterion. 
 For each cluster, a separate KDE is constructed, and the total distribution is modeled by summing the cluster KDEs with appropriate weights. 
 The conditional distance distribution p($d \vert \alpha, \delta$) is evaluated as $p(\alpha, \delta, d_L) / p(\alpha, \delta)$ by analytically marginalizing the 3D KDEs. 
-See Sec.~5 in~\cite{Singer_2016} for more details. 
+See Sec.~5 of Ref.~\cite{Singer_2016} for more details. 
 Due to the brute-force search over $k$, the runtime is $\sim 11$ seconds parallelized on 64 CPUs, which is not suitable for extremely rapid alerts.
 
 

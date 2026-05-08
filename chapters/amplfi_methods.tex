@@ -29,7 +29,7 @@ One primary step toward improving follow-up campaigns is the availability of fas
 The computationally expensive part of stochastic sampling techniques, like nested sampling currently in use, involve the repeated computation of the likelihood. 
 Techniques like reduced-order-quadrature (ROQ)~\cite{Canizares:2014fya, morisaki2023rapidlocalizationinferencecompact} and focused-ROQ~\cite{Morisaki:2020oqk} have been developed in view of making real-time PE as fast as possible. 
 This is currently used in LVK to deliver update alerts from Bayesian parameter estimation on the timescale of several minutes to hours. 
-Other techniques like the use of accelerated hardware for stochastic sampling has been reported in Refs.~\cite{Talbot:2019okv, wong2023fastgravitationalwaveparameter}, and mesh-free approximation for sky-localization, reported in~\cite{PhysRevD.108.064055, PhysRevD.109.024053}.
+Other techniques like the use of accelerated hardware for stochastic sampling has been reported in Refs.~\cite{Talbot:2019okv, wong2023fastgravitationalwaveparameter}, and mesh-free approximation for sky-localization, reported in Refs.~\cite{PhysRevD.108.064055, PhysRevD.109.024053}.
 
 More recently, likelihood-free inference (LFI) using variational methods, have emerged as a different paradigm with flexible neural network approximators being used to learn the posterior or the likelihood. 
 Their use has been demonstrated on GW data~\cite{Gabbard_2021, PhysRevD.108.042004}, in particular with posterior estimation using normalizing flows~\cite{Dax_2021}, such as in the DINGO algorithm. 
@@ -201,7 +201,7 @@ We note that the expander network, $h$, is only required for this pre-training s
 Previous work using LFI reported other techniques, like group equivariance, to tackle such symmetries~\cite{dax2023group}.
 We take a different approach because parameters like time of coalescence are reported by the search, and despite having some associated uncertainty, are sufficiently accurate for EM follow-up. 
 Hence, we marginalize over time of arrival and report posteriors on parameters such as mass and sky location that are also needed for EM follow-up. 
-For more details on this technique, the reader is referred to~\cite{chatterjee2023optimizing}. 
+For more details on this technique, the reader is referred to Ref.~\cite{chatterjee2023optimizing}. 
 This technique can be extended to other nuisance parameters; for example, the coalescence phase. 
 This is left to future work.
 
