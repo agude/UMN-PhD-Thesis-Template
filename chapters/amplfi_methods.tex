@@ -213,6 +213,7 @@ This is left to future work.
 \caption[Top ten embedding network hyper-parameter configurations]{Top 10 hyper-parameter configurations for hyper-parameter optimization runs for the embedding
 network. The best trial configuration is shown in boldface.}
 \footnotesize
+\resizebox{\columnwidth}{!}{%
 \begin{tabular}{ccccccccccc}
 \hline
 ResNet conf. & kernel size & $\lambda_1$ & $\lambda_2$ & $\lambda_3$ & $D_{\gamma}$ & LR & Momentum & wt. decay & $N$ & VICReg. \\
@@ -228,7 +229,7 @@ ResNet conf. & kernel size & $\lambda_1$ & $\lambda_2$ & $\lambda_3$ & $D_{\gamm
 ( $4$ , $3$ , $4$ ) &  $3$  &  $1$  &  $1$  &  $1$  &  $9$  &  $1.37\cdot 10^{-4}$  &  $5.46\cdot 10^{-5}$  &  $1.33\cdot 10^{-5}$  &  $3$  &  $0.677$ \\
 ( $4$ , $5$ , $3$ ) &  $5$  &  $5$  &  $5$  &  $1$  &  $8$  &  $1.64\cdot 10^{-4}$  &  $9.47\cdot 10^{-4}$  &  $1.61\cdot 10^{-5}$  &  $3$  &  $0.707$ \\
 \hline
-\end{tabular}
+\end{tabular}}
 \label{amp_meth_tab:embedding-hpo-table}
 \end{table}
 \begin{figure}[h]
@@ -254,6 +255,7 @@ The right panel of the figure shows the training/validation of the best model co
     \centering
     \caption[Top ten normalizing flow hyper-parameter configurations]{Top 10 hyper-parameter configurations for run involving 30 epochs. Validation loss is noted at the end of the 30th epoch.}
     \footnotesize
+    \resizebox{\columnwidth}{!}{%
     \begin{tabular}{ccccccc}
     \hline
     \# transforms & \# blocks & \# hidden feat. & LR & batch size & wt. decay & val. loss
@@ -269,7 +271,7 @@ The right panel of the figure shows the training/validation of the best model co
     $80$ & $8$ & $100$ & $0.000873$ & $1200$ & $0.00453$ & $8.86$ \\
     $60$ & $6$ & $120$ & $0.000297$ & $1000$ & $0.0509$ & $8.87$ \\
     \hline
-    \end{tabular}
+    \end{tabular}}
     \label{amp_meth_tab:flow-hpo-table}
 \end{table}
 \begin{figure}[h]

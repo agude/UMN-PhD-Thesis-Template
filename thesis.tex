@@ -2,16 +2,10 @@
 % thesis.tex: Primary TeX control file for thesis.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \documentclass[11pt, oneside]{mnthesis}
-\usepackage{epsfig} % Allows the inclusion of eps files
-\usepackage{epic} % Enhanced picture mode
-\usepackage{eepic} % Extensions for epic
 \usepackage{url} % URL handling
 \usepackage{longtable} % Tables that continue onto multiple pages
 \usepackage{threeparttable}
 \usepackage[table]{xcolor}
-\usepackage{mathrsfs} % Support for \mathscr script
-\usepackage{multirow} % Span rows in tables
-\usepackage{bigstrut} % Space struts in tables up and down
 \usepackage{amssymb} % AMS math symbols and helpers
 \usepackage{graphicx} % Enhanced graphics support
 \usepackage{setspace} % Adjust spacing in captions, single by default
@@ -23,25 +17,18 @@
 \usepackage[noabbrev]{cleveref} % Automatically determine \cref type
 \usepackage[font=small]{caption}
 \usepackage{iopams}
-\usepackage{rotating,color,wasysym,epstopdf,subcaption}
-\usepackage[normalem]{ulem}
-\usepackage{comment}
-\usepackage[multiple]{footmisc}
+\usepackage{color}
 \usepackage[backend=bibtex,giveninits=true,style=numeric]{biblatex}
 \addbibresource{test.bib}
 
-
 \usepackage{listings}
-\usepackage{mathtools}
-\usepackage{minted}
 \usepackage{makecell}
-\usepackage{dcolumn} % Align table columns on decimal point
 \usepackage{colortbl}
 \definecolor{codegreen}{rgb}{0,0.6,0}
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
 \definecolor{codepurple}{rgb}{0.58,0,0.82}
 \definecolor{backcolour}{rgb}{0.95,0.95,0.92}
- 
+
 \lstdefinestyle{mystyle}{
     backgroundcolor=\color{backcolour},   
     commentstyle=\color{codegreen},

@@ -198,7 +198,7 @@ The random placement of the coalescence time encodes time translational invarian
 \begin{table}
 \centering
 \footnotesize
-\begin{tabular*}{\columnwidth}{ p{4cm} p{3cm} p{3cm} p{3cm} }
+\begin{tabular}{ p{3.9cm} p{3cm} p{3cm} p{3cm} }
 \hline
 \hline
 Parameter & Prior & Limits & Units\\
@@ -217,7 +217,7 @@ Declination &Cosine & $(-\pi/2, \pi/2)$ & rad.\\
 Inclination angle & Sine & $(0, \pi)$ & rad.\\
 \hline
 \hline
-\end{tabular*}
+\end{tabular}
 \caption[Priors on parameters used to generate waveforms for training and testing \aframe]{Priors on parameters used to generate waveforms for both the training and testing sets. The prior is derived from that used in GWTC-3 to assess search pipelines. The component mass distributions are defined in the source frame. ``Comoving" refers to uniform in comoving volume.}
 \label{aframe_meth_tab:priors}
 \end{table}
@@ -264,7 +264,7 @@ This motivates the neural-network to learn the concept of coherence: the time-fr
 \begin{table*}
 \centering
 \small
-\begin{tabular*}{\textwidth}{ p{2cm} p{4.5cm} p{2.25cm} p{2.25cm} p{2.5cm} }
+\begin{tabular}{ p{1.8cm} p{4.0cm} p{2.0cm} p{2.0cm} p{2.2cm} }
 \hline
 \hline
 Parameter & Description & Prior & Limits & Best Value \\
@@ -277,7 +277,7 @@ $p_{\text{mute}}$ & Probability of mute augmentation & Uniform & $(0, 0.3)$ & $0
 SNR steps & Number of batches over which SNR scheduler decays & Uniform & $(1, 2500)$ & $989$\\
 \hline
 \hline
-\end{tabular*}
+\end{tabular}
 \caption[Priors and descriptions of \aframe hyperparameters searched over]{Priors and descriptions of hyperparameters searched over. 
 The best value corresponds to the neural-network from the hyperparameter search that produced the highest validation score across all epochs. 
 A neural-network trained with these hyperparameters was used to evaluate results reported in Fig.~\ref{aframe_meth_fig:sensitivity}. 
@@ -489,10 +489,10 @@ For the final event, our reported false alarm rate, 14 per year, is of a similar
 Additionally, during this period, we do not report any non-catalog candidates with a false alarm rate less than 5 per month.
 
 \begin{table*}
-\setlength{\tabcolsep}{5pt}
+\setlength{\tabcolsep}{3pt}
 \centering
 \tiny
-\begin{tabular*}{\textwidth}{ p{1.9cm} p{1.0cm} p{1.0cm} p{0.8cm} p{1.1cm} p{1.4cm} p{1.1cm} p{1.6cm} p{1.8cm}}
+\begin{tabular}{ p{2.1cm} p{1.2cm} p{1.2cm} p{0.8cm} p{1.1cm} p{1.4cm} p{1.1cm} p{1.4cm} p{1.7cm}}
 \hline
 \hline
 Event & $m_{1} (M_\odot)$ & $m_{2} (M_\odot)$  &\aframe & cWB & GstLAL & MBTA & PyCBC-BBH & PyCBC-Broad
@@ -509,7 +509,7 @@ GW190527\_092055 &$35.6^{+18.7}_{-8.0}$ & $22.2^{+9.0}_{-8.7}$ & $< 0.97$ & -- &
 GW190602\_175927 &$71.8^{+18.1}_{-14.6}$ & $44.8^{+15.5}_{-19.6}$ & $< 0.97$ & $0.015$ & $< 1.0 \times 10^{-5}$ & $3.0 \times 10^{-4}$ & $0.013$ & $0.29$ \\
 \hline
 \hline
-\end{tabular*}
+\end{tabular}
 \caption[Performance on known GW events in the \aframe testing set]{Masses in units of $M_{\odot}$, and false alarm rates in units of inverse years from \aframe, cWB, GstLAL, MBTA, and PyCBC-BBH for the known events in our testing set.
 Masses come from Table VIII of GWTC-2.1~\cite{theligoscientificcollaboration2022gwtc21}, and FARs from Table XV of GWTC-3~\cite{Abbott_2023}. 
 As our analysis examined only one year of background, our minimum FAR is one per year.}
