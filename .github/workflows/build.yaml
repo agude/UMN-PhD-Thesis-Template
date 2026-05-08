@@ -12,7 +12,7 @@ jobs:
     - name: Install the required packages
       run: |
         sudo apt-get update 
-        sudo apt-get install -y texlive-latex-base texlive-latex-extra texlive-fonts-recommended texlive-pictures texlive-science 
+        sudo apt-get install -y texlive-latex-base texlive-latex-extra texlive-fonts-recommended texlive-pictures texlive-science texlive-bibtex-extra biber
         sudo apt-get clean
     - name: Build the Thesis
       run: make
