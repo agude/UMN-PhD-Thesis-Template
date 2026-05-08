@@ -1,11 +1,11 @@
-\chapter{Online deployment of Aframe and AMPLFI}
+\chapter{Online Deployment of Aframe and AMPLFI}
 \label{chap:online}
 \begin{refsection}
 
 In this chapter, we describe the software architecture used to deploy the \texttt{Aframe} and \texttt{AMPLFI} algorithms, which together form an end-to-end machine learning-based system for real time detection and parameter estimation of gravitational waves. 
 We detail the production deployment of \texttt{Aframe} and \texttt{AMPLFI} during the third part of the LIGO-Virgo-KAGRA collaboration's fourth observing run, and discuss the system's contributions to public alerts. 
 
-\section{Introduction}
+\section{Overview}
 The first discovery of gravitational waves (GWs) from a binary black hole (BBH) merger in 2015 jump-started the era of observational GW science~\cite{AbEA2016a}. 
 The LIGO-Virgo-KAGRA (LVK) collaboration's third observing run (O3) was the first that distributed real-time public alerts to the astronomical community. 
 Since then, hundreds of real-time candidate events have been made public\footnote{https://gracedb.ligo.org/superevents/public}. 
@@ -50,7 +50,7 @@ The neural network is trained to map this input to a single scalar detection sta
 \texttt{Aframe}'s analysis window strides across the data at a fixed rate called the \emph{inference sampling rate}, producing a time-series of neural network outputs. 
 The inference sampling rate determines the precision with which the coalescence time of the merger can be estimated. 
 For O4c online analysis, the inference sampling rate is 512\,Hz. 
-The prior used to train \texttt{Aframe} for O4c deployment is listed in Table \ref{online_tab:aframe-priors}, which is the same as that used in previous works. 
+The prior used to train \texttt{Aframe} for O4c deployment is listed in Table~\ref{online_tab:aframe-priors}, which is the same as that used in previous works. 
 
 \subsection{\texttt{AMPLFI}}
 After candidate events are identified, parameter estimation (PE) is performed by \texttt{AMPLFI}, a ML framework based on likelihood-free inference (LFI)~\cite{amplfi, Marx:2025ioo}. 
@@ -60,7 +60,7 @@ The model uses time and frequency representations of the strain data along with 
 \texttt{AMPLFI} models are trained for fixed detector configurations. 
 To maximize sky localization precision, two distinct \texttt{AMPLFI} models for Hanford-Livingston (HL) and Hanford-Livingston-Virgo (HLV) detector configurations are trained. 
 The online deployment dynamically selects the appropriate model, prioritizing the HLV model when science-quality data from the Virgo interferometer at the time of the event is available. 
-The signal priors used to train the \texttt{AMPLFI} models used during O4c is listed in Table \ref{online_tab:amplfi-priors}. 
+The signal priors used to train the \texttt{AMPLFI} models used during O4c is listed in Table~\ref{online_tab:amplfi-priors}. 
 Compared with Refs.~\cite{amplfi, Marx:2025ioo}, the chirp mass prior is lowered to 5\,$\mathrm{M}_{\odot}$ motivated by analyzing mock data challenges with \texttt{Aframe} which demonstrated sensitivity to these signals. 
 In addition, we extend the distance prior from 3 to 6\,Gpc to account for increased detector sensitivity between O3 and O4, and to reduce instances where \texttt{AMPLFI}s luminosity distance posteriors would rail against the prior boundary. 
 
@@ -139,7 +139,7 @@ In addition, the data loader employs automated retry logic to catch and recover 
 This current system for delivering GW frames introduces a fundamental latency due to the discrete frame size. 
 Delivery of frames as discrete 1 second chunks means pipelines must wait for the whole frame to be complete before analysis. 
 In the worst case, a GW event occurs at the beginning of a frame, and downstream tasks must wait for the remaining full second of data before proceeding. 
-For 1 second frames, this \emph{discrete frame latency} adds an additional 0.5 seconds on average. See Figure \ref{online_fig:discrete-frame-latency} for an illustration. 
+For 1 second frames, this \emph{discrete frame latency} adds an additional 0.5 seconds on average. See Fig.~\ref{online_fig:discrete-frame-latency} for an illustration. 
 Next generation data delivery (NGDD) systems are being developed for use in future observing runs that will deliver data in 1/16-second chunks rather than 1-second frames, reducing the average discrete packet latency from 0.5 seconds to approximately 0.03 seconds.
 In addition, the \texttt{Aframe}/\texttt{AMPLFI} pipeline deployed at the LIGO Caltech computing cluster must wait for the data to be transferred from the interferometer sites to Caltech before analysis.
 Transfer latency includes the time required to calibrate the strain data and package all auxiliary channels into each frame file; for LIGO, this typically takes 7--8 seconds, with Virgo taking an additional 1--2 seconds.
@@ -181,7 +181,7 @@ Resampling methods that utilize finite impulse response filters corrupt portions
 To mitigate these edge effects, the \texttt{Aframe} data loader maintains a 2 second buffer of the most recent frames in memory. 
 When a new frame arrives, it is appended to the buffer. The now 3 second frame buffer is resampled to the desired sample rate. 
 The uncorrupted middle second of data is appended to a separate buffer which maintains 64 seconds of resampled data for analysis by \texttt{Aframe}. 
-An illustration of this process is shown in Figure \ref{online_fig:resampling}. 
+An illustration of this process is shown in Fig.~\ref{online_fig:resampling}. 
 Because resampling the frame at time T requires the frame at time T + 1, this procedure incurs a 1 second latency.
 Tightening the post-resampling crop to match the filter's transient length (rather than a conservative 1-second buffer) substantially reduces this penalty without requiring changes to the underlying filter or data delivery system. 
 
@@ -205,7 +205,7 @@ To facilitate this, a 64 second buffer of resampled data is kept in GPU memory.
 When the latest resampled frame is complete, it is moved to the GPU and appended to the front of the buffer. 
 Overlapping windows of data, with time deltas corresponding to the inference sampling rate, are ``unfolded'' into a batch. 
 The PSD estimated from the preceding 64 seconds of data is used to whiten each batch element. 
-The whitened batch is passed to \texttt{Aframe} for inference. This procedure is illustrated in Figure~\ref{online_fig:whitening}.
+The whitened batch is passed to \texttt{Aframe} for inference. This procedure is illustrated in Fig.~\ref{online_fig:whitening}.
 
 \begin{figure}
     \centering
@@ -224,7 +224,7 @@ The time-series of detection statistics is then appended to an output buffer whi
 This time-series is then integrated using a top-hat filter to produce a time-series of integrated detection statistics. 
 Events are identified by finding peaks in the integrated time-series.
 Because the background model is constructed from time-slides run at an inference sampling rate of 4\,Hz, both a 4\,Hz and the full 512\,Hz detection statistic time-series are tracked in parallel: the 4\,Hz output is used for FAR estimation, while the 512\,Hz output is used to precisely locate the coalescence time.
-An overview of this procedure is shown in Figure \ref{online_fig:inference}. 
+An overview of this procedure is shown in Fig.~\ref{online_fig:inference}. 
 
 Accurately estimating the significance of an event requires identifying the peak in the integrated network output. 
 If the coalescence time of the event lies at the end of the frame, the integrated network output will not reach its peak until the next frame. 
@@ -585,7 +585,7 @@ A dash (--) indicates the pipeline did not contribute to the alert.}
 \end{figure}
 
 
-\section{Conclusions and Outlook}
+\section{Discussion}
 
 
 Several avenues exist for improving the quality of this low latency deployment. 

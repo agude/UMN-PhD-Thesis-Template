@@ -1,4 +1,4 @@
-\chapter{AMPLFI Methods}
+\chapter{\texttt{AMPLFI} Methods}
 \label{chap:amplfi_methods}
 \begin{refsection}
 
@@ -9,7 +9,7 @@ We train our model using binary black-hole (BBH) simulations on real LIGO-Virgo 
 Our model has $\sim 6$ million trainable parameters with training times $\lesssim 24$ hours. 
 Based on online deployment on a mock data stream of LIGO-Virgo data, {\aframe~+ \amplfi} is able to pick up BBH candidates and infer parameters for real-time alerts from data acquisition with a net latency of $\sim 6$ seconds. 
 
-\section{Introduction}
+\section{Motivation}
 It has been almost a decade since the discovery of gravitational waves (GWs) from compact binary mergers~\cite{AbEA2016a}, with the last few years seeing a steady increase in the number of discovered GW events.
 While the first observing run of the Laser Interferometer Gravitational-wave Observatory (LIGO) reported only three events~\cite{AbEA2016a, AbEA2016g},\footnote{GW151012, initially labeled as low-significance, was later confirmed as a third event in O1.} the number count stood at 90 within a span of five years~\cite{LSC2021djp}.
 Furthermore, the recently-completed fourth observing run (O4) of ground-based observatories LIGO/Virgo/KAGRA (LVK) has already reported hundreds of events discovered online.\footnote{See \url{https://gracedb.ligo.org/superevents/public/O4/} for the most updated list.} 
@@ -29,11 +29,11 @@ One primary step toward improving follow-up campaigns is the availability of fas
 The computationally expensive part of stochastic sampling techniques, like nested sampling currently in use, involve the repeated computation of the likelihood. 
 Techniques like reduced-order-quadrature (ROQ)~\cite{Canizares:2014fya, morisaki2023rapidlocalizationinferencecompact} and focused-ROQ~\cite{Morisaki:2020oqk} have been developed in view of making real-time PE as fast as possible. 
 This is currently used in LVK to deliver update alerts from Bayesian parameter estimation on the timescale of several minutes to hours. 
-Other techniques like the use of accelerated hardware for stochastic sampling has been reported in~\cite{Talbot:2019okv, wong2023fastgravitationalwaveparameter}, and mesh-free approximation for sky-localization, reported in~\cite{PhysRevD.108.064055, PhysRevD.109.024053}.
+Other techniques like the use of accelerated hardware for stochastic sampling has been reported in Refs.~\cite{Talbot:2019okv, wong2023fastgravitationalwaveparameter}, and mesh-free approximation for sky-localization, reported in~\cite{PhysRevD.108.064055, PhysRevD.109.024053}.
 
 More recently, likelihood-free inference (LFI) using variational methods, have emerged as a different paradigm with flexible neural network approximators being used to learn the posterior or the likelihood. 
 Their use has been demonstrated on GW data~\cite{Gabbard_2021, PhysRevD.108.042004}, in particular with posterior estimation using normalizing flows~\cite{Dax_2021}, such as in the DINGO algorithm. 
-However, in order to relay discovery alerts for prompt followup, the combination of \emph{search and inference} needs to be considered together.\footnote{This is done in case of stochastic signals offline, for example, see~\cite{Smith_2018}.}
+However, in order to relay discovery alerts for prompt followup, the combination of \emph{search and inference} needs to be considered together.\footnote{This is done in case of stochastic signals offline, for example, see Ref.~\cite{Smith_2018}.}
 Also considering a live, real-time system design, several overhead costs like data transfer, file input/output operations, communicating data to a remote server, and so on are often overlooked in isolated analyses, but show up in the overall time-to-alert.
 It is also worth highlighting that traditionally in GW data analysis, the search and PE components have been treated separately -- matched-filtering searches pick up the candidates from the data stream using a suitable detection statistic, and also provide important context like the best matching template and the signal-to-noise ratio (SNR) time series, which are then used to compute sky-localization maps~\cite{Singer_2016} and EM-bright source properties~\cite{Chatterjee:2019avs} that are sent out in the sub-minute alerts by the LVK~\cite{Chaudhary_2024}.
 The results are then updated based on Bayesian PE results, in the timescale of a few hours.
@@ -101,7 +101,7 @@ We also make some optimizations compared to previous efforts in light of an onli
 \end{figure}
 
 We use the \phenomd~phenomenological waveform model for our simulations~\cite{Khan:2015jqa}. 
-This waveform model contains the full inspiral-merger-ringdown physics, starting with the inspiral phase up to 3.5 post-newtonian order in GW phase (known as TaylorF2; see~\cite{Buonanno_2009} for a review), and using an ansatz for the merger and ringdown, fitting this ansatz to numerical relativity results. 
+This waveform model contains the full inspiral-merger-ringdown physics, starting with the inspiral phase up to 3.5 post-newtonian order in GW phase (known as TaylorF2; see Ref.~\cite{Buonanno_2009} for a review), and using an ansatz for the merger and ringdown, fitting this ansatz to numerical relativity results. 
 One limitation of this waveform model is the restriction to aligned spins i.e. BH spin components perpendicular to the orbital plane and therefore no precession. 
 Current online PE using stochastic sampling techniques use the {\phenomp} waveform approximant, which contains precessing effects. 
 Furthermore, high mass BBH systems use the {\phenomxphm} approximant, which also includes higher modes of radiation. 
@@ -109,12 +109,12 @@ However, we note that inference like sky-localization is insensitive to such eff
 Also, the EM-brightness of a binary depends primarily on the aligned spin components aside from the mass ratio. Hence, the use of aligned-spin is justified for online purposes. 
 In the future, however, we plan to implement and integrate the {\phenomp} waveform model with our workflow.
 
-In Figure~\ref{amp_meth_fig:waveform}, we show the time-domain strain of a representative BBH system based on our \phenomd~ implementation and compare it with that implemented in \lalsim. 
+In Fig.~\ref{amp_meth_fig:waveform}, we show the time-domain strain of a representative BBH system based on our \phenomd~ implementation and compare it with that implemented in \lalsim. 
 The latter is a part of the LIGO Algorithm Library~\cite{lalsuite}, and provides the core components of GW data analysis with LVK data. 
 We find consistency between our implementation and that in ~\lalsim, with the residual errors below the signal by three orders of magnitude through most of the evolution.
 Such residuals are unlikely to impact the results since the statistical errors of the posterior are greater than systematic errors due to such differences. 
 We present some comparison results in section~\ref{amp_meth_sec:results}.
-Though we show comparison with a single representative system in Figure~\ref{amp_meth_fig:waveform}, several other combination of parameters are tested for consistency with {\lalsim} as a part of unit-tests of the {\mlgw} codebase.\footnote{\scriptsize{Located at \url{https://github.com/ML4GW/ml4gw/blob/v0.5.0/tests/waveforms/test_cbc_waveforms.py}}}
+Though we show comparison with a single representative system in Fig.~\ref{amp_meth_fig:waveform}, several other combination of parameters are tested for consistency with {\lalsim} as a part of unit-tests of the {\mlgw} codebase.\footnote{\scriptsize{Located at \url{https://github.com/ML4GW/ml4gw/blob/v0.5.0/tests/waveforms/test_cbc_waveforms.py}}}
 
 \subsection{Data generation on the GPU}
 \begin{figure}[h]
@@ -146,7 +146,7 @@ Our workflow involves:
     This step is fast; for example, generating $N=1000$ waveforms takes $\sim 0.15$ seconds on a NVIDIA A40 GPU. 
     \item We then inject the signals into the background chunks, obtaining the data batch. 
     We whiten the batch using the estimated power spectra and pass it along with the parameters for training/validation/testing. 
-    Examples of the whitened data with the injected waveform overlaid is shown in the panels of Figure~\ref{amp_meth_fig:data-view}.
+    Examples of the whitened data with the injected waveform overlaid is shown in the panels of Fig.~\ref{amp_meth_fig:data-view}.
 \end{itemize}
 We call this implementation {\tt InMemoryDataset} in \mlgw. 
 We also note that though we have used GPUs as the co-processors in this work, our software framework can also be ported to other accelerators, like TPUs or HPUs, supported by the {\tt{pytorch-lightning}}~\cite{falcon_2024_10779019} framework that we use.
@@ -162,7 +162,7 @@ The implementation closely resembles that of the \texttt{torchvision} library, w
 Firstly, {1-D} convolutions are used for time-series, instead of {2-D} variants used for images. 
 We use group normalization~\cite{wu2018groupnormalization} instead of batch-normalization.
 In \aframe, the architecture closely resembles a 34-layer residual network~\cite{he2015deepresiduallearningimage}.
-We, however, avoid the final 512-channel stack of convolution blocks (see Figure.~3 in~\cite{he2015deepresiduallearningimage}) since we do not find performance improvement with its inclusion. 
+We, however, avoid the final 512-channel stack of convolution blocks (see Fig. 3 in~\cite{he2015deepresiduallearningimage}) since we do not find performance improvement with its inclusion. 
 Thus our layer stacks contain blocks of 64, 128, and 256-channel residual convolution blocks. 
 The number of convolution layers in each block is determined by hyper-parameter optimization (HPO) using Variance-Invariance-Covariance Regularization (VICReg)~\cite{bardes2022vicreg} loss, detailed below in section~\ref{amp_meth_sec:ssl}.
 Details about the HPO are presented in~\ref{amp_meth_sec:embedding-hpo}. 
@@ -173,9 +173,9 @@ A final fully-connected layer projects to a representation dimension, $D_{\gamma
 We pre-train the embedding network to marginalize over uncertainties in arrival time up to 1 second.
 This is done because the \emph{peak} of the detection statistic reported by {\aframe} may differ from the true arrival time by up to tens of milliseconds. 
 The pre-training is done via self-supervised learning (SSL) by identifying two ``views'' of the data as being similar, and training the embedding network to minimize VICReg. 
-Examples of two different views, $d$ and $d^\prime$, are shown in Figure~\ref{amp_meth_fig:data-view}, where the upper panel shows a signal that
+Examples of two different views, $d$ and $d^\prime$, are shown in Fig.~\ref{amp_meth_fig:data-view}, where the upper panel shows a signal that
 is injected at a fixed reference time, while the lower panel shows a time-shifted signal; i.e., all signal parameters are the same except the time of arrival, which is chosen randomly within a 1-second window.
-We emphasize that the views shown in Figure~\ref{amp_meth_fig:data-view} do not affect the relative times of arrival between the detectors, which is crucial for sky-localization, but instead are a shift in the geo-center time of arrival by up to 1 second.
+We emphasize that the views shown in Fig.~\ref{amp_meth_fig:data-view} do not affect the relative times of arrival between the detectors, which is crucial for sky-localization, but instead are a shift in the geo-center time of arrival by up to 1 second.
 Two batches of views are then forward-modeled through the embedding network and projected down to the resulting space. 
 This projection, $\boldgamma$, is performed in two different steps. 
 First, the ResNet $f$, mentioned above, projects the inputs into $\smallgamma\in\mathbb{R}^{D_{\gamma}}$. 
@@ -185,7 +185,7 @@ The resulting composition is given by  $\boldgamma \equiv h\circ f$,
     \smallgamma = f(\data);\;\smallgamma' = f(\data');\;x = h(\smallgamma);\;x' = h(\smallgamma').
     \label{eq:representation}
 \end{equation}
-We follow the prescription mentioned in~\cite{bardes2022vicreg} and compute the \vicreg~loss in the expanded dimension as,
+We follow the prescription mentioned in Ref.~\cite{bardes2022vicreg} and compute the \vicreg~loss in the expanded dimension as,
 \begin{eqnarray}
     \vicreg(x, x') &=& \lambda_1\;\mathrm{MSE}(x, x') +
       \lambda_2\;\left[\sqrt{\mathrm{Var}(x) + \epsilon} + \sqrt{\mathrm{Var}(x') + \epsilon}\right] + \nonumber \\
@@ -246,7 +246,7 @@ We use a stochastic gradient descent optimizer and also sample over the learning
 A total of $\sim 250$ training runs were performed using asynchronous hyperbanding with early-stopping~\cite{li2018massively} using the {\raytune} library~\cite{liaw2018tune}. 
 This technique stops poor performing trials allowing more favorable trials to continue. We use a grace period of 3 epochs before half of ongoing trials are stopped. 
 The experiment was carried over 8 workers over 4 A40 GPU taking $\sim 40$ hours. 
-We show the top 10 trial configuration in Table~\ref{amp_meth_tab:embedding-hpo-table} and show the epoch-average VICReg validation loss for the same in the left panel of Figure~\ref{amp_meth_fig:embedding-hpo-top-runs}. 
+We show the top 10 trial configuration in Table~\ref{amp_meth_tab:embedding-hpo-table} and show the epoch-average VICReg validation loss for the same in the left panel of Fig.~\ref{amp_meth_fig:embedding-hpo-top-runs}. 
 The right panel of the figure shows the training/validation of the best model configuration trained until early-stopping condition is met.
 
 \subsection{\label{amp_meth_sec:flow-hpo}Hyperparameter Tuning of the Normalizing Flow}
@@ -283,11 +283,11 @@ The right panel of the figure shows the training/validation of the best model co
 Hyper-parameter optimization is done for $\sim 100$ configurations involving the number of transforms, the configuration of each transform, learning rate, batch size, optimizer
 weight decay and momentum parameters shown in Table~\ref{amp_meth_tab:flow-hpo-table} using asynchronous hyper-banding with early stopping~\cite{li2018massively} using the {\raytune} library~\cite{liaw2018tune}.
 This stops under-performing runs in favor of allowing better performing runs to continue. We carried out the HPO runs over 4 A40 GPUs which took $\sim 15$ hours. 
-The average validation loss over validation epoch for the top 5 runs are shown in the left panel of Figure~\ref{amp_meth_fig:flow-hpo-top-runs}.
+The average validation loss over validation epoch for the top 5 runs are shown in the left panel of Fig.~\ref{amp_meth_fig:flow-hpo-top-runs}.
 The right panel of the figure shows the training/validation loss of the best model configuration trained until early-stopping condition is met.
 While all the runs were allowed to run for 30 epochs, most of them are stopped early. The validation loss for the top ten performing runs are shown in the figure.
 We use the topmost configuration in Table~\ref{amp_meth_tab:flow-hpo-table} for the results of the paper. 
-The training and validation for this configuration, trained until early-stopping is shown on right panel of Figure~\ref{amp_meth_fig:flow-hpo-top-runs}.
+The training and validation for this configuration, trained until early-stopping is shown on right panel of Fig.~\ref{amp_meth_fig:flow-hpo-top-runs}.
 
 
 %%%% NEW SECTION %%%%
@@ -295,7 +295,7 @@ The training and validation for this configuration, trained until early-stopping
 \label{amp_meth_sec:estimation}
 
 \begin{table}
-\caption[Prior distributions of parameters used to train AMPLFI]{Prior distributions of parameters.
+\caption[Prior distributions of parameters used to train \amplfi]{Prior distributions of parameters.
 Note that the distance prior is a power-law with index 2 i.e. uniform in volume; cosmological effects are not included.}
 \centering
 \begin{tabular}{ll}
@@ -335,7 +335,7 @@ Here, $\mc = (m_1m_2)^{3/5}/(m_1 + m_2)^{1/5}$ is the chirp mass of the binary, 
 The prior distributions used for generating the simulations are listed in Table~\ref{amp_meth_tab:priors}.
 Note that the time of coalescence is not a part of parameter set because it is marginalized over.
 Although \phenomd~supports BH spins, we have ignored it for the current work. 
-This will be relaxed in subsequent versions of the code and reported in a future work. The data, \data, consists of 4 seconds of whitened time-domain strain sampled at 2048 Hz containing a BBH signal, as illustrated in Figure~\ref{amp_meth_fig:data-view}. 
+This will be relaxed in subsequent versions of the code and reported in a future work. The data, \data, consists of 4 seconds of whitened time-domain strain sampled at 2048 Hz containing a BBH signal, as illustrated in Fig.~\ref{amp_meth_fig:data-view}. 
 When training the normalizing flow, we condition the parameters on the data representation, \smallgamma, as shown in Eq.~(\ref{eq:representation}). 
 This uses only the ResNet, $f$. 
 The expander, $h$, is not required subsequently. 
@@ -384,41 +384,41 @@ This is due to the choice of the inverse auto-regressive flow: sampling is possi
 Doubling the resolution, i.e. using $\nside = 64$ takes $\sim 1.2$ seconds and $\nside = 128$ takes $\sim 2.4$ seconds.
 
 \section{\label{amp_meth_sec:results}Results and Performance}
-We show example posteriors in Figures~\ref{amp_meth_fig:high-mass-compare}, \ref{amp_meth_fig:low-mass-compare}, and \ref{amp_meth_fig:low-mass-compare-same-snr} from representative higher and lower mass BBH sources under different conditions. 
+We show example posteriors in Figs.~\ref{amp_meth_fig:high-mass-compare}, \ref{amp_meth_fig:low-mass-compare}, and \ref{amp_meth_fig:low-mass-compare-same-snr} from representative higher and lower mass BBH sources under different conditions. 
 In all cases, the signal injection is performed in a background different from that used during training. 
 The same signal is injected 20 times at different background segments and posterior samples are drawn. 
 The posteriors are shown in the blue colormap. 
 We also perform inference on the same systems via nested sampling using \texttt{Bilby}~\cite{Ashton_2019, Romero_Shaw_2020} and \texttt{Dynesty}~\cite{Speagle:2019ivv} with 1500 live points and identical priors as when training {\amplfi}, repeating 5-times on different background segments.
 This is shown in the red colormap. 
 We see that there is consistency amongst the {\amplfi} posteriors; i.e., distributions in the blue colormap fall on top of each other.
-For higher masses, like the $\mc = 45\;\msun$, shown in Figure~\ref{amp_meth_fig:high-mass-compare}, we find the recovery accuracy of the chirp mass to be comparable to nested sampling. 
+For higher masses, like the $\mc = 45\;\msun$, shown in Fig.~\ref{amp_meth_fig:high-mass-compare}, we find the recovery accuracy of the chirp mass to be comparable to nested sampling. 
 Also, considering all nested sampling runs, the mass-ratio accuracy from {\amplfi} is comparable. 
 However, extrinsic parameters like the inclination and sky location are not recovered with the same accuracy as nested sampling, although broad features like the ``ring'' pattern in the skymap are evident. 
 The same is also true for the inclination posterior, where the inference is degenerate between the true inclination angle, and its supplementary angle. 
-In case of the nested sampling runs, though this degeneracy is broken, the inference does not always select the right ``peak'' for the inclination which can be expected for two-detection observations (see section IV of~\cite{CuFl1994}, or~\cite{Nissanke:2009kt}).
+In case of the nested sampling runs, though this degeneracy is broken, the inference does not always select the right ``peak'' for the inclination which can be expected for two-detection observations (see section IV of Ref.~\cite{CuFl1994}, or Ref.~\cite{Nissanke:2009kt}).
 Thus, overall, we find consistency of the {\amplfi} results with the true parameters of the injection and with nested sampling results, though with less precision for some parameters.
 
-We find that the inference for the lower mass, $\mc=15\;\msun$ BBH system, shown in Figure~\ref{amp_meth_fig:low-mass-compare}, is worse compared to the higher-mass system. 
+We find that the inference for the lower mass, $\mc=15\;\msun$ BBH system, shown in Fig.~\ref{amp_meth_fig:low-mass-compare}, is worse compared to the higher-mass system. 
 For example, we see that the $\mc$ posterior recovered by {\amplfi} is broader compared to that recovered from nested sampling. 
 The extrinsic parameter recovery follows similar pattern as the high-mass example. 
 Though broad features of the sky location like the ``ring'' pattern for two detector is evident, the recovery is not at the level of nested sampling results. 
 The greater consistency of the intrinsic parameters compared to the extrinsic parameters suggests that one avenue of improvement is to further augment our dataloader in the extrinsic parameters $(\alpha, \delta, \psi)$ which are used to project the signal onto the GW antennae. 
 Signal projection as implemented in {\mlgw} performs this operation on-the-fly on the GPU, hence oversampling the corresponding priors and creating a larger batch is feasible without compromising data generation time, and will be considered in a future implementation.
 
-We also compare the two representative systems at similar SNR in Figure~\ref{amp_meth_fig:low-mass-compare-same-snr}, where the $\mc=15\;\msun$ system is simulated at $\dl=400\;\mpc$ keeping other injection parameters the same as for Figure~\ref{amp_meth_fig:low-mass-compare}. 
-We repeat the analysis done in Figures~\ref{amp_meth_fig:high-mass-compare} and \ref{amp_meth_fig:low-mass-compare}. 
+We also compare the two representative systems at similar SNR in Fig.~\ref{amp_meth_fig:low-mass-compare-same-snr}, where the $\mc=15\;\msun$ system is simulated at $\dl=400\;\mpc$ keeping other injection parameters the same as for Fig.~\ref{amp_meth_fig:low-mass-compare}. 
+We repeat the analysis done in Figs.~\ref{amp_meth_fig:high-mass-compare} and \ref{amp_meth_fig:low-mass-compare}. 
 We find that the widths of the $\mc$ and $q$ posteriors do not change significantly when compared to the $\dl=1000\;\mpc$ injections. 
 This is contrary to the general expectation that the posterior widths scale as $1/\mathrm{SNR}$. 
 However, we find that inference on $\dl$ does show that behavior and is more consistent with nested sampling runs. 
 Overall, we find consistency among the different {\amplfi} draws, demonstrating the algorithm's robustness to small changes in background.
 
-In Figure~\ref{amp_meth_fig:pp-plot}, we show parameter recovery consistency with true values via a percentile-percentile (PP) plot for 500 simulated BBHs. 
+In Fig.~\ref{amp_meth_fig:pp-plot}, we show parameter recovery consistency with true values via a percentile-percentile (PP) plot for 500 simulated BBHs. 
 The parameters of these are sampled from the same prior as that used during training.
 Like the previous examples above, for these injections, the background is different from the training background.
 The diagonal trend of the plot shows that there is no bias in the inference with {\amplfi} across the parameter space i.e., 10\% of the testing data are in the 10\% credible level, 20\% of the testing data in the 20\% credible level and so on. 
 The shaded regions in the figure represent 1,2,3-$\sigma$ confidence bands with respect to a uniform distribution. 
 The numbers within parenthesis are p-values from KS test done with respect to a uniform distribution.
-In Figure~\ref{amp_meth_fig:searched-area}, we show the \emph{searched area} distributions for the two representative higher mass BBH and lower mass BBH placed at a fiducial distance of $\dl = 1000\;\mpc$. 
+In Fig.~\ref{amp_meth_fig:searched-area}, we show the \emph{searched area} distributions for the two representative higher mass BBH and lower mass BBH placed at a fiducial distance of $\dl = 1000\;\mpc$. 
 The searched area measures the number of pixels between the peak of skymap posterior and the pixel containing the injection in a HEALPix map, when ranked according to the probability density in each pixel. 
 We see the expected trend of getting a better searched area statistic for higher mass system compared to a lower mass system due to their larger amplitude. 
 However, the searched area is several $\mathcal{O}(1000)$ degrees for the two-detector model because of the larger error-bars on the sky coordinates mentioned above.
@@ -455,10 +455,10 @@ However, the searched area is several $\mathcal{O}(1000)$ degrees for the two-de
     \centering
     \includegraphics[width=\textwidth]{figures/injection_comparison_low_mass_review.pdf}
     \caption[Example posterior for a signal with parameters $\{\mc=15~\msun,\ q = 0.9,\ \dl = 400~\mpc,\ \thetajn=30\;\mathrm{deg.},\ \alpha=1\;\mathrm{rad.},\ \delta=0\;\mathrm{rad.}\}$ injected in 20 different background instances]{Example posterior for a signal with parameters $\{\mc=15~\msun,\ q = 0.9,\ \dl = 400~\mpc,\ \thetajn=30\;\mathrm{deg.},\ \alpha=1\;\mathrm{rad.},\ \delta=0\;\mathrm{rad.}\}$ injected in 20 different background instances, sampled using {\amplfi} is shown in sky-blue. 
-    All other parameters are kept the same as in Figure~\ref{amp_meth_fig:low-mass-compare}. 
-    The choice of $\dl=400\mpc$ ensures that the optimal SNR of this source is similar to that used for Figure~\ref{amp_meth_fig:high-mass-compare}.
+    All other parameters are kept the same as in Fig.~\ref{amp_meth_fig:low-mass-compare}. 
+    The choice of $\dl=400\mpc$ ensures that the optimal SNR of this source is similar to that used for Fig.~\ref{amp_meth_fig:high-mass-compare}.
     The analysis with nested sampling in 5 different background instances is performed as in the previous cases and is overlaid in varied orange-red colors. 
-    We find that parameters though the parameter recovery is consistent, the width of {\mc} and $q$ do not change significantly compared to Figure~\ref{amp_meth_fig:low-mass-compare}.
+    We find that parameters though the parameter recovery is consistent, the width of {\mc} and $q$ do not change significantly compared to Fig.~\ref{amp_meth_fig:low-mass-compare}.
     However, the $\dl$ posterior is more constrained, and closer to the nested sampling posterior.}
     \label{amp_meth_fig:low-mass-compare-same-snr}
 \end{figure}
@@ -472,7 +472,7 @@ However, the searched area is several $\mathcal{O}(1000)$ degrees for the two-de
     The mentioned p-values are from a KS test done with respect to a uniform distribution.
     \textbf{Right}: Sampling times for {\amplfi} vs. nested sampling runs done on injections using Bilby, with identical waveform model and prior settings.
     The nested sampling runs were done with a CPU pool size of 24, and correspond to the runs
-    using in Figure~\ref{amp_meth_fig:low-mass-compare}. 
+    using in Fig.~\ref{amp_meth_fig:low-mass-compare}. 
     The standard GW likelihood model is used.
     The {\amplfi} sampling times correspond to the 500 injections used for the P-P plot on the left.}
     \label{amp_meth_fig:pp-plot}
@@ -514,13 +514,13 @@ However, the searched area is several $\mathcal{O}(1000)$ degrees for the two-de
 \end{figure}
 In this section, we run our model on several O3 events using the data from the Gravitational Wave Open Science Center (GWOSC; see \url{https://gwosc.org/}) and compare the sky-localization with the corresponding rapid localization method, BAYESTAR~\cite{Singer_2016}. 
 Since our model is trained on only 2-detector (HL) data, we re-run BAYESTAR on the events using only HL SNR timeseries for this comparison.
-We show the skymap, along with the 90\% localization area, for several O3 events that were detected online in Figure~\ref{amp_meth_fig:bayestar-maps}. 
+We show the skymap, along with the 90\% localization area, for several O3 events that were detected online in Fig.~\ref{amp_meth_fig:bayestar-maps}. 
 The left (right) panel shows the reconstruction using {\amplfi} (BAYESTAR). The choice of the selected events is that their event parameters, as published in GWTC-3, lie within the prior range used during training, and the events are spread over most of O3 from May 2019 to March 2020 (the event identifiers carry the date of discovery). 
 While our training background is a half-day chunk at the start of O3, we test on events which were detected over the duration of the entire run. 
 This is done to obtain a qualitative assessment of the impact of changing background; i.e., if the model performance degrades when supplied with data several months away from the training background. 
 We find that there is broad similarity in the skymaps between {\amplfi} and BAYESTAR. 
 There is no trend in terms of the skymaps being more/less constrained.
-Given that the events used for Figure~\ref{amp_meth_fig:bayestar-maps} range from May 2019 to March 2020, we conclude that the model validity is maintained for different background up to several months. 
+Given that the events used for Fig.~\ref{amp_meth_fig:bayestar-maps} range from May 2019 to March 2020, we conclude that the model validity is maintained for different background up to several months. 
 This does not imply that the model, once trained, is optimal for the
 entire run. 
 In fact, one of the requirements for {\amplfi} is the ability for periodic re-training; however, we anticipate that such re-training may converge quickly given the preliminary observations mentioned here.
@@ -537,7 +537,7 @@ The suitable re-training cadence is yet to be determined and will be reported in
     \caption[\textbf{Left panels}: The posteriors for \{\mc, $q$, \dl \} and sky-localization of GW150914 using an {\amplfi} model trained on O1 background. \textbf{Right panels}: Same as left, except with a model which is retrained with background data from Sept 15, 2015 starting with the model state from the left panel after training.]{\textbf{Left panels}: The posteriors for \{ \mc, $q$, \dl \} and sky-localization of GW150914 using an {\amplfi} model trained on O1 background. 
     The different colors represents ``jitter'' in the data segments chosen for inference around the $t_0 = 1126259462.4$ for GW150914.
     The solid black curve corresponds to the posteriors reported in GWOSC.
-    We find that the results are consistent although with wider confidence intervals, a trend reported in Figures~\ref{amp_meth_fig:high-mass-compare},~\ref{amp_meth_fig:low-mass-compare},~\ref{amp_meth_fig:low-mass-compare-same-snr}.
+    We find that the results are consistent although with wider confidence intervals, a trend reported in Figs.~\ref{amp_meth_fig:high-mass-compare},~\ref{amp_meth_fig:low-mass-compare},~\ref{amp_meth_fig:low-mass-compare-same-snr}.
     The consistency of the distributions from {\amplfi} shows the invariance to small time shifts.
     \textbf{Right panels}: Same as left, except with a model which is retrained with background data from Sept 15, 2015 starting with the model state from the left panel after training. 
     We find that the results generally agree with the former and that from GWOSC. 
@@ -547,7 +547,7 @@ The suitable re-training cadence is yet to be determined and will be reported in
 In this section, we further test the performance of our algorithm on background from the first observing run, O1. 
 We re-train a model using the same architecture and training strategies as in the previous sections except using a 4096-second stretch of background data from Sept 12, 2015
 available in GWOSC. 
-In left panels of Figure~\ref{amp_meth_fig:gw150914} we show the posterior distributions of
+In left panels of Fig.~\ref{amp_meth_fig:gw150914} we show the posterior distributions of
 \{\mc, $q$, \dl \} and the sky-localization when a 4-second data window around the coalescence of
 GW150914~\cite{AbEA2016a} is processed using our model. 
 The solid curve in the corner plot shows the results as reported in GWOSC. The colormap in the Mollweide plot shows the sky-localization reported by BAYESTAR for GW150914; the dashed curves in the same plot are the $90\%$ contours from our algorithm.
@@ -558,13 +558,13 @@ This is done to emulate the scenario where the uncertainty in time of coalescenc
 In particular, for {\aframe} the uncertainty can be up to several tens of milli-seconds, but well within 1-second, which motivates our choice here. 
 We find that all the dotted curves are generally consistent with each other, showing that the data representation is agnostic to small shifts as desired.
 
-For the right panels of Figure~\ref{amp_meth_fig:gw150914}, we consider a background segment from Sept 15, 2015 and re-train the model starting with the model checkpoint from the above model.
+For the right panels of Fig.~\ref{amp_meth_fig:gw150914}, we consider a background segment from Sept 15, 2015 and re-train the model starting with the model checkpoint from the above model.
 We use the identical training configuration except starting with an initial learning rate lower by a factor of 10.
 While the original model early-stopped in $\gtrsim 200$ epochs, the latter model achieves the lowest validation loss in $\sim 40$ epochs. 
 We do the inference of GW150914 data in the same way as in the previous case, and find the result mostly consistent, with the sky localization showing some differences but broadly consistent between the two models. 
 We did not use the data from Sept 14, 2015, since the duration of two-detector data in science mode was minimal due to the poor duty cycle of L1 detector (see analysis ready segments available in GWOSC).
 
-\section{Conclusion and Future Work}\label{amp_meth_sec:conclusion}
+\section{Summary}\label{amp_meth_sec:conclusion}
 In this work, we presented a GW parameter estimation algorithm, {\amplfi}, using likelihood-free inference.
 This work is one of the efforts to integrate AI algorithms in GW data analysis using tools built as a part of {\mlgw} -- like data cleaning using {\tt{DeepClean}}~\cite{Saleem_2024}, search of CBCs using {\aframe}~\cite{aframe-methods}, and anomaly detection with {\tt GWAK}~\cite{Raikman:2023ktu}.
 The use case of {\amplfi} is to run alongside the CBC search, {\aframe}.
@@ -573,16 +573,16 @@ While to date we have focused on this integration of neural-networks in order to
 An important future product of this research will be a standalone version of the software that can be run simply with the provision of a trigger time, enabling easy adoption for searches that want to use it. 
 Current real-time GW alert data products include sky-localization and EM-bright source properties apart from the significance, and a derived data-product, $p_{astro}$, based on rate of foreground and background triggers. 
 We have not discussed the EM Bright source properties in this work because the analysis, so far, is limited to BBH signal which are expected to be EM-dark. 
-However, the availability of the posterior samples in real-time allows for their straightforward computation by binning the posterior samples, or marginalizing them over several equations of state (see section C.2 of~\cite{Chaudhary_2024}).
+However, the availability of the posterior samples in real-time allows for their straightforward computation by binning the posterior samples, or marginalizing them over several equations of state (see section C.2 of Ref.~\cite{Chaudhary_2024}).
 
 As a part of routine end-to-end testing, the LVK has set up a streaming mock data challenge (MDC) with injections over a 40-days chunk of O3 background. 
-This was used to profile latencies in several components in the alert infrastructure, reported in~\cite{Chaudhary_2024}. 
+This was used to profile latencies in several components in the alert infrastructure, reported in Ref.~\cite{Chaudhary_2024}. 
 Preliminary work has been done toward the online deployment of {\aframe~+ \amplfi} to analyze this MDC.
 Based on preliminary testing, we find the net latency of data acquisition by \aframe, evaluating significance, passing data to \amplfi, followed by generating posteriors and skymaps takes $\sim 6$ seconds. 
 At the time of writing, candidates are reported to a test instance of GraceDB, the candidate database used by the LVK; however, this view is not public. 
-As a follow-up to the methods reported here, the performance of {\aframe~+ \amplfi} will be reported on the MDC constructed in~\cite{Chaudhary_2024} in a future work. 
+As a follow-up to the methods reported here, the performance of {\aframe~+ \amplfi} will be reported on the MDC constructed in Ref.~\cite{Chaudhary_2024} in a future work. 
 The MDC dataset contains $\mathcal{O}(1000)$ BBHs, for which several matched-filtering searches and annotation pipelines, including BAYESTAR, were run. 
-In the future we plan to conduct a systematic comparison with BAYESTAR on the simulated BBHs in the MDC, along with comparison with online PE results reported in~\cite{Chaudhary_2024}.
+In the future we plan to conduct a systematic comparison with BAYESTAR on the simulated BBHs in the MDC, along with comparison with online PE results reported in Ref.~\cite{Chaudhary_2024}.
 
 Certain aspects of the model require improvements; for example, the inference on the extrinsic parameters like sky location, and the extension to waveform approximants incorporating spin. 
 This will be considered in a future work.

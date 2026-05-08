@@ -1,4 +1,4 @@
-\chapter{Aframe Methods}
+\chapter{\texttt{Aframe} Methods}
 \label{chap:aframe_methods}
 
 \begin{refsection}
@@ -10,7 +10,7 @@ Here, we present a machine learning-based pipeline for the detection of gravitat
 We demonstrate this pipeline to have a fraction of the latency of traditional matched filtering search pipelines while achieving state-of-the-art sensitivity to higher-mass stellar binary black holes.
 
 
-\section{Introduction} \label{aframe_meth_sec:intro}
+\section{Motivation} \label{aframe_meth_sec:intro}
 
 Gravitational-wave astronomy has developed rapidly since the first direct detection of gravitational waves from a binary black hole merger in 2015~\cite{AbEA2016a}, with new detections now a common occurrence~\cite{Abbott_2023}.
 With the fourth observing run (O4) of the LIGO-Virgo-KAGRA (LVK) collaboration~\cite{Aasi_2015, Acernese_2015, kagra} completed, and with future ground and space based detectors planned for various points in the next decade~\cite{PhysRevD.91.082001, Punturo_2010, LISA2000}, ever more frequent discoveries of gravitational waves will enable follow-up observation of events across other cosmic messengers such as electromagnetic radiation and astrophysical neutrinos~\cite{Tanvir_2013, Ascenzi_2019, Jin_2020, Rastinejad_2022, Albert_2023, Abbasi_2023}. 
@@ -218,7 +218,7 @@ Inclination angle & Sine & $(0, \pi)$ & rad.\\
 \hline
 \hline
 \end{tabular*}
-\caption[Priors on parameters used to generate waveforms for training and testing Aframe]{Priors on parameters used to generate waveforms for both the training and testing sets. The prior is derived from that used in GWTC-3 to assess search pipelines. The component mass distributions are defined in the source frame. ``Comoving" refers to uniform in comoving volume.}
+\caption[Priors on parameters used to generate waveforms for training and testing \texttt{Aframe}]{Priors on parameters used to generate waveforms for both the training and testing sets. The prior is derived from that used in GWTC-3 to assess search pipelines. The component mass distributions are defined in the source frame. ``Comoving" refers to uniform in comoving volume.}
 \label{aframe_meth_tab:priors}
 \end{table}
 
@@ -278,7 +278,7 @@ SNR steps & Number of batches over which SNR scheduler decays & Uniform & $(1, 2
 \hline
 \hline
 \end{tabular*}
-\caption[Priors and descriptions of Aframe hyperparameters searched over]{Priors and descriptions of hyperparameters searched over. 
+\caption[Priors and descriptions of \texttt{Aframe} hyperparameters searched over]{Priors and descriptions of hyperparameters searched over. 
 The best value corresponds to the neural-network from the hyperparameter search that produced the highest validation score across all epochs. 
 A neural-network trained with these hyperparameters was used to evaluate results reported in Fig.~\ref{aframe_meth_fig:sensitivity}. 
 Details on hyperparameters can be found in Sec.~\ref{aframe_meth_sec:hp-search}}
@@ -345,7 +345,7 @@ Because analyses performed at 4\,Hz require 16 times fewer inference requests th
 \begin{figure}[h]
 \centering
 \includegraphics[width=\columnwidth]{figures/inference_rate_comparison.pdf}
-\caption[Sensitivity comparisons for the same Aframe model run over the same data at different inference rates]{Sensitivity comparisons for the same neural-network run over the same data at different inference rates. 
+\caption[Sensitivity comparisons for the same \texttt{Aframe} model run over the same data at different inference rates]{Sensitivity comparisons for the same neural-network run over the same data at different inference rates. 
 For the purposes of clarity, only a subset of the tested rates are shown here. 
 Except for the 1\,Hz inference, all results are within error of each other for all mass combinations and FARs, including for rates not shown in this plot.}
 \label{aframe_meth_fig:inference-rate-comparison}
@@ -510,14 +510,14 @@ GW190602\_175927 &$71.8^{+18.1}_{-14.6}$ & $44.8^{+15.5}_{-19.6}$ & $< 0.97$ & $
 \hline
 \hline
 \end{tabular*}
-\caption[Performance on known GW events in the Aframe testing set]{Masses in units of $M_{\odot}$, and false alarm rates in units of inverse years from \texttt{Aframe}, cWB, GstLAL, MBTA, and PyCBC-BBH for the known events in our testing set.
+\caption[Performance on known GW events in the \texttt{Aframe} testing set]{Masses in units of $M_{\odot}$, and false alarm rates in units of inverse years from \texttt{Aframe}, cWB, GstLAL, MBTA, and PyCBC-BBH for the known events in our testing set.
 Masses come from Table VIII of GWTC-2.1~\cite{theligoscientificcollaboration2022gwtc21}, and FARs from Table XV of GWTC-3~\cite{Abbott_2023}. 
 As our analysis examined only one year of background, our minimum FAR is one per year.}
 \label{aframe_meth_tab:known-events}
 \end{table*}
 
 
-\section{Conclusion}
+\section{Summary}
 We have implemented a machine-learning based CBC search pipeline that is capable of low-latency use in a production setting. 
 Through robust data augmentation techniques and extensive work in developing software infrastructure (Appendix~\ref{app:ml4gw}), our algorithm achieves a sensitivity that is superior to or competitive with established search pipelines for higher mass BBHs. 
 Work remains to improve the algorithm's performance on lower mass BBH systems. 

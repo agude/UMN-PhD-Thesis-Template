@@ -12,7 +12,7 @@ We show accurate reconstruction of source parameters with uncertainties for use 
 Altogether, we demonstrate \texttt{AMPLFI}'s ability to produce data products for low-latency public alerts.
 
 
-\section{Introduction}  \label{amp_res_sec:intro}
+\section{Overview}  \label{amp_res_sec:intro}
 A decade has passed since the first direct detection of gravitational waves (GWs)~\cite{AbEA2016a}. 
 Now, observing GWs from compact binary coalescences (CBCs) is commonplace. 
 The number of GW candidates has increased by two orders of magnitude in this decade, rising from three candidates in the first observing run, to over three-hundred cumulative after the fourth observing run (O4)~\cite{AbEA2018b, theligoscientificcollaboration2022gwtc21, Abbott_2023, LIGOScientific:2025slb}. 
@@ -197,7 +197,7 @@ The injections are binary black hole mergers with chirp masses between 10 and 10
 We ensure the injections were performed using science quality data from each interferometer. 
 Using the SNR time series, we create Hanford-Livingston (HL), and if available, Hanford-Livingston-Virgo (HLV) BAYESTAR localizations. 
 BAYESTAR is configured to use the same distance prior used to train \texttt{AMPLFI}. After these cuts, this leaves 1233 HL and 903 HLV injections. 
-Figure~\ref{amp_res_fig:mdc_dist} visualizes the distribution of signal parameters. 
+Fig.~\ref{amp_res_fig:mdc_dist} visualizes the distribution of signal parameters. 
 The dataset consists of a broad parameter space of signals, nearly uniform in chirp mass between 10 and 100 $M_\odot$ and covering a wide range of SNRs.
 
 
@@ -284,7 +284,7 @@ Using the dataset of injections described in Sec.~\ref{amp_res_sec:testing-data}
 For each injection, we calculate searched area and searched volume metrics for both estimators. 
 Searched area (volume) is measured by sorting sky area (volume) pixels by descending probability, and accumulating area (volume) until the pixel containing the true location of the simulated signal is reached. 
 For the adaptive histogram estimator, we draw 20,000 samples from the model. 
-The top row of Figure~\ref{amp_res_fig:kde-vs-hist} shows that searched areas from the two methods are in statistical agreement.
+The top row of Fig.~\ref{amp_res_fig:kde-vs-hist} shows that searched areas from the two methods are in statistical agreement.
 However, the histogram estimator has a minimum searched area of $\sim 1$ $\mathrm{deg^2}$ due to the pixel resolution of NSIDE=64, and is therefore unable to achieve searched areas smaller than this. 
 The bottom row compares the searched volumes between the estimators. 
 The methods agree for searched volumes $\lesssim 10^9$ $\mathrm{Mpc}^3$. 
@@ -334,11 +334,11 @@ Bottom: Same as top, but for searched volumes.
 
 \subsubsection{Accuracy}
 We compare \texttt{AMPLFI}'s sky localization performance with BAYESTAR using the dataset set described in Sec.~\ref{amp_res_sec:testing-data}. 
-In Figure~\ref{amp_res_fig:amplfi-vs-bayestar} we compare searched areas (top) and searched volumes (bottom) between \texttt{AMPLFI} and BAYESTAR sky maps for both HLV and HL datasets. 
+In Fig.~\ref{amp_res_fig:amplfi-vs-bayestar} we compare searched areas (top) and searched volumes (bottom) between \texttt{AMPLFI} and BAYESTAR sky maps for both HLV and HL datasets. 
 Bootstrapped confidence intervals show the searched area cumulative histograms agree within 2$\sigma$. 
 The searched volume cumulative histogram shows that \texttt{AMPLFI} provides smaller searched volumes than BAYESTAR. 
 One drawback of searched area and volume as performance metrics is that they do not capture sky map multi-modality (see Ref.~\cite{Essick:2014wwa} for a discussion).
-In Figure~\ref{amp_res_fig:dtheta} we compare the angular offset between the sky map's maximum a posteriori pixel and the true pixel of the injection. 
+In Fig.~\ref{amp_res_fig:dtheta} we compare the angular offset between the sky map's maximum a posteriori pixel and the true pixel of the injection. 
 We plot $\cos \delta \theta$ which highlights groupings at the true and antipodal location. 
 We see agreement between the BAYESTAR and \texttt{AMPLFI} distributions.
 
@@ -351,12 +351,12 @@ This probability can be estimated empirically by analyzing injections.
 For BAYESTAR, this calibration is achieved by rescaling the SNR timeseries by a correction factor which is tuned to injections~\cite{Singer_2016}. 
 Notably, this correction factor is dependent on algorithmic details of the matched-filter pipeline that provides the SNR timeseries. 
 The default value of 0.83 is tuned to injections analyzed by the GstLAL pipeline. 
-Using this default correction factor, BAYESTAR sky maps produced from the SNR timeseries provided by the PyCBC live analysis have been shown to be biased (see Figure 5 in Ref.~\cite{Nitz_2018}). 
+Using this default correction factor, BAYESTAR sky maps produced from the SNR timeseries provided by the PyCBC live analysis have been shown to be biased (see Fig. 5 in Ref.~\cite{Nitz_2018}). 
 The source of this correction factor was further studied in Ref.~\cite{Duverne_2024} using PyCBC. 
 The correction factor was shown to depend on variables like the construction of the matched-filtering template bank, and detector configuration. 
 The variability of this correction factor upon pipeline specifics is undesirable, since it requires tuning to algorithmic choices.
 
-Figure~\ref{amp_res_fig:self-consistency} shows self-consistency tests for the HLV \texttt{AMPLFI} model using injections with SNR $\geq 12$. 
+Fig.~\ref{amp_res_fig:self-consistency} shows self-consistency tests for the HLV \texttt{AMPLFI} model using injections with SNR $\geq 12$. 
 Consistency tests for area and volume are shown to be unbiased. 
 A small bias in distance is present. 
 Because \texttt{AMPLFI} is trained directly on strain data it does not require additional pipeline-dependent tuning factors to achieve self-consistency.
@@ -482,7 +482,7 @@ By training with real data, non-Gaussian statistics in the data is learned.
 
 In general, the posteriors show rough agreement. 
 However, there are some instances with noticeable differences. 
-For example, \texttt{AMPLFI} does not show multi-modality in masses exhibited by the GWTC-3 result in GW200129\_065458 (see Figure~\ref{amp_res_fig:GW200129_065458-hlv}). 
+For example, \texttt{AMPLFI} does not show multi-modality in masses exhibited by the GWTC-3 result in GW200129\_065458 (see Fig.~\ref{amp_res_fig:GW200129_065458-hlv}). 
 For this same event, \texttt{AMPLFI}'s distance and inclination estimates disagree with the GWTC-3 result. 
 With an SNR of $\sim$ 27, waveform systematics become more important and could explain this discrepancy. 
 For GW191215\_223052 and GW200220\_124850, \texttt{AMPLFI} does not show the multi-modality in inclination shown by the GWTC-3 result (see~\Cref{amp_res_fig:GW191215_223052-hlv,amp_res_fig:GW200220_124850-dist-railing}). 
@@ -492,7 +492,7 @@ Second, deviations may arise from limitations in neural network performance, inc
 Given the observed deviations in parameters like inclination, it is probable that neural-network inaccuracies are a primary driver of the differences. 
 We note that through importance sampling to a Gaussian likelihood, it is possible to mitigate differences due to suboptimal model convergence and assumed noise statistics~\cite{Dax_2023}.
 
-\section{Conclusion and Future Work}
+\section{Summary}
 We have presented the performance of the \texttt{AMPLFI} algorithm across several metrics. 
 We have demonstrated \texttt{AMPLFI}'s sky localization performance is equivalent to BAYESTAR using injections from an online data replay. 
 We have shown that a single \texttt{AMPLFI} algorithm trained using $\sim 2$ months of real data maintains performance months beyond its training period. 
