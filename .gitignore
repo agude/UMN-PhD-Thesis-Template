@@ -1,6 +1,8 @@
 #Generated files
 thesis.pdf
 *.fls
+*.xml
+*-blx.bib
 
 #Binary and Image
 *.exe
@@ -11,6 +13,10 @@ thesis.pdf
 
 #Network File System
 .nfs*
+
+# Scripts
+*.py
+**/*.py
 
 ##Github VIM Ignore
 # *.s[a-w][a-z]
