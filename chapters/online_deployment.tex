@@ -446,7 +446,7 @@ The CPU cores are used primarily for data loading, post processing \aframe and \
 
 \begin{figure}
     \centering
-    \includegraphics[page=7, width=0.95\columnwidth]{figures/aframe_diagrams.pdf}
+    \includegraphics[width=0.95\textwidth]{figures/aframe_gracedb_flow-crop.pdf}
     \caption[Communication of data between processes]{Communication of data between processes. 
     Sub-processes are depicted as blue parallelograms.
     \aframe identifies a significant candidate, triggering \amplfi, the event creation process, and the $p_\mathrm{astro}$ calculation process.
@@ -461,7 +461,7 @@ The CPU cores are used primarily for data loading, post processing \aframe and \
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.95\columnwidth]{figures/software_architecture.png}
+    \includegraphics[width=0.9\textwidth]{figures/aframe_software_arch-crop.pdf}
     \caption[A high level overview of the software architecture that deploys \aframe and \amplfi in real time]{A high level overview of the software architecture that deploys \aframe and \amplfi in real time. 
     A main Python process loads data, identifies events with \aframe, and produces parameter estimation products with \amplfi. 
     After an event is identified, several sub processes are kicked off in parallel to upload the necessary data products to GraceDB.}
