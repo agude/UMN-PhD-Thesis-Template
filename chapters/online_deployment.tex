@@ -50,7 +50,8 @@ The neural network is trained to map this input to a single scalar detection sta
 \aframe's analysis window strides across the data at a fixed rate called the \emph{inference sampling rate}, producing a time-series of neural network outputs. 
 The inference sampling rate determines the precision with which the coalescence time of the merger can be estimated. 
 For O4c online analysis, the inference sampling rate is 512\,Hz. 
-The prior used to train \aframe for O4c deployment is listed in Table~\ref{online_tab:aframe-priors}, which is the same as that used in previous works. 
+The prior used to train \aframe for O4c deployment is listed in Table~\ref{online_tab:aframe-priors}, which is the same as that used in previous works.
+\aframe was trained using data from the second part of the fourth observing run (O4b), and validated against timeslides of strain data from O4c.
 
 \subsection{\amplfi}
 After candidate events are identified, parameter estimation (PE) is performed by \amplfi, a ML framework based on likelihood-free inference (LFI)~\cite{amplfi, Marx:2025ioo}. 
@@ -63,14 +64,7 @@ The online deployment dynamically selects the appropriate model, prioritizing th
 The signal priors used to train the \amplfi models used during O4c is listed in Table~\ref{online_tab:amplfi-priors}. 
 Compared with Refs.~\cite{amplfi, Marx:2025ioo}, the chirp mass prior is lowered to 5\,$\mathrm{M}_{\odot}$ motivated by analyzing mock data challenges with \aframe which demonstrated sensitivity to these signals. 
 In addition, we extend the distance prior from 3 to 6\,Gpc to account for increased detector sensitivity between O3 and O4, and to reduce instances where \amplfi's luminosity distance posteriors would rail against the prior boundary. 
-
-\subsection{Training}
-Both \aframe and \amplfi were trained using data from the second part of the fourth observing run (O4b).
-% TODO: Expand this subsection. Needed information:
-%   - Total duration / volume of O4b data used for each model (e.g. N hours of background for Aframe, M hours for AMPLFI)
-%   - Any data-quality selection criteria (CAT1 flags, segment length cuts, etc.)
-%   - GPU hardware (type, count) used to train each model
-%   - Wall-clock training time for Aframe and AMPLFI separately
+\amplfi was trained and validated using data from the second part of the fourth observing run (O4b).
 
 \begin{table}
 \centering
