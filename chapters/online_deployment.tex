@@ -386,13 +386,13 @@ In addition, the main process performs inference with \aframe, and generates pos
 After event identification, Python sub-processes are utilized to parallelize data product production. 
 Python \texttt{multiprocessing.Queue} objects are used for message passing data dependencies between processes. 
 Each sub-process operates by continually checking for available data in the queue, and immediately starts processing once available. 
-A Python code snippet depicting this behavior is shown in Listing~\ref{lst:subprocess}. 
+A Python code snippet depicting this behavior is shown in Listing~\ref{lst:sub-process}. 
 Below, we describe sub-process responsibilities, data products, and dependencies. 
-Fig.~\ref{online_fig:subprocesses} provides an illustration of how sub-processes interact and depend upon each other. 
+Fig.~\ref{online_fig:sub-processes} provides an illustration of how sub-processes interact and depend upon each other. 
 
 %\newpage
 
-\lstinputlisting[language=Python, caption={Pseudo-code demonstrating how message passing is performed between the main process and sub-processes.}, label={lst:subprocess}]{figures/subprocess.py} 
+\lstinputlisting[language=Python, caption={Pseudo-code demonstrating how message passing is performed between the main process and sub-processes.}, label={lst:sub-process}]{figures/subprocess.py} 
 
 \subsubsection{Event Creation}
 After \aframe identifies an above threshold candidate, the main process will place the event's estimated coalescence time and FAR in the event creation sub-process queue. 
@@ -417,6 +417,8 @@ So, the PE sub-process first descales the posterior samples to physically meanin
 Then, sky localization is estimated from the posterior samples using an adaptive histogram estimator. 
 Meanwhile, the event creation process has shared the G-event ID with the PE sub-process. 
 The sky map is uploaded to the G-event, along with the posterior samples, which are used by gwcelery to estimate EM-Bright quantities. 
+After the low-latency data products are uploaded, the parameter estimation sub-process computes a higher resolution, KDE-based skymap, which is then uploaded $\sim20$ seconds after the first skymap.
+Also uploaded is a corner plot of the posterior samples and Mollweide plots for each of the skymaps.
 
 \subsubsection{Authentication}
 GraceDB utilizes the SciToken protocol for authentication~\cite{DBLP:journals/corr/abs-1905-09816}. 
@@ -441,29 +443,29 @@ The CPU cores are used primarily for data loading, post processing \aframe and \
 \begin{figure}
     \centering
     \includegraphics[width=0.95\textwidth]{figures/aframe_gracedb_flow-crop.pdf}
-    \caption[Data products and subprocess communication for a GraceDB event submission]{Data products and subprocess communication for a GraceDB event submission.
-    When \aframe identifies a significant candidate, three worker subprocesses are triggered in parallel.
-    The \textit{Event Creation} subprocess submits the event to GraceDB via a REST API call, receiving a GraceDB event ID (graceid) that is then distributed to the remaining subprocesses.
-    The \textit{\amplfi} subprocess reads pre-computed posterior samples from shared memory, postprocesses them into physical parameters, and uploads a suite of data products: a multiorder FITS skymap, a posterior HDF5 file, a corner plot, a high-resolution KDE skymap, and Mollweide sky projections.
-    The \textit{$p_\mathrm{astro}$} subprocess computes the probability of astrophysical origin from the detection statistic, uploading a $p_\mathrm{astro}$ JSON file to GraceDB.
-    In future observing runs, the $p_\mathrm{astro}$ subprocess will also incorporate source property information from \amplfi posteriors to produce more informative estimates of astrophysical probability and source classification.
+    \caption[Data products and sub-process communication for a GraceDB event submission]{Data products and sub-process communication for a GraceDB event submission.
+    When \aframe identifies a significant candidate, three worker sub-processes are triggered in parallel.
+    The \textit{Event Creation} sub-process submits the event to GraceDB via a REST API call, receiving a GraceDB event ID (graceid) that is then distributed to the remaining sub-processes.
+    The \textit{\amplfi} sub-process reads pre-computed posterior samples from shared memory, postprocesses them into physical parameters, and uploads a suite of data products: a multiorder FITS skymap, a posterior HDF5 file, a corner plot, a high-resolution KDE skymap, and Mollweide sky projections.
+    The \textit{$p_\mathrm{astro}$} sub-process computes the probability of astrophysical origin from the detection statistic, uploading a $p_\mathrm{astro}$ JSON file to GraceDB.
+    In future observing runs, the $p_\mathrm{astro}$ sub-process will also incorporate source property information from \amplfi posteriors to produce more informative estimates of astrophysical probability and source classification.
     }
-    \label{online_fig:subprocesses}
+    \label{online_fig:sub-processes}
 \end{figure}
 
 
 
 
 
-\begin{figure}
+\begin{figure}[t]
     \centering
-    \includegraphics[width=0.9\textwidth]{figures/aframe_software_arch-crop.pdf}
+    \includegraphics[width=0.95\textwidth]{figures/aframe_software_arch-crop.pdf}
     \caption[High-level software architecture of the \aframe online deployment]{High-level software architecture of the \aframe online deployment.
     A main CPU process reads strain data frame files, passes it through resampling and data quality checks, sends it into a buffer on the GPU, before whitening and running the \aframe neural network at 512\,Hz.
-    Integrated network scores are passed to a searcher that applies a FAR threshold; candidates above a set threshold trigger \amplfi sampling and are dispatched to worker subprocesses via interprocess communication (IPC) queues.
-    Five CPU worker subprocesses run independently: \textit{Event Creation}, \textit{\amplfi PE}, \textit{$p_\mathrm{astro}$}, \textit{Auth} (Kerberos/SciToken refresh), and \textit{Logging}.
-    Both the main process and the worker subprocesses route log output to a dedicated logging subprocess via a shared queue.
-    Subprocesses also communicate with an error queue monitored by the main process, which triggers a full pipeline restart if any subprocess encounters an error.
+    Integrated network scores are passed to a searcher that applies a FAR threshold; candidates above a set threshold trigger \amplfi sampling and are dispatched to worker sub-processes via interprocess communication (IPC) queues.
+    Five CPU worker sub-processes run independently: \textit{event creation}, \textit{parameter estimation}, \textit{$p_\mathrm{astro}$}, \textit{authentication} (Kerberos/SciToken refresh), and \textit{logging}.
+    Both the main process and the worker sub-processes route log output to a dedicated logging sub-process via a shared queue.
+    Sub-processes also communicate with an error queue monitored by the main process, which triggers a full pipeline restart if any sub-process encounters an error.
     }
     \label{online_fig:software_architecture}
 \end{figure}
