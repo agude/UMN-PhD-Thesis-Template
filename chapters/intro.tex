@@ -50,12 +50,11 @@ Finally, in Chapter~\ref{conclusion_chapter}, I highlight ongoing efforts to imp
 In this section, I will give a brief description of how the existence of GWs follows from the equations of general relativity.
 I will follow the standard ``Einstein notation'', where repeated upper and lower indices imply summation over that index; i.e., $a_\mu b^\mu \equiv \Sigma_{\mu=0}^3\ a_\mu b^\mu$.
 In what follows, Greek indices ($\mu$, $\nu$, etc.) run from 0 to 3 and indicate full spacetime coordinates, while Latin indices ($i$, $j$, etc.) run from 1 to 3 and indicate spatial coordinates.
-I will also make use of ``geometerized units'', with $G = c = 1$.
 
 The field equations of GR relate the geometry of spacetime to the density and flux of energy.
 These are a set of ten non-linear differential equations, written compactly as:
 \begin{equation}
-    G_{\mu\nu} = 8\pi T_{\mu\nu}
+    G_{\mu\nu} = \frac{8\pi G}{c^4} T_{\mu\nu}
 \end{equation}
 where the Einstein tensor $G_{\mu\nu}$ describes the spacetime curvature and $T_{\mu\nu}$ is the stress-energy tensor describing the distribution and flow of energy.
 We can look for vacuum solutions to this set of equations, where $T_{\mu\nu}$ (and hence $G_{\mu\nu}$) is equal to 0.
@@ -154,13 +153,13 @@ Because the particle starts from rest and we work in the transverse-traceless ga
 Thus $\mathrm{d}u^\mu / \mathrm{d}\tau = 0$ and the particle will remain at rest with respect to its coordinate system as the GW passes over it.
 Next, consider a pair of particles spatially separated by a vector $\vec{d}$.
 The coordinate distance between the two particles will remain constant as each remains at rest with respect to its coordinate system.
-In contrast, the proper distance, given by Equation~\ref{eq:ds}:
+In contrast, the proper distance, given by Eq.~\ref{eq:ds}:
 \begin{equation}
     s^2 = d^2 + h_{ij} d^i d^j
 \end{equation}
 grows proportionally to the amplitude of the wave and the coordinate distance between the particles.
-The latter factor is the motivation for the design of the GW detectors discussed in Section~\ref{intro_sec:detectors}.
-The effect of a GW passing into the page on a ring of test masses can be seen in Figure~\ref{intro_fig:test_masses}.
+The latter factor is the motivation for the design of the GW detectors discussed in Sec.~\ref{intro_sec:detectors}.
+The effect of a GW passing into the page on a ring of test masses can be seen in Fig.~\ref{intro_fig:test_masses}.
 
 \begin{figure}
     \centering
@@ -172,10 +171,10 @@ The effect of a GW passing into the page on a ring of test masses can be seen in
 \section{Sources of Gravitational Waves}
 \label{intro_sec:gr-source}
 
-If we make the approximation that our source of GWs is far away and non-relativistic, it can be shown that the metric perturbation in the transverse-traceless gauge is given by:
+If we make the approximation that our source of GWs is far away and non-relativistic, it can be shown~\cite{MTW1973} that the metric perturbation in the transverse-traceless gauge is given by:
 \begin{equation}
     \label{eq:quad}
-    h_{ij} = \frac{2}{r} \ddot{I}_{ij}(t - r)
+    h_{ij} = \frac{2G}{c^4 r} \ddot{I}_{ij}(t - r/c)
 \end{equation}
 where $r$ is the distance to the source and $I_{ij}$ is the quadrupole moment tensor of the source energy density:
 \begin{equation}
