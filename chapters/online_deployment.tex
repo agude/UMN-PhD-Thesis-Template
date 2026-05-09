@@ -434,7 +434,7 @@ Upon receiving the error, the main process will  exit, killing each sub-process,
 Unfortunately, restarts cause incoming data to be skipped as the pipeline takes time to re-initialize and re-accumulate data buffers (see Sec.~\ref{online_sec:event-identification}). 
 However, restarts are rare, typically occurring due to transient errors communicating with GraceDB, or issues with frame file delivery.
 
-The computational resources used for deployment are an NVIDIA A30 GPU, and 8 CPU-cores. 
+The computational resources used for deployment are an NVIDIA A30 GPU, and 8 CPU-cores for low-latency data products. 
 Both \aframe and \amplfi models are able to fit in memory and perform inference on this GPU. 
 The CPU cores are used primarily for data loading, post processing \aframe and \amplfi outputs, and interacting with GraceDB. 
 
