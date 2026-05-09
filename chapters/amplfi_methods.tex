@@ -95,7 +95,7 @@ We also make some optimizations compared to previous efforts in light of an onli
     \centering
     \includegraphics[width=0.8\textwidth]{figures/waveforms.pdf}
     \caption[A comparison of time-domain {\phenomd} between that implemented as a part of the {\mlgw} library and that implemented in LALsim]{A comparison of time-domain {\phenomd} between that implemented in this study, as a part of the {\mlgw} library. 
-    The parameters of the waveform is ${\mc = 26\;\msun, q = 1.0, \dl = 1000\;\mpc, \chi_{1,2} = 0.0}$.
+    The parameters of the waveform are ${\mc = 26\;\msun, q = 1.0, \dl = 1000\;\mpc, \chi_{1,2} = 0.0}$.
     We find that while there are differences in the waveform strain, the residuals are below three orders of magnitude compared to the signal for most of the evolution, except the final few cycles where it is two orders of magnitude lower.}
     \label{amp_meth_fig:waveform}
 \end{figure}
@@ -428,8 +428,7 @@ However, the searched area is several $\mathcal{O}(1000)$ degrees for the two-de
 \begin{figure}
     \centering
     \includegraphics[width=\textwidth]{figures/injection_comparison.pdf}
-    \caption[Example posterior for a signal with parameters $\{\mc=45~\msun,\ q = 0.7,\ \dl = 1000~\mpc,\ 
-    \thetajn=30\;\mathrm{deg.},\ \alpha=1\;\mathrm{rad.},\  \delta=0\;\mathrm{rad.}\}$ injected in 20 different background instances]{Example posterior for a signal with parameters $\{\mc=45~\msun,\ q = 0.7,\ \dl = 1000~\mpc,\ 
+    \caption[\amplfi posterior comparison for a high-mass BBH injection ($\mc = 45\,\msun$)]{Example posterior for a signal with parameters $\{\mc=45~\msun,\ q = 0.7,\ \dl = 1000~\mpc,\ 
     \thetajn=30\;\mathrm{deg.},\ \alpha=1\;\mathrm{rad.},\  \delta=0\;\mathrm{rad.}\}$ injected in 20 different background instances, sampled using {\amplfi} is shown in sky-blue. 
     All posteriors are consistent with one another. 
     Posteriors from the same signal injected in 5 different background instances, using the same background stretch as the {\amplfi} injections, and analyzed via nested sampling with Bilby, is overlaid in varying orange-red colors.
@@ -443,7 +442,7 @@ However, the searched area is several $\mathcal{O}(1000)$ degrees for the two-de
 \begin{figure}
     \centering
     \includegraphics[width=\textwidth]{figures/injection_comparison_low_mass.pdf}
-    \caption[Example posterior for a signal with parameters $\{\mc=15~\msun,\ q = 0.9,\ \dl = 1000~\mpc,\  \thetajn=30\;\mathrm{deg.},\ \alpha=1\;\mathrm{rad.},\  \delta=0\;\mathrm{rad.}\}$ injected in 20 different background instances]{Example posterior for a signal with parameters $\{\mc=15~\msun,\ q = 0.9,\ \dl = 1000~\mpc,\  \thetajn=30\;\mathrm{deg.},\ \alpha=1\;\mathrm{rad.},\  \delta=0\;\mathrm{rad.}\}$ injected in 20 different background instances, sampled using {\amplfi} is shown in sky-blue. 
+    \caption[\amplfi posterior comparison for a low-mass BBH injection ($\mc = 15\,\msun$)]{Example posterior for a signal with parameters $\{\mc=15~\msun,\ q = 0.9,\ \dl = 1000~\mpc,\  \thetajn=30\;\mathrm{deg.},\ \alpha=1\;\mathrm{rad.},\  \delta=0\;\mathrm{rad.}\}$ injected in 20 different background instances, sampled using {\amplfi} is shown in sky-blue. 
     All posteriors are consistent with one another. 
     Posteriors from the same signal injected in 5 different background instances, using the same background stretch as the {\amplfi} injections, and analyzed via nested sampling with Bilby, is overlaid in varying orange-red colors.
     The values mentioned above each marginal distribution correspond to the {\amplfi} median with the 5th and 95th percentiles. 
@@ -456,11 +455,11 @@ However, the searched area is several $\mathcal{O}(1000)$ degrees for the two-de
 \begin{figure}
     \centering
     \includegraphics[width=\textwidth]{figures/injection_comparison_low_mass_review.pdf}
-    \caption[Example posterior for a signal with parameters $\{\mc=15~\msun,\ q = 0.9,\ \dl = 400~\mpc,\ \thetajn=30\;\mathrm{deg.},\ \alpha=1\;\mathrm{rad.},\ \delta=0\;\mathrm{rad.}\}$ injected in 20 different background instances]{Example posterior for a signal with parameters $\{\mc=15~\msun,\ q = 0.9,\ \dl = 400~\mpc,\ \thetajn=30\;\mathrm{deg.},\ \alpha=1\;\mathrm{rad.},\ \delta=0\;\mathrm{rad.}\}$ injected in 20 different background instances, sampled using {\amplfi} is shown in sky-blue. 
+    \caption[\amplfi posterior comparison for a low-mass BBH injection at matched SNR ($\mc = 15\,\msun$, $\dl = 400\,\mpc$)]{Example posterior for a signal with parameters $\{\mc=15~\msun,\ q = 0.9,\ \dl = 400~\mpc,\ \thetajn=30\;\mathrm{deg.},\ \alpha=1\;\mathrm{rad.},\ \delta=0\;\mathrm{rad.}\}$ injected in 20 different background instances, sampled using {\amplfi} is shown in sky-blue. 
     All other parameters are kept the same as in Fig.~\ref{amp_meth_fig:low-mass-compare}. 
     The choice of $\dl=400\mpc$ ensures that the optimal SNR of this source is similar to that used for Fig.~\ref{amp_meth_fig:high-mass-compare}.
     The analysis with nested sampling in 5 different background instances is performed as in the previous cases and is overlaid in varied orange-red colors. 
-    We find that parameters though the parameter recovery is consistent, the width of {\mc} and $q$ do not change significantly compared to Fig.~\ref{amp_meth_fig:low-mass-compare}.
+    We find that, though the parameter recovery is consistent, the widths of {\mc} and $q$ do not change significantly compared to Fig.~\ref{amp_meth_fig:low-mass-compare}.
     However, the $\dl$ posterior is more constrained, and closer to the nested sampling posterior.}
     \label{amp_meth_fig:low-mass-compare-same-snr}
 \end{figure}
@@ -468,7 +467,7 @@ However, the searched area is several $\mathcal{O}(1000)$ degrees for the two-de
     \centering
     \includegraphics[width=0.6\textwidth]{figures/pp-plot.pdf}
     \includegraphics[width=0.38\textwidth, trim=0.3cm 0.3cm 0.3cm 0.3cm, clip]{figures/sampling-times.pdf}
-    \caption[\textbf{Left}: Percentile-percentile (PP) plot showing recovery accuracy for 500 BBH injections performed in a testing background. \textbf{Right}: Sampling times for {\amplfi} vs. nested sampling runs done on injections using Bilby.]{\textbf{Left}: Percentile-percentile (PP) plot showing recovery accuracy for 500 BBH injections performed in a testing background, different from the training background.
+    \caption[Percentile-percentile plot and sampling time comparison for \amplfi]{\textbf{Left}: Percentile-percentile (PP) plot showing recovery accuracy for 500 BBH injections performed in a testing background, different from the training background.
     The different lines track the cumulative fraction of events within a corresponding confidence interval for the parameters mentioned in Eq.~\ref{eq:parameters}.
     The shaded bands represent the 1, 2, 3-$\sigma$ confidence bands, in decreasing opacity, with respect to a uniform distribution. 
     The mentioned p-values are from a KS test done with respect to a uniform distribution.
@@ -483,7 +482,7 @@ However, the searched area is several $\mathcal{O}(1000)$ degrees for the two-de
     \centering
         \includegraphics[width=0.8\textwidth]{figures/searched-area.pdf}
     \caption[Searched area for a representative system with $\mc = 45~\msun$ and $\mc = 15~\msun$ at $\dl = 1$ Gpc done across the sky]{Searched area for a representative system with $\mc = 45\msun$ and $\mc = 15\msun$ at $\dl = 1$ Gpc done across the sky. 
-    We note that, as expected, larger chirp mass give better searched area as a result of being louder signals. 
+    We note that, as expected, larger chirp masses give better searched area as a result of being louder signals. 
     However, the median searched area is $\mathcal{O}(1000) \mathrm{deg}^2$.}
     \label{amp_meth_fig:searched-area}
 \end{figure}
@@ -497,7 +496,7 @@ However, the searched area is several $\mathcal{O}(1000)$ degrees for the two-de
     \includegraphics[width=0.47\textwidth]{figures/amplfi-S190513bm.pdf} \includegraphics[width=0.47\textwidth]{figures/bayestar-S190513bm.pdf}\\
     \scriptsize{$\mathrm{S190701ah}$} \\
     \includegraphics[width=0.47\textwidth]{figures/amplfi-S190701ah.pdf} \includegraphics[width=0.47\textwidth]{figures/bayestar-S190701ah.pdf}\\
-    \caption[\textbf{Left}: {\amplfi} skymaps \textbf{Right} Bayestar maps from events, using HL data, spanning different months of the third observing run, O3]{\textbf{Left}: {\amplfi} skymaps \textbf{Right} Bayestar maps from events, using HL data, spanning different months of the third observing run, O3. 
+    \caption[Comparison of \amplfi and BAYESTAR skymaps for O3 events]{{\textbf{Left}}: {\amplfi} skymaps. \textbf{Right}: BAYESTAR maps from events, using HL data, spanning different months of the third observing run, O3. 
     We find that the skymaps are broadly consistent, although there is no clear trend of one being more constraining. 
     However, it demonstrates model validity to differing backgrounds up to several months from that used in training.}
     \label{amp_meth_fig:bayestar-maps}
@@ -511,7 +510,7 @@ However, the searched area is several $\mathcal{O}(1000)$ degrees for the two-de
     \includegraphics[width=0.485\textwidth]{figures/amplfi-S200129m.pdf} \includegraphics[width=0.485\textwidth]{figures/bayestar-S200129m.pdf}\\
     \scriptsize{$\mathrm{S200311bg}$} \\
     \includegraphics[width=0.485\textwidth]{figures/amplfi-S200311bg.pdf} \includegraphics[width=0.485\textwidth]{figures/bayestar-S200311bg.pdf}\\
-    \caption{Continued from above -- \textbf{Left}: {\amplfi} skymaps \textbf{Right} Bayestar maps.}
+    \caption[Comparison of \amplfi and BAYESTAR skymaps for O3 events (continued)]{Continued from above. \textbf{Left}: {\amplfi} skymaps. \textbf{Right}: BAYESTAR maps.}
   \label{amp_meth_fig:results}
 \end{figure}
 In this section, we run our model on several O3 events using the data from the Gravitational Wave Open Science Center (GWOSC; see \url{https://gwosc.org/}) and compare the sky-localization with the corresponding rapid localization method, BAYESTAR~\cite{Singer_2016}. 
@@ -536,7 +535,7 @@ The suitable re-training cadence is yet to be determined and will be reported in
     \\
     \includegraphics[width=0.48\textwidth, trim=0cm 3cm 0cm 3cm, clip]{figures/gw150914_skymaps.Sept12.pdf}
     \includegraphics[width=0.48\textwidth, trim=0cm 3cm 0cm 3cm, clip]{figures/gw150914_skymaps.Sept15.pdf}
-    \caption[\textbf{Left panels}: The posteriors for \{\mc, $q$, \dl \} and sky-localization of GW150914 using an {\amplfi} model trained on O1 background. \textbf{Right panels}: Same as left, except with a model which is retrained with background data from Sept 15, 2015 starting with the model state from the left panel after training.]{\textbf{Left panels}: The posteriors for \{ \mc, $q$, \dl \} and sky-localization of GW150914 using an {\amplfi} model trained on O1 background. 
+    \caption[\amplfi posteriors for GW150914 with and without background retraining]{\textbf{Left panels}: The posteriors for \{ \mc, $q$, \dl \} and sky-localization of GW150914 using an {\amplfi} model trained on O1 background. 
     The different colors represents ``jitter'' in the data segments chosen for inference around the $t_0 = 1126259462.4$ for GW150914.
     The solid black curve corresponds to the posteriors reported in GWOSC.
     We find that the results are consistent although with wider confidence intervals, a trend reported in Figs.~\ref{amp_meth_fig:high-mass-compare},~\ref{amp_meth_fig:low-mass-compare},~\ref{amp_meth_fig:low-mass-compare-same-snr}.

@@ -174,7 +174,7 @@ Training this larger model takes $\sim 10$ days using 2 NVIDIA A100 GPUs.
     size of $\gamma_t$ & 12 & 20 \\
     \hline
     \end{tabular}
-    \caption[Neural network hyperparameters for the HL and HLV models used to analyze the O3 MDC.]{Neural network hyperparameters for the HL and HLV models used in this work.}
+    \caption[Neural network hyperparameters for the HL and HLV models used to analyze the O3 MDC]{Neural network hyperparameters for the HL and HLV models used to analyze the O3 MDC.}
     \label{amp_res_tab:hps}
 \end{table}
 
@@ -317,17 +317,17 @@ Top Right: Cumulative histogram of searched areas for the same events.
 Error bars correspond to 1$\sigma$ confidence intervals calculated by bootstrapping are shown. 
 The cumulative distribution of searched areas from the two methods are statistically equivalent. 
 Bottom: Same as top, but for searched volumes. 
-\amplfi provides smaller searched volumes than BAYESTAR} \label{amp_res_fig:amplfi-vs-bayestar}
+\amplfi provides smaller searched volumes than BAYESTAR.} \label{amp_res_fig:amplfi-vs-bayestar}
 \end{figure*} 
 
 \section{Performance Studies} \label{amp_res_sec:results}
- 
+
 \subsection{Sky Maps} \label{amp_res_sec:results-skyloc}
 
 \begin{figure}
     \centering
     \includegraphics[width=\columnwidth]{figures/angle_offset_HLV.pdf}
-    \caption[Normalized histogram of cos $\delta \theta$ for the HLV injection set]{Normalized histogram of cos $\delta \theta$ for the HLV injection set, where $\delta \theta$ is the angular offset between the true pixel of the injection and the maximum a posterior pixel}
+    \caption[Normalized histogram of cos $\delta \theta$ for the HLV injection set]{Normalized histogram of cos $\delta \theta$ for the HLV injection set, where $\delta \theta$ is the angular offset between the true sky position of the injection and the maximum a posteriori pixel.}
     \label{amp_res_fig:dtheta}
 \end{figure}
 
@@ -513,7 +513,7 @@ Chapter~\ref{chap:online} describes the software architecture used to deploy thi
 \begin{figure*}
     \centering
     \includegraphics[scale=0.4]{figures/events/GW191215_223052.pdf}
-    \caption[Posterior comparison between \amplfi and GWTC-3 for GW191215\_223052]{Posterior comparison between \amplfi and GWTC-3 result for GW191215\_223052. Hanford, Livingston and Virgo data is analyzed. The BAYESTAR sky map produced in low-latency is plotted in purple. Sky map contours correspond to 90\% confidence intervals.}
+    \caption[Posterior comparison between \amplfi and GWTC-3 for GW191215\_223052]{Posterior comparison between \amplfi and GWTC-3 result for GW191215\_223052. Data from Hanford, Livingston, and Virgo are analyzed. The BAYESTAR sky map produced in low-latency is plotted in purple. Sky map contours correspond to 90\% confidence intervals.}
     \label{amp_res_fig:GW191215_223052-hlv}
 \end{figure*}
 
@@ -521,7 +521,7 @@ Chapter~\ref{chap:online} describes the software architecture used to deploy thi
 \begin{figure*}
     \centering
     \includegraphics[scale=0.4]{figures/events/GW200129_065458.pdf}
-    \caption[Posterior comparison between \amplfi and GWTC-3 for GW200129\_065458]{Posterior comparison between \amplfi and GWTC-3 result for GW200129\_065458. Hanford, Livingston and Virgo data is analyzed. The BAYESTAR sky map produced in low-latency is plotted in purple. Sky map contours correspond to 90\% confidence intervals. For this event, bi-modalities in $m_1$ and $m_2$ are not captured by \amplfi. In addition, \amplfi's distance and inclination posteriors disagree with the GWTC-3 result.}
+    \caption[Posterior comparison between \amplfi and GWTC-3 for GW200129\_065458]{Posterior comparison between \amplfi and GWTC-3 result for GW200129\_065458. Data from Hanford, Livingston, and Virgo are analyzed. The BAYESTAR sky map produced in low-latency is plotted in purple. Sky map contours correspond to 90\% confidence intervals. For this event, bi-modalities in $m_1$ and $m_2$ are not captured by \amplfi. In addition, \amplfi's distance and inclination posteriors disagree with the GWTC-3 result.}
     \label{amp_res_fig:GW200129_065458-hlv}
 \end{figure*}
 
@@ -529,21 +529,21 @@ Chapter~\ref{chap:online} describes the software architecture used to deploy thi
 \begin{figure*}
     \centering
     \includegraphics[scale=0.4]{figures/events/GW200208_130117.pdf}
-    \caption[Posterior comparison between \amplfi and GWTC-3 for GW200208\_130117]{Posterior comparison between \amplfi and GWTC-3 result for GW200208\_130117. Hanford, Livingston and Virgo data is analyzed. The BAYESTAR sky map produced in low-latency is plotted in purple. Sky map contours correspond to 90\% confidence intervals.}
+    \caption[Posterior comparison between \amplfi and GWTC-3 for GW200208\_130117]{Posterior comparison between \amplfi and GWTC-3 result for GW200208\_130117. Data from Hanford, Livingston, and Virgo are analyzed. The BAYESTAR sky map produced in low-latency is plotted in purple. Sky map contours correspond to 90\% confidence intervals.}
     \label{amp_res_fig:GW200208_130117-hlv}
 \end{figure*}
 
 \begin{figure*}
     \centering
     \includegraphics[scale=0.4]{figures/events/GW200311_115853.pdf}
-    \caption[Posterior comparison between \amplfi and GWTC-3 for GW200311\_115853]{Posterior comparison between \amplfi and GWTC-3 result for GW200311\_115853. Hanford, Livingston and Virgo data is analyzed. The BAYESTAR sky map produced in low-latency is plotted in purple. Sky map contours correspond to 90\% confidence intervals.}
+    \caption[Posterior comparison between \amplfi and GWTC-3 for GW200311\_115853]{Posterior comparison between \amplfi and GWTC-3 result for GW200311\_115853. Data from Hanford, Livingston, and Virgo are analyzed. The BAYESTAR sky map produced in low-latency is plotted in purple. Sky map contours correspond to 90\% confidence intervals.}
     \label{amp_res_fig:GW200311_115853-hlv}
 \end{figure*}
 
 \begin{figure*}
     \centering
     \includegraphics[scale=0.4]{figures/events/GW200224_222234.pdf}
-    \caption[Posterior comparison between \amplfi and GWTC-3 for GW200224\_222234]{Posterior comparison between \amplfi and GWTC-3 result for GW200224\_222234. Hanford, Livingston and Virgo data is analyzed. The BAYESTAR sky map produced in low-latency is plotted in purple. Sky map contours correspond to 90\% confidence intervals.}
+    \caption[Posterior comparison between \amplfi and GWTC-3 for GW200224\_222234]{Posterior comparison between \amplfi and GWTC-3 result for GW200224\_222234. Data from Hanford, Livingston, and Virgo are analyzed. The BAYESTAR sky map produced in low-latency is plotted in purple. Sky map contours correspond to 90\% confidence intervals.}
     \label{amp_res_fig:GW200224_222234-hlv}
 \end{figure*}
 
@@ -551,21 +551,21 @@ Chapter~\ref{chap:online} describes the software architecture used to deploy thi
 \begin{figure*}
     \centering
     \includegraphics[scale=0.4]{figures/events/GW200225_060421.pdf}
-    \caption[Posterior comparison between \amplfi and GWTC-3 for GW200225\_060421]{Posterior comparison between \amplfi and GWTC-3 result for GW200225\_060421. Hanford and Livingston data is analyzed. The BAYESTAR sky map produced in low-latency is plotted in purple. Sky map contours correspond to 90\% confidence intervals.}
+    \caption[Posterior comparison between \amplfi and GWTC-3 for GW200225\_060421]{Posterior comparison between \amplfi and GWTC-3 result for GW200225\_060421. Data from Hanford and Livingston are analyzed. The BAYESTAR sky map produced in low-latency is plotted in purple. Sky map contours correspond to 90\% confidence intervals.}
     \label{amp_res_fig:GW200225_060421-hl}
 \end{figure*}
 
 \begin{figure*}
     \centering
     \includegraphics[scale=0.4]{figures/events/GW191204_110529.pdf}
-    \caption[Posterior comparison between \amplfi and GWTC-3 for GW191204\_110529]{Posterior comparison between \amplfi and GWTC-3 result for GW191204\_110529. Hanford and Livingston data is analyzed. Sky map contours correspond to 90\% confidence intervals.}
+    \caption[Posterior comparison between \amplfi and GWTC-3 for GW191204\_110529]{Posterior comparison between \amplfi and GWTC-3 result for GW191204\_110529. Data from Hanford and Livingston are analyzed. Sky map contours correspond to 90\% confidence intervals.}
     \label{amp_res_fig:GW191204_110529-hl}
 \end{figure*}
 
 \begin{figure*}
     \centering
     \includegraphics[scale=0.4]{figures/events/GW200306_093714.pdf}
-    \caption[Posterior comparison between \amplfi and GWTC-3 for GW200306\_093714]{Posterior comparison between \amplfi and GWTC-3 result for GW200306\_093714. Hanford and Livingston data is analyzed. Sky map contours correspond to 90\% confidence intervals.}
+    \caption[Posterior comparison between \amplfi and GWTC-3 for GW200306\_093714]{Posterior comparison between \amplfi and GWTC-3 result for GW200306\_093714. Data from Hanford and Livingston are analyzed. Sky map contours correspond to 90\% confidence intervals.}
     \label{amp_res_fig:GW200306_093714-hl}
 \end{figure*}
 
@@ -575,21 +575,21 @@ Chapter~\ref{chap:online} describes the software architecture used to deploy thi
 \begin{figure*}
     \centering
     \includegraphics[scale=0.4]{figures/events/GW200220_124850.pdf}
-    \caption[Posterior comparison between \amplfi and GWTC-3 for GW200220\_124850]{Posterior comparison between \amplfi and GWTC-3 result for GW200220\_124850. Hanford and Livingston data is analyzed. This illustrates the scenario where the distance posterior has support well beyond \amplfi's training prior. Still, \amplfi is able to recover source parameters and localizations in rough agreement with the GWTC-3 result.}
+    \caption[Posterior comparison between \amplfi and GWTC-3 for GW200220\_124850]{Posterior comparison between \amplfi and GWTC-3 result for GW200220\_124850. Data from Hanford and Livingston are analyzed. This illustrates the scenario where the distance posterior has support well beyond \amplfi's training prior. Still, \amplfi is able to recover source parameters and localizations in rough agreement with the GWTC-3 result.}
     \label{amp_res_fig:GW200220_124850-dist-railing}
 \end{figure*}
 
 \begin{figure*}
     \centering
     \includegraphics[scale=0.4]{figures/events/GW200128_022011.pdf}
-    \caption[Posterior comparison between \amplfi and GWTC-3 for GW200128\_022011]{Posterior comparison between \amplfi and GWTC-3 result for GW200128\_022011. Hanford and Livingston data is analyzed. The BAYESTAR sky map produced in low-latency is plotted in purple. This illustrates the scenario where the distance posterior has support well beyond \amplfi's training prior. Still, \amplfi is able to recover source parameters and localizations in rough agreement with the GWTC-3 result.}
+    \caption[Posterior comparison between \amplfi and GWTC-3 for GW200128\_022011]{Posterior comparison between \amplfi and GWTC-3 result for GW200128\_022011. Data from Hanford and Livingston are analyzed. The BAYESTAR sky map produced in low-latency is plotted in purple. This illustrates the scenario where the distance posterior has support well beyond \amplfi's training prior. Still, \amplfi is able to recover source parameters and localizations in rough agreement with the GWTC-3 result.}
     \label{amp_res_fig:GW200128_022011-dist-railing}
 \end{figure*}
 
 \begin{figure*}
     \centering
     \includegraphics[scale=0.4]{figures/events/GW191222_033537.pdf}
-    \caption[Posterior comparison between \amplfi and GWTC-3 for GW191222\_033537]{Posterior comparison between \amplfi and GWTC-3 result for GW191222\_033537. Hanford and Livingston data is analyzed. The BAYESTAR sky map produced in low-latency is plotted in purple. This illustrates the scenario where the distance posterior has support well beyond \amplfi's training prior. Still, \amplfi is able to recover source parameters and localizations in rough agreement with the GWTC-3 result.}
+    \caption[Posterior comparison between \amplfi and GWTC-3 for GW191222\_033537]{Posterior comparison between \amplfi and GWTC-3 result for GW191222\_033537. Data from Hanford and Livingston are analyzed. The BAYESTAR sky map produced in low-latency is plotted in purple. This illustrates the scenario where the distance posterior has support well beyond \amplfi's training prior. Still, \amplfi is able to recover source parameters and localizations in rough agreement with the GWTC-3 result.}
     \label{amp_res_fig:GW191222_033537-dist-railing}
     
 \end{figure*}

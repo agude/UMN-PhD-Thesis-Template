@@ -66,6 +66,11 @@ In addition, we extend the distance prior from 3 to 6\,Gpc to account for increa
 
 \subsection{Training}
 Both \aframe and \amplfi were trained using data from the second part of the fourth observing run (O4b).
+% TODO: Expand this subsection. Needed information:
+%   - Total duration / volume of O4b data used for each model (e.g. N hours of background for Aframe, M hours for AMPLFI)
+%   - Any data-quality selection criteria (CAT1 flags, segment length cuts, etc.)
+%   - GPU hardware (type, count) used to train each model
+%   - Wall-clock training time for Aframe and AMPLFI separately
 
 \begin{table}
 \centering
@@ -235,7 +240,7 @@ See Fig.~\ref{online_fig:ramp-up} for an illustration.
 \begin{figure}
     \centering
     \includegraphics[page=4,width=0.95\columnwidth]{figures/aframe_diagrams.pdf}
-    \caption{Illustration of inference procedure}
+    \caption[Illustration of the \aframe inference procedure]{Illustration of the \aframe inference procedure. Batches of whitened, overlapping data windows are passed through the neural network, producing per-window output scores that are integrated to form a running detection statistic.}
     \label{online_fig:inference}
 \end{figure}
 
@@ -243,7 +248,7 @@ See Fig.~\ref{online_fig:ramp-up} for an illustration.
 \begin{figure}
     \centering
     \includegraphics[page=5,width=0.95\columnwidth]{figures/aframe_diagrams.pdf}
-    \caption{If an event's integrated NN output has yet to reach a peak, wait for the next frame.}
+    \caption[Illustration of the event ramp-up procedure]{Illustration of the event ramp-up procedure. If a candidate's integrated neural-network output has not yet reached a peak at the time of the most recently received frame, the system waits for the next frame before processing the candidate further.}
     \label{online_fig:ramp-up}
 \end{figure}
 
@@ -443,9 +448,9 @@ The CPU cores are used primarily for data loading, post processing \aframe and \
     \centering
     \includegraphics[page=7, width=0.95\columnwidth]{figures/aframe_diagrams.pdf}
     \caption[Communication of data between processes]{Communication of data between processes. 
-    Sub-procceses are depicted as blue parallelograms. 
-    \aframe identifies a signficant candidate, triggering \amplfi, the event creation process, and $p_\mathrm{astro}$ calculation process. 
-    The GraceDB server returns a Gevent ID to the event creation process, and distributes it to the other sub-processes so each can upload data to the Gevent. 
+    Sub-processes are depicted as blue parallelograms.
+    \aframe identifies a significant candidate, triggering \amplfi, the event creation process, and the $p_\mathrm{astro}$ calculation process.
+    The GraceDB server returns a GraceDB event ID to the event creation process, and distributes it to the other sub-processes so each can upload data to the event. 
     Posterior samples from \amplfi are passed to the parameter estimation process to calculate and upload a skymap.}
     \label{online_fig:subprocesses}
 \end{figure}
@@ -530,37 +535,37 @@ A dash (--) indicates the pipeline did not contribute to the alert.}
 
 \begin{figure}
     \includegraphics[width=0.95\columnwidth]{figures/skymaps/S251103f.pdf}
-    \caption{Skymap comparison between \amplfi and BAYESTAR for S251103f}
+    \caption[Skymap comparison between \amplfi and BAYESTAR for S251103f]{Skymap comparison between \amplfi and BAYESTAR for the O4c event S251103f. Sky map contours correspond to 90\% confidence intervals.}
     \label{online_fig:S251103f}
 \end{figure}
 
 \begin{figure} 
     \includegraphics[width=0.95\columnwidth]{figures/skymaps/S250830bp.pdf}
-    \caption{Skymap comparison between \amplfi and BAYESTAR for S250830bp}
+    \caption[Skymap comparison between \amplfi and BAYESTAR for S250830bp]{Skymap comparison between \amplfi and BAYESTAR for the O4c event S250830bp. Sky map contours correspond to 90\% confidence intervals.}
     \label{online_fig:S250830bp}
 \end{figure}
 
 \begin{figure}
     \includegraphics[width=0.95\columnwidth]{figures/skymaps/S251018bi.pdf}
-    \caption{Skymap comparison between \amplfi and BAYESTAR for S251018bi}
+    \caption[Skymap comparison between \amplfi and BAYESTAR for S251018bi]{Skymap comparison between \amplfi and BAYESTAR for the O4c event S251018bi. Sky map contours correspond to 90\% confidence intervals.}
     \label{online_fig:S251018bi}
 \end{figure}
 
 \begin{figure}
     \includegraphics[width=0.95\columnwidth]{figures/skymaps/S250830m.pdf}
-    \caption{Skymap comparison between \amplfi and BAYESTAR for S250830m}
+    \caption[Skymap comparison between \amplfi and BAYESTAR for S250830m]{Skymap comparison between \amplfi and BAYESTAR for the O4c event S250830m. Sky map contours correspond to 90\% confidence intervals.}
      \label{online_fig:S250830m}
 \end{figure}
 
 \begin{figure}
     \includegraphics[width=0.95\columnwidth]{figures/skymaps/S250901cb.pdf}
-    \caption{Skymap comparison between \amplfi and BAYESTAR for S250901cb}
+    \caption[Skymap comparison between \amplfi and BAYESTAR for S250901cb]{Skymap comparison between \amplfi and BAYESTAR for the O4c event S250901cb. Sky map contours correspond to 90\% confidence intervals.}
     \label{online_fig:S250901cb}
 \end{figure}
 
 \begin{figure}
     \includegraphics[width=0.95\columnwidth]{figures/skymaps/S250904br.pdf}
-    \caption{Skymap comparison between \amplfi and BAYESTAR for S250904br}
+    \caption[Skymap comparison between \amplfi and BAYESTAR for S250904br]{Skymap comparison between \amplfi and BAYESTAR for the O4c event S250904br. Sky map contours correspond to 90\% confidence intervals.}
     \label{online_fig:S250904br}
 \end{figure}
 
@@ -568,19 +573,19 @@ A dash (--) indicates the pipeline did not contribute to the alert.}
 
 \begin{figure} 
     \includegraphics[width=0.95\columnwidth]{figures/skymaps/S251021u.pdf}
-    \caption{Skymap comparison between \amplfi and BAYESTAR for S251021u}
+    \caption[Skymap comparison between \amplfi and BAYESTAR for S251021u]{Skymap comparison between \amplfi and BAYESTAR for the O4c event S251021u. Sky map contours correspond to 90\% confidence intervals.}
     \label{online_fig:S251021u}
 \end{figure}
 
 \begin{figure} 
     \includegraphics[width=0.95\columnwidth]{figures/skymaps/S251116en.pdf}
-    \caption{Skymap comparison between \amplfi and BAYESTAR for S251116en}
+    \caption[Skymap comparison between \amplfi and BAYESTAR for S251116en]{Skymap comparison between \amplfi and BAYESTAR for the O4c event S251116en. Sky map contours correspond to 90\% confidence intervals.}
     \label{online_fig:S251116en}
 \end{figure}
 
 \begin{figure} 
     \includegraphics[width=0.95\columnwidth]{figures/skymaps/S251117dq.pdf}
-    \caption{Skymap comparison between \amplfi and BAYESTAR for S251117dq}
+    \caption[Skymap comparison between \amplfi and BAYESTAR for S251117dq]{Skymap comparison between \amplfi and BAYESTAR for the O4c event S251117dq. Sky map contours correspond to 90\% confidence intervals.}
     \label{online_fig:S251117dq}
 \end{figure}
 
