@@ -216,6 +216,7 @@ A peak in $\rho(t)$ above a detection threshold indicates the presence of a sign
 Because the parameters of a gravitational wave signal are not known in advance, matched filtering searches use a template bank containing a large number of templates with different parameters~\cite{Owe1996}.
 Templates are placed in parameter space such that no signal of interest falls more than some maximum distance away from the nearest template.
 Hundreds of thousands to millions of templates may be required to cover the full parameter space of interest, making the computational cost of matched filtering searches substantial.
+The number of templates required to cover a given parameter space scales steeply with the minimum component mass: lighter systems have longer, more rapidly evolving waveforms that require finer sampling in chirp mass to keep the signal mismatch below the desired threshold.
 An illustration of the matched filtering process is shown in Fig.~\ref{intro_fig:matched_filter}.
 
 \begin{figure}[t]
@@ -224,6 +225,23 @@ An illustration of the matched filtering process is shown in Fig.~\ref{intro_fig
     \caption[Illustration of the matched filtering technique]{Illustration of matched filtering applied to a simulated gravitational wave signal. \textit{Top}: bandpassed detector data containing an injected CBC signal (red). \textit{Middle}: the matched filter template (CBC waveform). \textit{Bottom}: the matched filter output SNR time series, normalized by its standard deviation far from the signal, showing a peak at the true merger time.}
     \label{intro_fig:matched_filter}
 \end{figure}
+
+The time-frequency morphology of a CBC signal is an upward-sweeping track (shown in the Q-transform spectrogram of Fig.~\ref{intro_fig:qtransform}) that is qualitatively distinct from typical noise transients in detector data, known as ``glitches''.
+Despite this distinction, glitches can still produce a large matched filter SNR and mimic a true signal, making signal-based vetoes necessary for rejecting false triggers.
+A commonly-used method is the $\chi^2$ time-frequency veto~\cite{Allen_2005}, which divides the matched filter output into sub-bands and tests whether the SNR accumulated in each is consistent with what a true GW signal would produce.
+A glitch that, for example, concentrates power in a narrow frequency band will fail this test and receive a reduced ranking statistic.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{figures/qtransform.pdf}
+    \caption[Q-transform spectrogram of a simulated binary black hole signal]{Q-transform spectrogram of a simulated GW150914-like binary black hole signal ($m_1 = 36\,M_\odot$, $m_2 = 29\,M_\odot$) embedded in aLIGO-design colored noise. 
+    The characteristic chirp track is visible as a bright upward-sweeping curve, with the gravitational-wave frequency rising from $\sim$30\,Hz roughly 0.25 seconds before merger (dashed white line) to $\sim$200\,Hz at coalescence. 
+    This morphology is qualitatively distinct from that of detector glitches, and is the basis for the signal-consistency tests used to distinguish astrophysical signals from noise transients.}
+    \label{intro_fig:qtransform}
+\end{figure}
+
+The matched-filter searches used by the LVK (GstLAL~\cite{Tsukada_2023}, MBTA~\cite{Allene_2025}, PyCBC~\cite{Dal_Canton_2021}, and SPIIR~\cite{PhysRevD.105.024023}) operate in low latency, producing triggers for real-time alerts to the astronomical community.
+The machine learning search developed in this dissertation is complementary to matched filtering: it operates at much lower computational cost and lower latency, and implicitly learns to distinguish signals from glitches through training on realistic data, rather than applying analytical signal-consistency tests.
 
 \section{Bayesian Parameter Estimation}
 \label{intro_sec:bayesian_pe}
@@ -245,7 +263,6 @@ Evaluating this likelihood requires computing a waveform template $h_k(\boldsymb
 Standard approaches use stochastic sampling algorithms, such as Markov chain Monte Carlo (MCMC) or nested sampling~\cite{Skilling_2006}, to draw samples from the posterior without evaluating the full integral.
 The LVK PE codes LALInference~\cite{Veitch_2015} and Bilby~\cite{Ashton_2019} implement these samplers, typically requiring $\mathcal{O}(10^7)$ likelihood evaluations and times of hours to days per event.
 This computational cost is the primary obstacle to rapid source characterization following a GW detection, and motivates the machine learning approach presented in this dissertation.
-
 
 \section{Machine Learning for Gravitational-Wave Astronomy}
 \label{intro_sec:ml}
