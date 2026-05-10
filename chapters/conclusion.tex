@@ -5,6 +5,71 @@
 \label{conclusion_chapter}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+The work presented in this dissertation introduces two machine learning algorithms --- \aframe and \amplfi --- and documents their development, validation, and real-time deployment as an end-to-end gravitational wave search and parameter estimation pipeline.
+The central demonstration is that machine learning methods can achieve sensitivity competitive with traditional matched-filter searches for compact binary coalescences while reporting alerts at latencies that are orders of magnitude lower.
+Together, \aframe and \amplfi represent the first demonstration of an end-to-end machine learning pipeline for gravitational waves operating in a live observing run.
 
+Beyond these immediate results, this dissertation addresses a question that has remained open since the first applications of machine learning to gravitational-wave detection: whether such methods are mature enough to be trusted in a production environment alongside the established pipelines that have shaped the field.
+Meeting this standard requires more than demonstrating competitive sensitivity in controlled experiments.
+It requires handling the practical demands of continuous operation: data quality variation, non-stationary noise, fault tolerance, and multi-messenger data product generation.
+By designing \aframe and \amplfi around these operational requirements and validating them against matched-filter searches on real observing data, this work provides a template for how machine learning pipelines can be developed and deployed responsibly in gravitational-wave astronomy.
+
+\section{Summary of Contributions}
+
+Chapter~\ref{chap:aframe_methods} introduced \aframe, a convolutional neural network trained to detect compact binary coalescence signals in two-detector strain data from LIGO.
+Rather than evaluating a large template bank as in matched-filter searches, \aframe processes overlapping 1.5-second windows of coincident Hanford and Livingston strain data in real time to produce a scalar detection statistic.
+The key technical contributions include a data augmentation strategy that enables the network to generalize to a wide range of signal morphologies and noise conditions, and an efficient GPU-based inference deployment capable of analyzing data continuously.
+To enable direct comparison with matched-filter searches, we developed a sensitive volume metric that places ML and traditional pipelines on equal footing.
+Evaluated on a test set drawn from the third observing run, \aframe identified 8 of 9 GWTC-3 astrophysical candidates at false alarm rates below 1 per year --- the minimum achievable given the test set duration --- while reporting zero non-catalog events at false alarm rates below 5 per month.
+
+Chapter~\ref{chap:o3_catalog} presented the results of applying \aframe to the full O3 data set as an end-to-end search.
+This analysis recovered 38 events from GWTC-3 with $p_\mathrm{astro} > 0.5$, together with 2 additional candidates from the IAS catalog and 1 from the OGC catalog --- a count comparable to that reported by individual matched-filter pipelines operating on the same data.
+Of the 15 GWTC-3 candidates not recovered by \aframe, 5 had secondary masses below $5\,M_\odot$ and fell outside the training prior; the remaining 10 had network matched-filter SNRs below 12.6.
+Parameter estimation was also performed on the IAS and OGC candidates using Bilby with the IMRPhenomXPHM waveform approximant, yielding posteriors broadly consistent with those reported by the respective catalogs.
+The O3 search demonstrated competitive sensitivity to high-mass binary black hole mergers while also revealing the current model's limitations: reduced sensitivity at lower component masses, and a requirement for simultaneous operation of both LIGO detectors.
+
+Chapter~\ref{chap:amplfi_methods} introduced \amplfi, a likelihood-free inference algorithm for rapid parameter estimation.
+\amplfi uses a normalizing flow trained to estimate posterior distributions over source parameters --- including chirp mass, mass ratio, and sky location --- conditioned on strain data from both LIGO detectors.
+The algorithm produces posterior samples in under two seconds from the time of a detection trigger, achieving an end-to-end latency of approximately six seconds including detection, significance evaluation, parameter estimation, and sky map generation.
+A major technical contribution is the implementation of compact binary waveform generation directly on GPU, enabling on-the-fly waveform simulation during training at negligible computational cost.
+\amplfi was designed for co-deployment with \aframe on shared GPU hardware, minimizing communication overhead and enabling the full pipeline latency demonstrated here.
+
+Chapter~\ref{chap:amplfi_results} validated \amplfi against established methods using data from O3.
+Comparisons with BAYESTAR, the standard low-latency sky localization algorithm, show that \amplfi produces sky maps of comparable quality for well-localized events.
+Comparisons of recovered source parameter posteriors with those from GWTC-3 demonstrate broad consistency, including cases where posterior support extends near or beyond the boundaries of the training prior.
+
+Chapter~\ref{chap:online} described the integration of \aframe and \amplfi into a production pipeline and the deployment of this pipeline during the final segment of LIGO's fourth observing run, O4c, from August 28 to November 25, 2025.
+Of the 24 compact binary events for which data from both Hanford and Livingston were available, \aframe detected 23 (96\%).
+The single non-detection was due to a computing infrastructure failure that prevented data delivery to the pipeline, rather than a limitation of the algorithm.
+For 9 events where \aframe was the preferred pipeline at the time of the preliminary alert, \amplfi sky maps were distributed to the astronomical community via the General Coordinates Network.
+The deployment relied on purpose-built software infrastructure, including the \mlgw library (Appendix~\ref{app:ml4gw}) for GPU-accelerated gravitational-wave data processing and a multiprocessing architecture that generates sky maps, source classifications, and significance estimates in parallel.
+This deployment demonstrates that machine learning methods are mature enough for production use in gravitational wave astronomy and can contribute alongside traditional matched-filter pipelines in an operational setting.
+
+\section{Outlook}
+
+Several extensions of this work are already underway; others represent longer-horizon priorities.
+
+On the detection side, the most significant limitation of the current \aframe implementation is the requirement that both LIGO Hanford and Livingston be operating simultaneously.
+Development of multi-detector configurations --- supporting arbitrary detector subsets including three-detector, single-detector, and heterogeneous network modes --- will increase the fraction of observing time for which \aframe can contribute.
+An extension of the training mass distribution to lower-mass systems, including binary neutron star and neutron star--black hole mergers, will make the search relevant for the events most likely to have electromagnetic counterparts and yield the most multi-messenger science.
+Extending \aframe to BNS systems poses a fundamental signal-duration challenge: a 1.4+1.4\,$M_\odot$ BNS inspiral spends 60--120 seconds in the LIGO sensitive band, far exceeding the 1.5-second input windows on which the current model operates.
+One experimental approach under investigation evaluates each input window in the frequency domain against a log-normally spaced grid of chirp mass hypotheses --- approximately 100 templates per window --- using heterodyning to shift each template to baseband, where the slowly evolving signal envelope can be matched efficiently with a compact inner product.
+Whether this approach can be made computationally cheap enough for real-time operation remains an open question, but initial experiments are encouraging.
+
+On the parameter estimation side, extending \amplfi to binary neutron star and neutron star--black hole systems is a natural next step given the scientific priority of multi-messenger follow-up.
+The longer signal durations and richer parameter spaces of these systems will require dedicated training datasets and may motivate architectural changes to the normalizing flow.
+A heterodyning-based approach analogous to that described above for detection is also being explored on the parameter estimation side, compressing long BNS signal representations into a form compatible with \amplfi's existing input window; this work is at an earlier stage than the detection-side development.
+Future versions may also incorporate spin-precessing waveform models beyond IMRPhenomD and could support burst signal morphologies, enabling collaboration with unmodeled event search pipelines.
+
+On the deployment side, integrating a distributed task orchestration framework such as Ray or Celery will improve fault tolerance by allowing failed sub-tasks to be retried independently without restarting the entire pipeline.
+Several latency reductions have already been made following O4c.
+The post-resampling crop was tightened from a conservative 1-second buffer to one based on the filter's transient length (typically less than 0.2 seconds), recovering resampling latency without modifying the underlying filter.
+Also in active development is an auxiliary regression head for \aframe to directly output a merger time estimate, which would eliminate the top-hat integration step used to locate the coalescence time.
+Longer-horizon improvements include replacing the current symmetric (zero-phase) whitening filter with a causal (minimum-phase) implementation to eliminate the latency introduced by the whitening step, and extending the detector network to include Virgo, which would broaden sky localization coverage for three-detector events.
+Infrastructure improvements outside the pipeline will also reduce latency: the next-generation data delivery (NGDD) system, currently in development for future observing runs, will deliver data in 1/16-second chunks rather than 1-second frames, reducing the discrete packet latency, and will deliver each chunk immediately rather than waiting for all auxiliary channels to be ready, reducing the data preparation and transfer latency.
+
+Looking further ahead, the next generation of ground-based detectors --- Cosmic Explorer and the Einstein Telescope --- are expected to detect hundreds of thousands of compact binary mergers per year at far greater distances than current instruments can reach.
+At those event rates, machine learning methods will likely be essential infrastructure rather than merely an alternative to matched filtering.
+The algorithms, software frameworks, and operational experience developed in this dissertation provide a foundation for meeting that challenge.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
