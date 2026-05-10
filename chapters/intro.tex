@@ -5,25 +5,29 @@
 \label{intro_chapter}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-In 1915, Einstein's theory of general relativity (GR) was published, and in it was a revolutionary understanding of the relationship between energy density and the geometry of spacetime (cite).
+In 1915, Einstein's theory of general relativity (GR) was published, and in it was a revolutionary understanding of the relationship between energy density and the geometry of spacetime~\cite{Einstein:1916vd}.
 More than a century later, GR has withstood every test that has been made against it.
 One such test of GR was the prediction of gravitational waves (GWs), which are weak perturbations to the spacetime metric that take the form of a wave equation.
-Though they represent a straightforward consequence of the equations of GR, it was not until 1974 that GWs were first indirectly detected by the discovery of the Hulse-Taylor binary pulsar system (cite) and the subsequent analysis of its decaying period due to emission of GWs (cite).
-The first direct measurement of GWs came more than 50 years later, a century after Einstein's publication, when the LIGO Scientific Collaboration detected the merger of a binary black hole (BBH) system in 2015 (cite).
+Though they represent a straightforward consequence of the equations of GR, it was not until 1974 that GWs were first indirectly detected by the discovery of the Hulse-Taylor binary pulsar system~\cite{HuTa1975} and the subsequent analysis of its decaying period due to emission of GWs~\cite{TaWe1982}.
+The first direct measurement of GWs came more than 50 years later, a century after Einstein's publication, when the LIGO detectors~\cite{Aasi_2015} observed the merger of a binary black hole (BBH) system in 2015~\cite{AbEA2016a}.
 
-The detection was made by a pair of ground-based interferometric detectors, located in Hanford, Washington and Livingston, Louisiana.
-Since that time, the LIGO detectors have been joined by the Virgo (cite) and KAGRA (cite) detectors, located in Italy and Japan, respectively.
-There are also plans for future ground-based detectors, Cosmic Explorer (cite) and Einstein Telescope (cite), as well as a space-based detector, LISA (cite).
+The LIGO detectors are a pair of ground-based interferometric detectors, located in Hanford, Washington and Livingston, Louisiana.
+Since that time, they have been joined by the Virgo~\cite{Acernese_2015} and KAGRA~\cite{kagra} detectors, located in Italy and Japan, respectively.
+There are also plans for future ground-based detectors, Cosmic Explorer~\cite{Evans_2021} and Einstein Telescope~\cite{Punturo_2010}, as well as a space-based detector, LISA~\cite{LISA2000}.
 All of these detectors operate under the same principle, seeking to detect a change in the relative position of test masses as GWs pass through them.
 
 Over the past decade, as instruments have been upgraded and made more sensitive, the catalog of GW detections has grown.
-The LIGO-Virgo-KAGRA collaboration (LVK) has reported hundreds of signals from compact binary coalescences (CBCs), most of which are BBHs, but a few come from neutron star -- black hole (NSBH) mergers, and one has come from a binary neutron star (BNS) merger (cite).
-The observation of the BNS merger was a landmark event for astrophysics because it was observed not only via GWs, but also across the electromagnetic (EM) spectrum (cite).
+The LIGO-Virgo-KAGRA collaboration (LVK) has reported hundreds of signals from compact binary coalescences (CBCs)~\cite{LIGOScientific:2025slb}, most of which are BBHs, but a few come from neutron star -- black hole (NSBH) mergers, and one has come from a binary neutron star (BNS) merger~\cite{AbEA2017b}.
+The observation of the BNS merger was a landmark event for astrophysics because it was observed not only via GWs, but also across the electromagnetic (EM) spectrum~\cite{gw170817_mma}.
 The scarcity of such a scientifically interesting phenomenon has motivated much of the work in this dissertation.
 
-In the remainder of Chapter~\ref{intro_chapter}, I will give a brief overview of the mathematics of GR and how GWs appear as a solution to its equations in Section~\ref{intro_sec:gr-math}.
-In Section~\ref{intro_sec:gr-source}, I will discuss sources of GWs with a focus on CBCs.
-Finally, in Section~\ref{intro_sec:detectors}, I will discuss the operation of the LIGO interferometers.
+In the remainder of Chapter~\ref{intro_chapter}, I will give a brief overview of the mathematics of GR and how GWs appear as a solution to its equations in Sec.~\ref{intro_sec:gr-math}.
+In Sec.~\ref{intro_sec:gr-source}, I will discuss sources of GWs with a focus on CBCs.
+In Sec.~\ref{intro_sec:detectors}, I will discuss the operation of the LIGO interferometers.
+In Sec.~\ref{intro_sec:matched_filter}, I will describe matched filtering, the traditional technique used to search for GW signals in detector data.
+In Sec.~\ref{intro_sec:bayesian_pe}, I will introduce Bayesian parameter estimation, the standard framework for measuring source properties from detected GW signals.
+Matched filtering and Bayesian parameter estimation provide the baseline against which the ML methods in this dissertation are compared.
+Finally, in Sec.~\ref{intro_sec:ml}, I will introduce the machine learning approaches used in this dissertation, motivating the algorithmic choices made in subsequent chapters.
 
 Chapter~\ref{chap:aframe_methods} introduces a machine learning-based method for the detection of gravitational waves from CBCs.
 I will outline this method and present a comparison to existing search pipelines used by the LVK.
@@ -48,7 +52,7 @@ Finally, in Chapter~\ref{conclusion_chapter}, I highlight ongoing efforts to imp
 \label{intro_sec:gr-math}
 
 In this section, I will give a brief description of how the existence of GWs follows from the equations of general relativity.
-I will follow the standard ``Einstein notation'', where repeated upper and lower indices imply summation over that index; i.e., $a_\mu b^\mu \equiv \Sigma_{\mu=0}^3\ a_\mu b^\mu$.
+I will follow the standard ``Einstein notation'', where repeated upper and lower indices imply summation over that index; i.e., $a_\mu b^\mu \equiv \sum_{\mu=0}^3 a_\mu b^\mu$.
 In what follows, Greek indices ($\mu$, $\nu$, etc.) run from 0 to 3 and indicate full spacetime coordinates, while Latin indices ($i$, $j$, etc.) run from 1 to 3 and indicate spatial coordinates.
 
 The field equations of GR relate the geometry of spacetime to the density and flux of energy.
@@ -122,9 +126,9 @@ For example, a GW traveling in the z-direction would have:
         0 & h_\times & -h_+ & 0 \\
         0 & 0 & 0 & 0 \\
     \end{pmatrix}
-    e^{i(k_3 z - k_0 t)}
+    e^{i(k_3 z - \omega t)}
 \end{equation}
-where $h_+$ and $h_\times$ are constant, complex wave amplitudes.
+where $h_+$ and $h_\times$ are constant, complex wave amplitudes, $\omega$ is the angular frequency of the wave, and $k_3 = \omega/c$ is the wave number in the $z$-direction.
 Thus the wave can be decomposed into two independent polarizations:
 \begin{equation}
     \epsilon^+_{\mu\nu} = 
@@ -149,6 +153,7 @@ Its motion in the presence of a GW is determined by the geodesic equation:
 \begin{equation}
     \frac{\mathrm{d}u^\mu}{\mathrm{d}\tau} + \Gamma^\mu_{\rho\sigma} u^\rho u^\sigma = 0
 \end{equation}
+where $\tau$ is the proper time along the particle's worldline.
 Because the particle starts from rest and we work in the transverse-traceless gauge, all components of $\Gamma^\mu_{\rho\sigma} u^\rho u^\sigma$ are zero.
 Thus $\mathrm{d}u^\mu / \mathrm{d}\tau = 0$ and the particle will remain at rest with respect to its coordinate system as the GW passes over it.
 Next, consider a pair of particles spatially separated by a vector $\vec{d}$.
@@ -164,7 +169,7 @@ The effect of a GW passing into the page on a ring of test masses can be seen in
 \begin{figure}
     \centering
     \includegraphics[width=\textwidth]{figures/test_masses.png}
-    \caption[The effect of gravitational wave polarizations on a ring of test masses over the course of one half period]{The effect of gravitational wave polarizations on a ring of test masses over the course of one half period.}
+    \caption[Effect of gravitational wave polarizations on test masses]{The effect of the two gravitational wave polarizations, $h_+$ (plus) and $h_\times$ (cross), on a ring of freely falling test masses over the course of one half period. The $h_+$ polarization stretches and compresses the ring along the $x$- and $y$-axes in turn, while the $h_\times$ polarization does the same along axes rotated by 45$^\circ$.}
     \label{intro_fig:test_masses}
 \end{figure}
 
@@ -178,11 +183,11 @@ If we make the approximation that our source of GWs is far away and non-relativi
 \end{equation}
 where $r$ is the distance to the source and $I_{ij}$ is the quadrupole moment tensor of the source energy density:
 \begin{equation}
-    I_{ij}(t) = \int x^i x^j T^{00}(y, \vec{x}) d^3x
+    I_{ij}(t) = \int x^i x^j T^{00}(t, \vec{x}) d^3x
 \end{equation}
-Leaving geometerized units, the constant prefactor in Equation~\ref{eq:quad} is $2G / c^4$, which is $\sim 10^{-44}\ \mathrm{N}^{-1}$.
-This term suppresses all but the most energetic sources beneath the level of what is observable with current technology; the most promising sources will have high energy densities and large accelerations.
-In this section, I will discuss some of the sources of GWs that are targeted by the detectors discussed in Section~\ref{intro_sec:detectors}.
+with $T^{00}$ the energy density component of the stress-energy tensor.
+The prefactor $2G/c^4 \approx 10^{-44}\ \mathrm{N}^{-1}$ suppresses all but the most energetic sources beneath the level of what is observable with current technology; the most promising sources will have high energy densities and large accelerations.
+In this section, I will discuss some of the sources of GWs that are targeted by the detectors discussed in Sec.~\ref{intro_sec:detectors}.
 
 \subsection{Compact binary systems}
 
