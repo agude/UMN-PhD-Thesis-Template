@@ -203,6 +203,28 @@ In this section, I will discuss some of the sources of GWs that are targeted by 
 \section{Matched Filtering}
 \label{intro_sec:matched_filter}
 
+The traditional approach to detecting gravitational wave signals in LIGO data is matched filtering~\cite{CuFl1994}.
+Given a data stream $d(t) = n(t) + h(t)$, where $n(t)$ is detector noise and $h(t)$ is a GW signal, the matched filter is the linear filter that maximizes the signal-to-noise ratio (SNR) when the form of $h(t)$ is known.
+For stationary Gaussian noise with one-sided power spectral density (PSD) $S_n(f)$, the optimal filter is the template waveform itself, weighted by the inverse of the noise PSD.
+The resulting SNR time series is
+\begin{equation}
+    \rho^2(t) = 4 \Re \int_0^\infty \frac{\tilde{d}(f)\, \tilde{h}^*(f)}{S_n(f)}\, e^{2\pi i f t}\, \mathrm{d}f,
+\end{equation}
+where tildes denote Fourier transforms.
+A peak in $\rho(t)$ above a detection threshold indicates the presence of a signal whose waveform matches the template, and the time of the peak estimates the coalescence time.
+
+Because the parameters of a gravitational wave signal are not known in advance, matched filtering searches use a template bank containing a large number of templates with different parameters~\cite{Owe1996}.
+Templates are placed in parameter space such that no signal of interest falls more than some maximum distance away from the nearest template.
+Hundreds of thousands to millions of templates may be required to cover the full parameter space of interest, making the computational cost of matched filtering searches substantial.
+An illustration of the matched filtering process is shown in Fig.~\ref{intro_fig:matched_filter}.
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.95\textwidth]{figures/matched_filter.pdf}
+    \caption[Illustration of the matched filtering technique]{Illustration of matched filtering applied to a simulated gravitational wave signal. \textit{Top}: bandpassed detector data containing an injected CBC signal (red). \textit{Middle}: the matched filter template (CBC waveform). \textit{Bottom}: the matched filter output SNR time series, normalized by its standard deviation far from the signal, showing a peak at the true merger time.}
+    \label{intro_fig:matched_filter}
+\end{figure}
+
 \section{Bayesian Parameter Estimation}
 \label{intro_sec:bayesian_pe}
 
@@ -212,7 +234,7 @@ This is accomplished via Bayes' theorem:
 \begin{equation}
     p(\boldsymbol{\theta} \mid d) = \frac{\mathcal{L}(d \mid \boldsymbol{\theta})\, \pi(\boldsymbol{\theta})}{p(d)},
 \end{equation}
-where $\mathcal{L}(d \mid \boldsymbol{\theta})$ is the likelihood of the data given a signal with parameters $\boldsymbol{\theta}$, $\pi(\boldsymbol{\theta})$ is the prior distribution encoding knowledge and assumptions about the source population, and $\p(d) = \int \mathcal{L}(d \mid \boldsymbol{\theta})\, \pi(\boldsymbol{\theta})\, d\boldsymbol{\theta}$ is the evidence, which normalizes the posterior.
+where $\mathcal{L}(d \mid \boldsymbol{\theta})$ is the likelihood of the data given a signal with parameters $\boldsymbol{\theta}$, $\pi(\boldsymbol{\theta})$ is the prior distribution encoding knowledge and assumptions about the source population, and $p(d) = \int \mathcal{L}(d \mid \boldsymbol{\theta})\, \pi(\boldsymbol{\theta})\, d\boldsymbol{\theta}$ is the evidence, which normalizes the posterior.
 
 Assuming a network of detectors with stationary Gaussian noise, the log-likelihood takes the form
 \begin{equation}
@@ -228,9 +250,10 @@ This computational cost is the primary obstacle to rapid source characterization
 \section{Machine Learning for Gravitational-Wave Astronomy}
 \label{intro_sec:ml}
 
-Matched filtering is optimal when the signal model is known exactly and the noise is stationary and Gaussian.
-In practice, neither condition holds perfectly: real detector noise shifts over time and contains non-Gaussian glitches, and waveform template banks cannot perfectly match all possible signals with a finite number of elements.
-Machine learning (ML) offers a complementary approach that does not require an explicit signal model, instead learning properties of signal-like and noise-like data from labeled examples.
+The traditional approaches described above -- matched filtering for detection and Bayesian sampling for parameter estimation -- are well-founded and highly effective, but each faces practical limitations.
+Matched filtering is optimal when the signal model is known exactly and the noise is stationary and Gaussian; in practice, neither condition holds perfectly, as real detector noise shifts over time and contains non-Gaussian glitches.
+Bayesian PE, while statistically rigorous, is computationally expensive and too slow for full parameter estimation in real-time.
+Machine learning (ML) offers a complementary approach that addresses both limitations: it learns properties of signal-like and noise-like data from labeled examples rather than requiring an explicit signal model, and amortizes the cost of inference over a training phase so that individual events can be analyzed in seconds.
 
 A neural network classifier trained on realistic detector data, both with and without simulated signals, learns an internal representation of the data that can be used to predict whether a signal is present~\cite{PhysRevLett.120.141103}.
 This implicit encoding of signal morphology replaces the explicit template bank required by matched filtering.
