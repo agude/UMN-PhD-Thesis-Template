@@ -200,6 +200,47 @@ In this section, I will discuss some of the sources of GWs that are targeted by 
 \section{LIGO Detectors}
 \label{intro_sec:detectors}
 
+\section{Matched Filtering}
+\label{intro_sec:matched_filter}
 
+\section{Bayesian Parameter Estimation}
+\label{intro_sec:bayesian_pe}
+
+Once a GW signal has been identified by a search pipeline, the goal of parameter estimation (PE) is to infer the posterior probability distribution of the parameters of the source, $\boldsymbol{\theta}$, given the observed data $d$.
+These parameters include the component masses, spins, sky location, distance, and inclination of the binary merger.
+This is accomplished via Bayes' theorem:
+\begin{equation}
+    p(\boldsymbol{\theta} \mid d) = \frac{\mathcal{L}(d \mid \boldsymbol{\theta})\, \pi(\boldsymbol{\theta})}{p(d)},
+\end{equation}
+where $\mathcal{L}(d \mid \boldsymbol{\theta})$ is the likelihood of the data given a signal with parameters $\boldsymbol{\theta}$, $\pi(\boldsymbol{\theta})$ is the prior distribution encoding knowledge and assumptions about the source population, and $\p(d) = \int \mathcal{L}(d \mid \boldsymbol{\theta})\, \pi(\boldsymbol{\theta})\, d\boldsymbol{\theta}$ is the evidence, which normalizes the posterior.
+
+Assuming a network of detectors with stationary Gaussian noise, the log-likelihood takes the form
+\begin{equation}
+    \ln \mathcal{L}(d \mid \boldsymbol{\theta}) = -\frac{1}{2} \sum_k \langle d_k - h_k(\boldsymbol{\theta}) \mid d_k - h_k(\boldsymbol{\theta}) \rangle,
+\end{equation}
+where the sum runs over detectors, $h_k(\boldsymbol{\theta})$ is the waveform template projected onto detector $k$, and $\langle a \mid b \rangle = 4\, \Re \int_0^\infty \tilde{a}(f)\tilde{b}^*(f) / S_n(f)\, df$ is the noise-weighted inner product from Sec.~\ref{intro_sec:matched_filter}.
+Evaluating this likelihood requires computing a waveform template $h_k(\boldsymbol{\theta})$ at each point in parameter space.
+Standard approaches use stochastic sampling algorithms, such as Markov chain Monte Carlo (MCMC) or nested sampling~\cite{Skilling_2006}, to draw samples from the posterior without evaluating the full integral.
+The LVK PE codes LALInference~\cite{Veitch_2015} and Bilby~\cite{Ashton_2019} implement these samplers, typically requiring $\mathcal{O}(10^7)$ likelihood evaluations and times of hours to days per event.
+This computational cost is the primary obstacle to rapid source characterization following a GW detection, and motivates the machine learning approach presented in this dissertation.
+
+
+\section{Machine Learning for Gravitational-Wave Astronomy}
+\label{intro_sec:ml}
+
+Matched filtering is optimal when the signal model is known exactly and the noise is stationary and Gaussian.
+In practice, neither condition holds perfectly: real detector noise shifts over time and contains non-Gaussian glitches, and waveform template banks cannot perfectly match all possible signals with a finite number of elements.
+Machine learning (ML) offers a complementary approach that does not require an explicit signal model, instead learning properties of signal-like and noise-like data from labeled examples.
+
+A neural network classifier trained on realistic detector data, both with and without simulated signals, learns an internal representation of the data that can be used to predict whether a signal is present~\cite{PhysRevLett.120.141103}.
+This implicit encoding of signal morphology replaces the explicit template bank required by matched filtering.
+Gravitational-wave data analysis is particularly well-suited for ML: multiple geographically separated detectors allow effectively unlimited samples of background noise by time-shifting the data streams relative to one another, and high-fidelity waveform models derived from GR allow as many simulated signals as desired.
+
+For parameter estimation, a class of ML models called \emph{normalizing flows} provides a natural framework.
+A normalizing flow is a learned, invertible mapping between a simple base distribution and a complex target distribution~\cite{papamakarios2021normalizing}, where here the target distribution is the posterior probability of source parameters given observed data.
+Once trained on simulated events, the flow can evaluate the posterior probability at the cost of a single forward pass through the network rather than the millions of likelihood evaluations required by traditional Markov chain Monte Carlo or nested sampling methods.
+This enables posterior estimation in under two seconds, compared to hours or days for full Bayesian samplers.
+
+The detection and parameter estimation algorithms developed in this dissertation are based on these properties, achieving performance competitive with traditional methods while operating at significantly lower computational cost and latency.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
