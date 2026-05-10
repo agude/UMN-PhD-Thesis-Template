@@ -100,19 +100,21 @@
 \node[sec] at (20.0, 20.0) {p$_{\mathrm{astro}}$ Subprocess};
 
 \node[prod] (pa_stat)  at (20.0, 18.8) {KDE on detection\\statistic $\to$ $p_{\mathrm{astro}}$};
-\node[prod] (pa_post)  at (20.0, 17.2)
+\node[prod] (pa_post)  at (20.0, 16.4)
   {Wait for AMPLFI\\posteriors\\{\footnotesize up to 10\,s timeout}};
-\node[prod] (pa_frac)  at (20.0, 15.4) {Compute source-frame\\masses from posteriors};
-\node[prod] (pa_class) at (20.0, 13.8)
-  {Classify BBH / BNS / NSBH\\{\footnotesize In O4c, $p_{\mathrm{astro}} = p_{\mathrm{BBH}}$}};
+\node[prod] (pa_frac)  at (20.0, 14.8) {Compute source-frame\\masses from posteriors};
+\node[prod] (pa_class) at (20.0, 13.2)
+  {Classify BBH / BNS / NSBH\\{\footnotesize $p_{\alpha} = f_{\alpha}(m_1, m_2) \cdot p_{\mathrm{astro}}$}};
 \node[gdb]  (gdb_pa)   at (20.0, 11.55)
   {{\bfseries Upload $p_{\mathrm{astro}}$ JSON}\\{\footnotesize \{BBH, NSBH, BNS, Terrestrial\}}};
 
 \draw[main] (trigger.east) -- ++(2.2,0) |- node[very near start,right,font=\footnotesize]{pastro\_queue} (pa_stat.west);
-\draw[->, thick] (pa_stat)  -- (pa_post);
+\draw[->, thick] (pa_stat)  -- node[midway,left,font=\footnotesize]{Post O4c \\process} (pa_post);
 \draw[->, thick] (pa_post)  -- (pa_frac);
 \draw[->, thick] (pa_frac)  -- (pa_class);
 \draw[sub]       (pa_class) -- (gdb_pa);
+
+\draw[sub] (pa_stat.east) -- node[near end,above,font=\footnotesize]{O4c \\process} ++(0.8,0) |- (gdb_pa.east);
 
 %% graceid → P_astro: route below ev_gid to avoid sharing AMPLFI dep segment
 \draw[dep] (ev_gid.south) |- (gdb_pe.south west);
