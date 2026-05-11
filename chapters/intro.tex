@@ -168,7 +168,7 @@ The effect of a GW passing into the page on a ring of test masses can be seen in
 
 \begin{figure}
     \centering
-    \includegraphics[width=\textwidth]{figures/test_masses.png}
+    \includegraphics[width=\textwidth]{figures/test_masses.pdf}
     \caption[Effect of gravitational wave polarizations on test masses]{The effect of the two gravitational wave polarizations, $h_+$ (plus) and $h_\times$ (cross), on a ring of freely falling test masses over the course of one half period. The $h_+$ polarization stretches and compresses the ring along the $x$- and $y$-axes in turn, while the $h_\times$ polarization does the same along axes rotated by 45$^\circ$.}
     \label{intro_fig:test_masses}
 \end{figure}
@@ -192,6 +192,13 @@ In this section, I will discuss some of the sources of GWs that are targeted by 
 \subsection{Compact binary systems}
 
 \subsection{Burst sources}
+
+Gravitational wave bursts are short-duration signals whose waveform morphology cannot be predicted with sufficient accuracy to enable matched filtering (see Sec.~\ref{intro_sec:matched_filter}).
+The most energetically-promising astrophysical sources are core-collapse supernovae (CCSNe), in which the asymmetric collapse of a stellar core can generate a brief burst of gravitational radiation lasting $\mathcal{O}(1)$\,s with a complex, poorly-modeled time-frequency structure~\cite{Ott_2009}.
+The nonlinear, three-dimensional hydrodynamics of stellar collapse make waveform prediction impractical, so matched filtering is not a viable option.
+Even with the most optimistic emission models, a galactic CCSN at $\sim 10$\,kpc would produce a strain $h \sim 10^{-21}$--$10^{-22}$ in the LIGO band, near the edge of detectability; extragalactic events are unlikely to be detectable with current instruments~\cite{Ott_2009}.
+Other candidate burst sources include magnetar giant flares, accretion disk instabilities, and cosmic string cusps~\cite{Abbott_2017_burst}, all of which present similar challenges in waveform prediction.
+Because of this, burst-search algorithms such as coherent WaveBurst (cWB~\cite{Klimenko:2015ypf}) look for excess power in the time-frequency domain that is coincident and coherent across multiple detectors, while remaining inconsistent with known noise transient morphologies.
 
 \subsection{Rapidly rotating neutron stars}
 
