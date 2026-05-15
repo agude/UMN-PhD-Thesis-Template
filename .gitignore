@@ -1,5 +1,6 @@
 #Generated files
 thesis.pdf
+TODO.md
 *.fls
 
 #Binary and Image
@@ -23,6 +24,7 @@ Session.vim
 .*
 !.gitignore
 !.github
+!.latexmkrc
 *~
 
 ##Github Archives Ignore

@@ -1,168 +1,122 @@
-# University of Minnesota PhD Thesis Template
+# University of Minnesota Thesis Template
 
-This repository contains an updated version of the UMN PhD Thesis Template.
+A LaTeX template for University of Minnesota PhD dissertations and Master's
+theses, meeting Graduate School formatting requirements.
 
-## Prerequisites
+## Getting Started
 
-### Build Locally
+1. Click **"Use this template"** → **"Create a new repository"**
+2. Clone your new repository
+3. Edit `preliminaries/title.tex` with your information
+4. Start writing in `chapters/`
 
-To build the thesis locally, on Ubuntu, you will need to install:
+## Building Your Thesis
 
-```bash
-# Install the required packages
-sudo apt-get install \
-texlive-latex-base \
-texlive-latex-extra \
-texlive-fonts-recommended \
-texlive-pictures \
-texlive-science \
-```
-
-You can then build the thesis with `make`:
+### Local (Ubuntu/Debian)
 
 ```bash
-make
+sudo apt-get install texlive-latex-base texlive-latex-extra \
+    texlive-fonts-recommended texlive-pictures texlive-science latexmk
+
+make        # Build thesis.pdf
+make tidy   # Build and clean intermediate files
+make clean  # Remove all generated files
 ```
 
-This will produce a `thesis.pdf` in the root directory of your repository,
-along with all the intermediate build files. You can instead run:
+### Docker
+
+No TeX Live installation required—just Docker. Note: first run downloads a ~4GB
+image.
 
 ```bash
-make tidy
+make docker        # Build thesis.pdf
+make docker-tidy   # Build and clean intermediate files
+make docker-clean  # Remove all generated files
 ```
 
-To just produce the PDF.
+### GitHub Actions
 
-### Build On Github
+Push to GitHub and the PDF builds automatically. Go to the **Actions** tab,
+click a successful build, and download "Compiled Thesis" from **Artifacts**.
 
-The easiest way to build the PDF is to use [Github Actions][actions]. This
-will build the thesis and produce a PDF all within Github. The repository
-already contains the correct configuration files, but you will need to enable
-actions in Github.
+### Overleaf
 
-[actions]: https://help.github.com/en/actions
+Upload or import your clone of the repository to
+[Overleaf](https://www.overleaf.com/). It works out of the box.
 
-Once this is done, you can click on the _"Actions"_ tab at the top of the
-repository on Github.
+## Project Structure
 
-<img
-src="https://raw.githubusercontent.com/agude/UMN-PhD-Thesis-Template/master/.github/images/actions.png?raw=true"
-width="800" alt="Actions page"/> 
+```
+thesis.tex              # Main document
+preliminaries/
+    title.tex           # Title, author, advisor, degree type
+    abstract.tex        # Abstract
+    acknowledge.tex     # Acknowledgements
+    dedication.tex      # Dedication
+chapters/
+    intro.tex           # Chapter files
+    ...
+figures/                # Images and graphics
+thesis.bib              # Bibliography
+my_definitions.tex      # Custom macros
+mnthesis.cls            # Document class (don't edit unless necessary)
+```
 
-There you'll see a list of build jobs. The ones with green check marks have
-completed successfully. Clicking on one will bring you to the build page,
-where there will be a section titled **Artifacts**. Click on "Compiled Thesis"
-to download a zip file containing the PDF.
+## Configuration
 
-<img
-src="https://raw.githubusercontent.com/agude/UMN-PhD-Thesis-Template/master/.github/images/artifact.png?raw=true"
-width="800" alt="Artifact download"/> 
-
-## Additional Packages
-
-The thesis template comes with some useful additional packages. They are
-described below.
-
-### `cleveref`
-
-[`cleveref`](https://www.ctan.org/pkg/cleveref?lang=en) is a package designed
-to make cross referencing easier. Unlike `\ref`, `\cref` automatically adds
-the prefix required for the object being referenced. For example,
-`\cref{fig:my_fig}` will produce text like "figure 1" whereas
-`\ref{fig:my_fig}` would simply produce "1" and require you to fill in the
-"figure".
-
-Additionally, `cleveref` can handle multiple references at once.
-`\cref{fig:my_fig,fig:my_fig2}` produces "figures 1 and 2".
-
-In the [main thesis file](thesis_masters.tex), the following is set:
+In `preliminaries/title.tex`:
 
 ```latex
-\newcommand{\creflastconjunction}{, and } % Always use the serial comma
+\phd                            % Use \ms for Master's thesis
+\title{Your Title}
+\author{Your Name}
+\director{Advisor Name}
+\submissionmonth{May}
+\submissionyear{2025}
+
+% Copyright options (uncomment one):
+\copyrightpage                  % Standard copyright
+%\copyrightpageccby             % Creative Commons CC-BY
+%\copyrightpageccbysa           % Creative Commons CC-BY-SA
 ```
 
-This includes the serial comma in lists, so that
-`\cref{fig:my_fig,fig:my_fig2,fig_other_fig}` produces "figures 1, 2, and 3"
-instead of "figures 1, 2 and 3".
+## Included Packages
 
-Additionally, the package is passed the option `noabbrev` which causes it to
-print the full prefix instead of an abbreviation ("figure" vs "fig.").
+### cleveref
 
-### `SIunitx`
-
-[`SIunitx`](https://www.ctan.org/pkg/siunitx?lang=en) formats SI units. It
-provides the `\SI{}` command, which is used as follows:
+Smart cross-references that automatically add "Figure", "Table", etc.
 
 ```latex
-\SI{3.8}{\tesla}
-\SI{14}{\kilo\tonne}
-\SI{14.6}{\meter\squared}
-\SI{8}{\tera\eV}
+\cref{fig:example}              % "Figure 1"
+\cref{fig:a,fig:b,fig:c}        % "Figures 1, 2, and 3"
 ```
 
-There are various abbreviations for units (such as `\SI{8}{\TeV}`) and the
-formatting of the numbers can be controlled in detail. Additionally, it
-provides `\SIrange{1}{5}{\meter}` which produces "1m to 5m" and
-`\SIlist{1;2;3}{\kelvin}` which produces "1K, 2K, and 3K".
+### siunitx
 
-The package also provides `\num{12345}` which will format numbers (just like
-`\SI`) but without adding units. The previous example produces "12,345" for
-instance.
-
-In the [main thesis file](thesis_masters.tex), the following default options
-are set:
+Consistent formatting for numbers and SI units.
 
 ```latex
-% Configure the siunitx package
-\sisetup{
-    group-separator = {,}, % Use , to separate groups of digits, like 12,345
-    list-final-separator = {, and } % Always use the serial comma in \SIlist
-}
+\num{12345}                     % "12,345"
+\SI{9.8}{\meter\per\second^2}   % "9.8 m/s²"
+\SIrange{1}{10}{\kilo\gram}     % "1 kg to 10 kg"
 ```
 
-`group-separator` makes the package separate groups of digits with commas (so
-12,345.0), and `list-final-separator` uses the serial comma in lists ("1K, 2K,
-and 3K", not "1K, 2K and 3K").
+### booktabs
 
-The way in which units are displayed can also be redefined, as has been done
-`\electronvolt` in [the macros file](my_definitions.tex):
+Professional tables with `\toprule`, `\midrule`, `\bottomrule`.
 
 ```latex
-% Define a better looking eV by moving the V slightly left
-\DeclareSIUnit\electronvolt{e\hspace{-0.08em}V}
+\begin{tabular}{@{}lr@{}}
+    \toprule
+    Item    & Value \\
+    \midrule
+    Alpha   & 1.0 \\
+    Beta    & 2.0 \\
+    \bottomrule
+\end{tabular}
 ```
 
-### `booktabs`
+## History
 
-[`booktabs`](https://www.ctan.org/pkg/booktabs?lang=en) adds options to make
-nicer tables. It defines `\toprule`, `\midrule`, and `\bottomrule` which add
-rules of varying thickness and with additional vertical space.
-
-An example table using these commands is shown below. The `@{}` removes extra
-space on the end of the tables (so that the rules start and end flush with the
-text instead of hanging over) and the `\spacerows{1.2}` command is defined in
-[the macros file](my_definitions.tex) and adds extra space between the rows.
-
-```latex
-\begin{table}[h]
-    \centering
-    \spacerows{1.2}
-    \begin{center}
-        \begin{tabular}{@{}l r@{}}
-            \toprule
-            Mode         & Fraction $\left( \Gamma_{i} / \Gamma \right)$ \\
-            \midrule
-            $\Ztoqq$     & $69.91 \pm 0.06\%$ \\
-            $\Ztoee$     & $3.363 \pm 0.004\%$ \\
-            $\Ztomumu$   & $3.366 \pm 0.007\%$ \\
-            $\Ztotautau$ & $3.370 \pm 0.008\%$ \\
-            $\Ztonunu$   & $20.00 \pm 0.06\%$ \\
-            \bottomrule
-        \end{tabular}
-        \caption{
-            Selected decay modes of the Z boson.
-        }
-        \label{table:z_decays}
-    \end{center}
-\end{table}
-```
+This template has been maintained by UMN students since 1989. See the header
+of `mnthesis.cls` for the full list of contributors.
