@@ -23,6 +23,17 @@ make tidy   # Build and clean intermediate files
 make clean  # Remove all generated files
 ```
 
+### Docker
+
+No TeX Live installation required—just Docker. Note: first run downloads a ~4GB
+image.
+
+```bash
+make docker        # Build thesis.pdf
+make docker-tidy   # Build and clean intermediate files
+make docker-clean  # Remove all generated files
+```
+
 ### GitHub Actions
 
 Push to GitHub and the PDF builds automatically. Go to the **Actions** tab,
