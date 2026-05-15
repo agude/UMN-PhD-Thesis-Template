@@ -13,7 +13,7 @@ jobs:
       run: sudo apt-get update && sudo apt-get install texlive-latex-base texlive-latex-extra texlive-fonts-recommended texlive-pictures texlive-science latexmk
     - name: Build the Thesis
       run: make
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v7
       with:
         name: Compiled Thesis
         path: ./thesis.pdf
