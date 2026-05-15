@@ -8,12 +8,12 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v4
     - name: Install the required packages
-      run: sudo apt-get install texlive-latex-base texlive-latex-extra texlive-fonts-recommended texlive-pictures texlive-science
+      run: sudo apt-get update && sudo apt-get install texlive-latex-base texlive-latex-extra texlive-fonts-recommended texlive-pictures texlive-science
     - name: Build the Thesis
       run: make
-    - uses: actions/upload-artifact@master
+    - uses: actions/upload-artifact@v4
       with:
         name: Compiled Thesis
         path: ./thesis.pdf
