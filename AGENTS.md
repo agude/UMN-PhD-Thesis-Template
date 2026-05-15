@@ -14,7 +14,13 @@ make tidy   # Build thesis.pdf and clean intermediate files
 make clean  # Remove all generated files including PDF
 ```
 
-Uses bundled `latexmk/latexmk` for intelligent rebuilding.
+Docker (no local TeX Live required):
+
+```bash
+make docker        # Build thesis.pdf
+make docker-tidy   # Build and clean intermediate files
+make docker-clean  # Remove all generated files
+```
 
 ## Structure
 
